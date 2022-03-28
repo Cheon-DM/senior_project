@@ -19,3 +19,4 @@ samples, guidance on mobile development, and a full API reference.
 # 2nd sentense is here now~
 
 // 아 이거 맞냐공~
+// ㄱ=낄끼릮릮릴
