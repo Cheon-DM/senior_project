@@ -1,7 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/addFreind.dart';
+
+import 'addFriend.dart';
+
 
 class Menu extends StatelessWidget {
   @override
@@ -69,7 +71,7 @@ class Menu extends StatelessWidget {
                     child: ElevatedButton(onPressed: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context)=>AddFreindPage()));}, child: Text("친구추가각"),)
+                          MaterialPageRoute(builder: (context)=>AddFriend()));}, child: Text("친구추가각"),)
                 )
               ],
             ) ),
