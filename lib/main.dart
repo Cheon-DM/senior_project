@@ -9,6 +9,7 @@ void main() {
 
 // 화면 실행 테스트용
 // home: <스크립트> 넣으면 실행되유
+//알겠어유
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
