@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:senior_project/DM/signup_complete.dart';
 
 import 'DM/signup.dart';
+import 'DM/message.dart';
 
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
+        home: tester()
     );
   }
 }
