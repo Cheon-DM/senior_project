@@ -14,7 +14,6 @@ class signup extends StatelessWidget{
           children: <Widget>[
             Container(height: 50),
             TextFormField(
-
               keyboardType: TextInputType.name,
               decoration: InputDecoration(
                   icon: Icon(Icons.accessibility),
