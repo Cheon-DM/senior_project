@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:senior_project/HW/addFriend.dart';
 
+import '../HW/login.dart';
 import 'loginPage.dart';
 
 class MyPage extends StatefulWidget {
@@ -10,6 +13,10 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
+  final _authentication = FirebaseAuth.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +43,7 @@ class _MyPageState extends State<MyPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("정밤비",
+                    Text("여기 아직 구현 못함 ㅠ",
                         style: TextStyle(fontWeight: FontWeight.bold)
                     ),
                   ],
@@ -47,9 +54,31 @@ class _MyPageState extends State<MyPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('userIDsomething')
+                    Text(auth.currentUser!.email.toString())
                   ],
                 ),
+              ),
+
+              SizedBox(
+                height: 50,
+              ),
+
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return AddFriend();
+                          }));
+                    },
+                    child: Text("나의 친구관리")
+                ),
+              ),
+
+
+              SizedBox(
+                height: 50,
               ),
 
               Container(
@@ -58,7 +87,12 @@ class _MyPageState extends State<MyPage> {
                 alignment: Alignment.center,
                 child: OutlinedButton(
                     onPressed: () {
-                      Get.to(PreLoginPage());
+                      _authentication.signOut();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return (login());
+                          }));
+
                     },
                     child: Text("로그아웃")),
               ),

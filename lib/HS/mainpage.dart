@@ -21,7 +21,10 @@ class _MainPageState extends State<MainPage> {
           children: [
             OutlinedButton(
                 onPressed: () {
-                  Get.to(PreLoginPage());
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                        return PreLoginPage();
+                      }));
                 },
                 child: Text("내 정보")
             ),

@@ -1,17 +1,28 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_kakao_map/flutter_kakao_map.dart';
 import 'package:flutter_kakao_map/kakao_maps_flutter_platform_interface.dart';
 import 'package:get/get.dart';
+import 'package:senior_project/DM/signup.dart';
+import 'package:senior_project/DM/signup_complete.dart';
 import 'package:senior_project/HS/landingpage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:senior_project/HS/myPage.dart';
+import 'package:senior_project/HW/login.dart';
 
-void main() => runApp(MyApp());
+import 'HW/addFriend.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyAppOne(),
+      home: login()
     );
   }
 }
@@ -54,4 +65,4 @@ class _MyAppState extends State<MyAppOne> {
   }
 }
 
-// 왜 안가 ?*/
+// 왜 안가 ?
