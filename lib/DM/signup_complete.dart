@@ -1,15 +1,45 @@
-import 'package:flutter/material.dart';
+//import 'dart:html';
 
-class signup_complete extends StatelessWidget{
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:senior_project/DM/signup.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:senior_project/HW/login.dart';
+
+class signup_complete extends StatefulWidget {
+
+  final String received;
+  const signup_complete(this.received);
   @override
-  Widget build(BuildContext context) {
+  _signup_completeState createState() => _signup_completeState();
+}
+
+class _signup_completeState extends State<signup_complete> {
+
+
+  //late final String userName;
+  var name='';
+  final user =FirebaseAuth.instance.currentUser;
+  //DocumentSnapshot documentSnapshot =await userRe
+  //final userData=FirebaseFirestore.instance.collection('user').doc('$code');
+  void _sendName()async{
+    final user =FirebaseAuth.instance.currentUser;
+    final userData= await FirebaseFirestore.instance.collection('user').doc(user!.uid).get();
+    name = userData.data()!['userName'];
+    print(name);
+  }
+  //FirebaseAuth auth = FirebaseAuth.instance;
+
+
+  Scaffold showComplete(userName){
     return Scaffold(
       appBar: AppBar(
         title : Text("회원가입완료"),
       ),
       body: Padding(
-        padding: EdgeInsets.all(50),
-        child: Column(
+
+          padding: EdgeInsets.all(50),
+          child: Column(
             children: <Widget>[
               Text(
                 "회원가입이 완료되었습니다.",
@@ -21,7 +51,7 @@ class signup_complete extends StatelessWidget{
                 children: <Widget>[
                   Text("닉네임"),
                   Container(width: 20,),
-                  Text("천다미", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(widget.received, style: const TextStyle(fontWeight: FontWeight.bold)),
                   Text("님")
                 ],
               ),
@@ -30,14 +60,19 @@ class signup_complete extends StatelessWidget{
                 children: <Widget>[
                   Text("아이디"),
                   Container(width: 20,),
-                  Text("adfhladsjfklasdjl"),
+                  Text(user!.email.toString()),
                 ],
               ),
               Container(height: 100),
               Container(
                 width: double.maxFinite,
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                          return login();
+                        }));
+                  },
                   child: Text("로그인하기"),
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.white),
@@ -51,8 +86,21 @@ class signup_complete extends StatelessWidget{
               ),
             ],
 
-        )
+          )
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        _sendName();
+        return showComplete(name);
+
+      }
+    );
+  }
 }
+
+
