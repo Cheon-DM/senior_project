@@ -39,6 +39,7 @@ class Disasterlist {
   }
 }
 
+// 아직 안씀
 class Simplelist {
   final String BBS_NO;
   final String CONT;

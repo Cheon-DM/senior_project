@@ -57,7 +57,8 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
         ),
         leading: IconButton(
           onPressed: (){
-            Get.to(MainPage());
+            // Get.to(MainPage());
+            Get.offAll(() => MainPage());
           },
           icon: Icon(
               Icons.arrow_back,
