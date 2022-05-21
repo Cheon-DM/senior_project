@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-
 void update() async {
   DateTime now = DateTime.now();
   DateTime before = DateTime.now().subtract(Duration(days: 5));
@@ -59,7 +58,11 @@ void crawling() async {
 Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
   final item = FirebaseFirestore.instance.collection("disaster_message").doc("${BBS_ORDR}");
   var checking = await item.get();
-  String LOCATION = FRST_REGIST_DT.substring(0,3);
+
+  // 송출 지역 뽑아내기
+  String parsingSentense = CONT;
+  final re = RegExp(r'^\[[ㄱ-ㅎ가-힣]+\]');
+  String LOCATION = parsingSentense.splitMapJoin(re, onMatch: (m) => '${m[0]}', onNonMatch: (n) => '');
 
   if(checking.exists){ // msg exist
 
@@ -69,15 +72,8 @@ Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
       "BBS_ORDR": BBS_ORDR,
       "CONT": CONT,
       "FRST_REGIST_DT": FRST_REGIST_DT,
-      "location": LOCATION,
+      "LOCATION": LOCATION,
     });
   }
 }
 
-/*
-    String sentense = "[오산시청] 5월 20일 확진자 97명";
-  print(sentense);
-  final re = RegExp(r'^\[[ㄱ-ㅎ가-힣]+\]');
-  String location = sentense.splitMapJoin(re, onMatch: (m) => '${m[0]}', onNonMatch: (n) => '');
-  print(location);
-  */
