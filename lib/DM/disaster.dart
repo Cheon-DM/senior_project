@@ -1,40 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'message.dart';
 
-void callMessage() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: "AIzaSyAs4QaED_5xj6hvFySG8RhqqvJAMk05gKY",
-      appId: "1:1051877983471:android:70919ed3a8496500f6871a",
-      messagingSenderId: "1051877983471",
-      projectId: "testing-7e550",
-    ),
-  );
-  runApp(MyApp());
-}
+class ShowDisasterMsg extends StatelessWidget {
 
-class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'disaster scroll',
-      home: MyHomePage(),
+      home: ShowDisasterList(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class ShowDisasterList extends StatefulWidget {
+  ShowDisasterList({Key? key}) : super(key: key);
 
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _ShowDisasterListState createState() => _ShowDisasterListState();
 }
 
-class _MyHomePageState extends State<MyHomePage>{
+class _ShowDisasterListState extends State<ShowDisasterList>{
   bool loading = false;
 
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;

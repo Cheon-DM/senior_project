@@ -1,24 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-import 'disasterList.dart';
 
 void update() async {
   DateTime now = DateTime.now();
-  DateTime before = DateTime.now().subtract(Duration(days: 3));
+  DateTime before = DateTime.now().subtract(Duration(days: 5));
 
   DateFormat formatter = DateFormat('yyyy-MM-dd');
 
   String todayString = formatter.format(now);
   String pastString = formatter.format(before);
-  print(todayString);
-  print(pastString);
-
-  /*
 
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   var ref = firebaseFirestore.collection("disaster_message");
@@ -36,7 +30,6 @@ void update() async {
       ref.doc('${deletelist[i]}').delete();
     }
   });
-*/
 }
 
 void crawling() async {
@@ -55,9 +48,6 @@ void crawling() async {
 
       create(item['BBS_ORDR'], item['CONT'], item['FRST_REGIST_DT']);
     }
-
-    // print(result.length);
-    // print(result[3]);
   }
 
   else {
@@ -70,7 +60,7 @@ Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
   final item = FirebaseFirestore.instance.collection("disaster_message").doc("${BBS_ORDR}");
   var checking = await item.get();
   String LOCATION = FRST_REGIST_DT.substring(0,3);
-  RegExp
+
   if(checking.exists){ // msg exist
 
   }
@@ -83,3 +73,11 @@ Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
     });
   }
 }
+
+/*
+    String sentense = "[오산시청] 5월 20일 확진자 97명";
+  print(sentense);
+  final re = RegExp(r'^\[[ㄱ-ㅎ가-힣]+\]');
+  String location = sentense.splitMapJoin(re, onMatch: (m) => '${m[0]}', onNonMatch: (n) => '');
+  print(location);
+  */
