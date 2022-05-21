@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:senior_project/HS/mainpage.dart';
 import 'message.dart';
 
 class ShowDisasterMsg extends StatelessWidget {
@@ -54,7 +57,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
         ),
         leading: IconButton(
           onPressed: (){
-            Navigator.pop(context);
+            Get.to(MainPage());
           },
           icon: Icon(
               Icons.arrow_back,
