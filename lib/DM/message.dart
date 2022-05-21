@@ -1,7 +1,43 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+
+import 'disasterList.dart';
+
+void update() async {
+  DateTime now = DateTime.now();
+  DateTime before = DateTime.now().subtract(Duration(days: 3));
+
+  DateFormat formatter = DateFormat('yyyy-MM-dd');
+
+  String todayString = formatter.format(now);
+  String pastString = formatter.format(before);
+  print(todayString);
+  print(pastString);
+
+  /*
+
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  var ref = firebaseFirestore.collection("disaster_message");
+  List<int> deletelist = [];
+
+  ref.get().then((value) {
+    for (var doc in value.docs) {
+      if (doc['FRST_REGIST_DT'] == pastString){
+        deletelist.add(doc['BBS_ORDR']);
+
+      }
+    }
+    print(deletelist);
+    for (int i = 0; i < deletelist.length ; i++){
+      ref.doc('${deletelist[i]}').delete();
+    }
+  });
+*/
+}
 
 void crawling() async {
   var url = Uri.parse("http://m.safekorea.go.kr/idsiSFK/neo/ext/json/disasterDataList/disasterDataList.json");
@@ -16,6 +52,7 @@ void crawling() async {
     var item = result[0];
     for (int i = 0; i < result.length; i++){
       item = result[i];
+
       create(item['BBS_ORDR'], item['CONT'], item['FRST_REGIST_DT']);
     }
 
@@ -32,6 +69,8 @@ void crawling() async {
 Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
   final item = FirebaseFirestore.instance.collection("disaster_message").doc("${BBS_ORDR}");
   var checking = await item.get();
+  String LOCATION = FRST_REGIST_DT.substring(0,3);
+  RegExp
   if(checking.exists){ // msg exist
 
   }
@@ -39,7 +78,8 @@ Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
     item.set({
       "BBS_ORDR": BBS_ORDR,
       "CONT": CONT,
-      "FRST_REGIST_DT": FRST_REGIST_DT
+      "FRST_REGIST_DT": FRST_REGIST_DT,
+      "location": LOCATION,
     });
   }
 }

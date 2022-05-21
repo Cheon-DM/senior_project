@@ -38,3 +38,23 @@ class Disasterlist {
     );
   }
 }
+
+class Simplelist {
+  final String BBS_NO;
+  final String CONT;
+  final String FRST_REGIST_DT;
+
+  Simplelist({
+    required this.BBS_NO,
+    required this.CONT,
+    required this.FRST_REGIST_DT
+  });
+
+  factory Simplelist.fromJson(Map<String, dynamic> json) {
+    return Simplelist(
+      BBS_NO: json['BBS_NO'] as String,
+      CONT: json['CONT'] as String,
+      FRST_REGIST_DT: json['FRST_REGIST_DT'] as String,
+    );
+  }
+}

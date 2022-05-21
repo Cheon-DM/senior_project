@@ -46,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage>{
   }
 
   Future<void> getList() async {
+    update();
     crawling();
   }
 
