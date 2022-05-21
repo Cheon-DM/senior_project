@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:senior_project/HS/mainpage.dart';
 import 'package:senior_project/HW/addFriend.dart';
 import '../HW/login.dart';
 
@@ -73,6 +74,21 @@ class _MyPageState extends State<MyPage> {
                     child: Text("나의 친구관리")
                 ),
               ),
+              SizedBox(
+                height: 50,
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return MainPage();
+                          }));
+                    },
+                    child: Text("메인페이지")
+                ),
+              ),
 
 
               SizedBox(
@@ -86,10 +102,11 @@ class _MyPageState extends State<MyPage> {
                 child: OutlinedButton(
                     onPressed: () {
                       _authentication.signOut();
-                      Navigator.push(context,
+                      /*Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                             return (login());
-                          }));
+                          }));*/
+                      Get.offAll(() => login());
 
                     },
                     child: Text("로그아웃")),
