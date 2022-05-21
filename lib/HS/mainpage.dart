@@ -3,12 +3,13 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/get_transition_mixin.dart';
 import 'package:senior_project/HS/action_guide.dart';
-import 'package:senior_project/HS/disaster_sms.dart';
 
-import 'location_sharing.dart';
-import 'loginPage.dart';
+import 'package:senior_project/HW/login.dart';
+
+import '../DM/disaster.dart';
+import '../DM/map.dart';
+
 
 
 class MainPage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       home: Container(
           child: Scaffold(
             appBar: AppBar(
@@ -37,7 +38,7 @@ class _MainPageState extends State<MainPage> {
               actions: <Widget>[
                 IconButton(
                     onPressed: (){
-                      Get.to(PreLoginPage());
+                      Get.to(login());
                     },
                     icon: Icon(
                       Icons.perm_contact_calendar_outlined,
@@ -74,7 +75,7 @@ class _MainPageState extends State<MainPage> {
                                 ),
                               ),
                             onPressed: (){
-                              Get.to(LocationSharing());
+                              Get.to(KakaoMapTest());
                             },
                           ),
                           SizedBox(height: 0,),
@@ -184,7 +185,7 @@ class _MainPageState extends State<MainPage> {
                         children: [
                           CupertinoButton(
                             onPressed: () {
-                              Get.to(LocationSharing());
+                              Get.to(KakaoMapTest());
                             },
                             child: Row(children: <Widget>[
                               Container(
@@ -246,7 +247,7 @@ class _MainPageState extends State<MainPage> {
                         children: [
                           CupertinoButton(
                             onPressed: () {
-                              Get.to(DisasterSMS());
+                              Get.to(ShowDisasterMsg());
                             },
                             child: Row(children: <Widget>[
                               Container(
