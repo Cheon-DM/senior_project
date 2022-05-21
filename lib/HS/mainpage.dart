@@ -12,6 +12,7 @@ import '../DM/disaster.dart';
 import '../DM/map.dart';
 
 import '../DM/disaster.dart';
+import '../HW/checkState.dart';
 import '../HW/friendlist.dart';
 
 
@@ -41,7 +42,7 @@ class _MainPageState extends State<MainPage> {
               actions: <Widget>[
                 IconButton(
                     onPressed: (){
-                      Get.to(login());
+                      Get.to(checkState());
                     },
                     icon: Icon(
                       Icons.perm_contact_calendar_outlined,
