@@ -32,7 +32,7 @@ class _MyPageState extends State<MyPage> {
 
             children: <Widget>[
               Image.asset(
-                "assets/images/bambi.jpg",
+                "assets/assets/bambi.jpg",
                 width: 200,
               ),
               SizedBox(
