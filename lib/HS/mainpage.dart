@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/routes/get_transition_mixin.dart';
 import 'package:senior_project/HS/action_guide.dart';
 
 import 'package:senior_project/HW/login.dart';
@@ -10,6 +11,8 @@ import 'package:senior_project/HW/login.dart';
 import '../DM/disaster.dart';
 import '../DM/map.dart';
 
+import '../DM/disaster.dart';
+import '../HW/friendlist.dart';
 
 
 class MainPage extends StatefulWidget {

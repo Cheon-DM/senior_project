@@ -41,7 +41,26 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Infinite scroll'),
+        backgroundColor: const Color(0xff6157DE),
+        elevation: 0,
+        title: Text(
+            "재난문자",
+          style: TextStyle(
+            fontFamily: 'Leferi',
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          icon: Icon(
+              Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Column(
         children: [
