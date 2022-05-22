@@ -10,7 +10,7 @@ import '../HS/myPage.dart';
 
 class login extends StatelessWidget {
 
-  final _formkey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
 
   String userName = '';
