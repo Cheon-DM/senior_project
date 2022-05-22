@@ -25,8 +25,10 @@ class Menu extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
-            // Get.to(MainPage());
-            Get.offAll(() => MyPage());
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return MyPage();
+                }));
           },
           icon: Icon(
             Icons.arrow_back,
