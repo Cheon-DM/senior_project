@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../HS/mainpage.dart';
 import 'kakaomap_screen.dart';
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
@@ -172,7 +173,31 @@ class _aroundShelterState extends State<aroundShelter> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text('Kakao map webview test')),
+      appBar: AppBar(
+        backgroundColor: const Color(0xff6157DE),
+        elevation: 5,
+        title: Text(
+          "내 주변 대피소",
+          style: TextStyle(
+            fontFamily: 'Leferi',
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return MainPage();
+                }));
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
