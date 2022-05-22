@@ -41,6 +41,7 @@ class _MainPageState extends State<MainPage> {
               ),
               actions: <Widget>[
                 IconButton(
+
                     onPressed: (){
                       Get.to(checkState());
                     },

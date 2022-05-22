@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import 'mainpage.dart';
 
 class ActionGuide extends StatefulWidget {
   @override
@@ -15,7 +19,27 @@ class _ActionGuideState extends State<ActionGuide> {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: Text('행동지침'),
+            backgroundColor: const Color(0xff6157DE),
+            elevation: 0,
+            title: Text(
+              "행동지침",
+              style: TextStyle(
+                fontFamily: 'Leferi',
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            leading: IconButton(
+              onPressed: (){
+                // Get.to(MainPage());
+                Get.offAll(() => MainPage());
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+            ),
           ),
           drawer: Drawer(
             child: ListView(

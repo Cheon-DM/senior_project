@@ -81,36 +81,64 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                 return CircularProgressIndicator();
               }
               return SizedBox(
-                height: 400.0,
+                height: MediaQuery.of(context).size.height*0.8,
                 child: ListView.builder(
                   reverse: true,
                   shrinkWrap: true,
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (ctx, index) => Container(
-                    padding: EdgeInsets.all(15),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          child: Text('NO. ${snapshot.data!.docs[index]['BBS_ORDR']}',
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          alignment: Alignment.centerLeft,
-                        ),
-                        Container(
-                          child: Text('${snapshot.data!.docs[index]['CONT']}',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
-                            ),
-                          alignment: Alignment.centerLeft,
-                        ),
-                        Container(
-                          child: Text('DATE : ${snapshot.data!.docs[index]['FRST_REGIST_DT']}',
-                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
-                            ),
-                          alignment: Alignment.centerRight,
-                        ),
-                      ],
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 15),
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            child: Text('NO. ${snapshot.data!.docs[index]['BBS_ORDR']}',
+                              style: TextStyle(
+                                  fontFamily: 'Leferi',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                              ),
+                            alignment: Alignment.centerLeft,
+                          ),
+                          Container(
+                            child: Text('${snapshot.data!.docs[index]['CONT']}',
+                                style: TextStyle(
+                                    fontFamily: 'Leferi',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.normal
+                                ),
+                              ),
+                            alignment: Alignment.centerLeft,
+                          ),
+                          Container(
+                            child: Text('DATE : ${snapshot.data!.docs[index]['FRST_REGIST_DT']}',
+                                style: TextStyle(
+                                    fontFamily: 'Leferi',
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.normal
+                                ),
+                              ),
+                            alignment: Alignment.centerRight,
+                          ),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 5,
+                            spreadRadius: 1,
+                            offset: Offset(0,5),
+                          )
+                        ],
+                      ),
+                      padding: EdgeInsets.all(15),
                     ),
-                  ),),
+                  color: Colors.grey[200],
+                  ),
+                ),
               );
             }
           )
