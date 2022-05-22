@@ -33,8 +33,10 @@ class _MyPageState extends State<MyPage> {
         ),
         leading: IconButton(
           onPressed: () {
-            // Get.to(MainPage());
-            Get.offAll(() => MainPage());
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return MainPage();
+                }));
           },
           icon: Icon(
             Icons.arrow_back,
@@ -129,27 +131,24 @@ class _MyPageState extends State<MyPage> {
         child: GestureDetector(
           onTap: () {
             _authentication.signOut();
-            /*Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return (login());
-                          }));*/
-            Get.offAll(() => login());
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return (login());
+            }));
           },
-            child: Container(
-              padding: EdgeInsets.only(top: 9),
-              height: 50,
-              color: const Color(0xff6157DE),
-              child: Text(
-                "로그아웃",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: 'Leferi',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white
-                ),
-              ),
+          child: Container(
+            padding: EdgeInsets.only(top: 9),
+            height: 50,
+            color: const Color(0xff6157DE),
+            child: Text(
+              "로그아웃",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Leferi',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
+          ),
         ),
       ),
     );
