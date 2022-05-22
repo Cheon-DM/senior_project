@@ -15,7 +15,7 @@ class _AddFriendState extends State<AddFriend> {
 
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
-        elevation: 0,
+        elevation: 5,
         title: Text(
           "나의 친구관리",
           style: TextStyle(

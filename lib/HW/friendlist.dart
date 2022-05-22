@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:senior_project/HW/addFriend.dart';
 import 'package:senior_project/HW/requestedFriend.dart';
+import 'package:get/get.dart';
+
+import '../HS/myPage.dart';
 
 
 class Menu extends StatelessWidget {
@@ -10,7 +13,27 @@ class Menu extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("혜원 친구목록 페이지"),
+          backgroundColor: const Color(0xff6157DE),
+          elevation: 5,
+          title: Text(
+            "친구목록",
+            style: TextStyle(
+              fontFamily: 'Leferi',
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          leading: IconButton(
+            onPressed: (){
+              // Get.to(MainPage());
+              Get.offAll(() => MyPage());
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+          ),
         ),
         body: Column(
           children: <Widget>[

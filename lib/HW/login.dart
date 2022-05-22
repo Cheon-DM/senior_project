@@ -29,7 +29,7 @@ class login extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
-        elevation: 0,
+        elevation: 5,
         title: Text(
           "로그인",
           style: TextStyle(

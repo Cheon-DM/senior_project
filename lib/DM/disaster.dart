@@ -43,9 +43,11 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
-        elevation: 0,
+        elevation: 5,
+
         title: Text(
             "재난문자",
           style: TextStyle(
@@ -66,13 +68,14 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
           ),
         ),
       ),
+
       body: Column(
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.0),
           ),
           SizedBox(
-            height: 50.0,
+            height: 0.0,
           ),
           StreamBuilder<QuerySnapshot>(
             stream: firebaseFirestore.collection("disaster_message").snapshots(),
@@ -81,7 +84,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                 return CircularProgressIndicator();
               }
               return SizedBox(
-                height: MediaQuery.of(context).size.height*0.8,
+                height: MediaQuery.of(context).size.height*0.9,
                 child: ListView.builder(
                   reverse: true,
                   shrinkWrap: true,
@@ -104,7 +107,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                             child: Text('${snapshot.data!.docs[index]['CONT']}',
                                 style: TextStyle(
                                     fontFamily: 'Leferi',
-                                    fontSize: 20,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.normal
                                 ),
                               ),
@@ -122,6 +125,8 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                           ),
                         ],
                       ),
+
+                      //메세지 카드
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         color: Colors.white,

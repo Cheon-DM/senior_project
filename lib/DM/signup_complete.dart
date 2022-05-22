@@ -35,7 +35,7 @@ class _signup_completeState extends State<signup_complete> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
-        elevation: 0,
+        elevation: 5,
         title: Text(
           "회원가입완료",
           style: TextStyle(

@@ -123,7 +123,7 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
-        elevation: 0,
+        elevation: 5,
         title: Text(
           "내 주변 대피소",
           style: TextStyle(

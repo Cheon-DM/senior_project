@@ -13,11 +13,10 @@ class _ActionGuideState extends State<ActionGuide> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '행동지침1',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'action-guide',
+
       home: Scaffold(
+
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
           elevation: 5,
@@ -41,12 +40,15 @@ class _ActionGuideState extends State<ActionGuide> {
             ),
           ),
         ),
+
         body: Padding(
           padding: EdgeInsets.all(0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+              //화면 좌측 분할부(메뉴)
               Expanded(
                 child:
                 Container(
@@ -87,6 +89,8 @@ class _ActionGuideState extends State<ActionGuide> {
                 ),
                 flex: 1,
               ),
+
+              //화면 우측 분할부(내용)
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10, top: 15),

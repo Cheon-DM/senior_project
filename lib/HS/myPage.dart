@@ -20,7 +20,7 @@ class _MyPageState extends State<MyPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
-        elevation: 0,
+        elevation: 5,
         title: Text(
           "내 정보",
           style: TextStyle(
