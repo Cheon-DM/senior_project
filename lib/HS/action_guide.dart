@@ -26,7 +26,7 @@ class _ActionGuideState extends State<ActionGuide> {
               style: TextStyle(
                 fontFamily: 'Leferi',
                 color: Colors.white,
-                fontSize: 15,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),

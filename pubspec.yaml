@@ -81,6 +81,7 @@ flutter:
     - assets/logo_square.png
     - assets/logo_white.png
     - assets/logo_square_white.png
+    - assets/neoguleman.jpeg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

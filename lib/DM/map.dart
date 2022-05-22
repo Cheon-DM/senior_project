@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:get/get.dart';
+
+import '../HS/mainpage.dart';
+
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
 
@@ -117,7 +121,28 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text('Kakao map webview test')),
+      appBar: AppBar(
+        backgroundColor: const Color(0xff6157DE),
+        elevation: 0,
+        title: Text(
+          "내 주변 대피소",
+          style: TextStyle(
+            fontFamily: 'Leferi',
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: (){
+            Get.offAll(()=>MainPage());
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -249,7 +274,7 @@ const customOverlay = new kakao.maps.CustomOverlay({
                       'map.setLevel(map.getLevel() + 1, {animate: true})');
                 },
                 child: CircleAvatar(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color(0xff6157DE),
                   child: const Icon(
                     Icons.add,
                     color: Colors.white,
@@ -297,10 +322,23 @@ const customOverlay = new kakao.maps.CustomOverlay({
             ],
           ),
           ElevatedButton(
-              child: Text('Kakao map screen'),
+              child: Text(
+                  'Kakao map screen',
+                style: TextStyle(
+                  fontFamily: 'Leferi',
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(const Color(0xff6157DE))
+              ),
               onPressed: () async {
                 await _openKakaoMapScreen(context);
-              })
+              },
+
+          ),
         ],
       ),
     );

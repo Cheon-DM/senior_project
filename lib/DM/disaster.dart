@@ -51,7 +51,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
           style: TextStyle(
             fontFamily: 'Leferi',
             color: Colors.white,
-            fontSize: 15,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),

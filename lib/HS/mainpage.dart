@@ -34,14 +34,14 @@ class _MainPageState extends State<MainPage> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset('assets/logo_white.png',
+                  Image.asset(
+                    'assets/logo_white.png',
                   fit: BoxFit.contain,
                   height: 20,),
                 ],
               ),
               actions: <Widget>[
                 IconButton(
-
                     onPressed: (){
                       Get.to(checkState());
                     },

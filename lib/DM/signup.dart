@@ -2,7 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:senior_project/DM/signup_complete.dart';
+
+import '../HW/login.dart';
 
 class signup extends StatefulWidget {
   @override
@@ -33,7 +37,27 @@ class _signupState extends State<signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("회원가입"),
+        backgroundColor: const Color(0xff6157DE),
+        elevation: 0,
+        title: Text(
+          "회원가입",
+          style: TextStyle(
+            fontFamily: 'Leferi',
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: (){
+            // Get.to(MainPage());
+            Get.offAll(() => login());
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(50),
@@ -135,49 +159,63 @@ class _signupState extends State<signup> {
                       hintText: 'Password',
                       border: OutlineInputBorder()),
                 ),
-                Container(height: 100),
-                Container(
-                  width: double.maxFinite,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      _tryValidation();
-
-                      final newUser =
-                          await _authentication.createUserWithEmailAndPassword(
-                               email: userEmail, password: userPassword);
-
-                      await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
-                      .set({
-                        'userName' : userName,
-                        'email' : userEmail
-                      });
-
-
-                      if (newUser.user == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('제대로된 입력 필요')));
-                      }
-
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return signup_complete(userName);
-                          }));
-                    },
-                    child: Text("회원가입하기"),
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(Colors.white),
-                      backgroundColor:
-                          MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.disabled)) {
-                          return Colors.grey;
-                        } else {
-                          return Color(0xff6157de);
-                        }
-                      }),
-                    ),
-                  ),
-                ),
+                Container(height: 200),
               ],
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child:ElevatedButton(
+          onPressed: () async {
+            _tryValidation();
+
+            final newUser =
+            await _authentication.createUserWithEmailAndPassword(
+                email: userEmail, password: userPassword);
+
+            await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
+                .set({
+              'userName' : userName,
+              'email' : userEmail
+            });
+
+
+            if (newUser.user == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('제대로된 입력 필요')));
+            }
+
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return signup_complete(userName);
+                }));
+          },
+          child: Container(
+            padding: EdgeInsets.only(top: 9),
+            height: 50,
+            color: const Color(0xff6157DE),
+            child: Text(
+              '회원가입하기',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Leferi',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+              ),
+            ),
+          ),
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+            backgroundColor:
+            MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return Colors.grey;
+              } else {
+                return Color(0xff6157de);
+              }
+            }
             ),
           ),
         ),
