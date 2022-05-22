@@ -88,7 +88,7 @@ class _signupState extends State<signup> {
                   decoration: InputDecoration(
                       icon: Icon(Icons.accessibility),
                       labelText: "닉네임",
-                      hintText: 'Username',
+                      hintText: 'Email',
                       border: OutlineInputBorder()),
                 ),
                 Container(height: 10),

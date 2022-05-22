@@ -22,7 +22,7 @@ class Requested extends StatelessWidget {
             ),
           ),
           leading: IconButton(
-            onPressed: (){
+            onPressed: () {
               // Get.to(MainPage());
               Get.offAll(() => MyPage());
             },
@@ -34,55 +34,71 @@ class Requested extends StatelessWidget {
         ),
         body: Column(
           children: <Widget>[
+            /*
             Container(
               padding: EdgeInsets.only(top: 10),
-              color: Colors.blue,
+              color: const Color(0xff6157DE),
               width: size.width,
               height: 50,
-              child: SizedBox.expand(child: Text("친구 관리",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
-                ),)),
+              child: SizedBox.expand(
+                child: Text(
+                  "친구 관리",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Leferi',
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
+             */
+
             Row(
               children: <Widget>[
                 GestureDetector(
                     child: Container(
                       padding: EdgeInsets.only(top: 13),
-                      color: Colors.blue,
+                      color: const Color(0xff6157DE),
                       width: size.width * 0.5,
                       height: 50,
-                      child: SizedBox.expand(child: Text("친구",
+                      child: SizedBox.expand(
+                        child: Text(
+                          "친구",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
-                            fontWeight: FontWeight.w300,
-                          )
-                      )),
+                            fontFamily: 'Leferi',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                     onTap: () {
                       Navigator.pop(context);
-                    }
-                ),
+                    }),
                 Container(
                   padding: EdgeInsets.only(top: 13),
                   color: Colors.white,
                   width: size.width * 0.5,
                   height: 50,
-                  child: SizedBox.expand(child: Text("받은 요청",
+                  child: SizedBox.expand(
+                    child: Text(
+                      "받은 요청",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                      )
-                  )),
+                        fontFamily: 'Leferi',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 )
               ],
             ),
-
-
           ],
         ));
   }

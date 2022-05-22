@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:senior_project/HS/myPage.dart';
 import 'package:get/get.dart';
 
+import 'friendlist.dart';
+
 
 class AddFriend extends StatefulWidget {
   @override
@@ -28,7 +30,7 @@ class _AddFriendState extends State<AddFriend> {
         leading: IconButton(
           onPressed: (){
             // Get.to(MainPage());
-            Get.offAll(() => MyPage());
+            Get.offAll(() => Menu());
           },
           icon: Icon(
             Icons.arrow_back,
