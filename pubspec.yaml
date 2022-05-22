@@ -84,6 +84,7 @@ flutter:
     - assets/logo_square_white.png
     - assets/shelterlist.xlsx
     - assets/neoguleman.jpeg
+    - assets/EQ_Shelter.xlsx
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

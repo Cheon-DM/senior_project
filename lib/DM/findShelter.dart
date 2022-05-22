@@ -49,7 +49,7 @@ class _aroundShelterState extends State<aroundShelter> {
 
   Future<void> readExcelFile() async {
     WidgetsFlutterBinding.ensureInitialized();
-    ByteData data = await rootBundle.load("assets/shelterlist.xlsx");
+    ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var excel = Excel.decodeBytes(bytes);
     int j=0;
@@ -64,10 +64,11 @@ class _aroundShelterState extends State<aroundShelter> {
 
       for (var row in excel.tables[table]!.rows) {
         List<dynamic> tmp = [];
-        tmp.add(row[1]!.props.first);
         tmp.add(row[5]!.props.first);
-        tmp.add(row[6]!.props.first);
+        tmp.add(row[9]!.props.first);
+        tmp.add(row[10]!.props.first);
         mp[j] = tmp;
+        print(tmp);
 
         j++;
       }
