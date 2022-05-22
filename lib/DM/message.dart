@@ -72,7 +72,6 @@ Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
       "BBS_ORDR": BBS_ORDR,
       "CONT": CONT,
       "FRST_REGIST_DT": FRST_REGIST_DT,
-      "LOCATION": LOCATION,
     });
   }
 }
