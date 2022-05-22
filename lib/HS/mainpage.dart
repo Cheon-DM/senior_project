@@ -9,6 +9,7 @@ import 'package:senior_project/HS/action_guide.dart';
 import 'package:senior_project/HW/login.dart';
 
 import '../DM/disaster.dart';
+import '../DM/findShelter.dart';
 import '../DM/map.dart';
 
 import '../DM/disaster.dart';
@@ -23,7 +24,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       home: Container(
           child: Scaffold(
               appBar: AppBar(
@@ -42,7 +43,10 @@ class _MainPageState extends State<MainPage> {
                 actions: <Widget>[
                   IconButton(
                     onPressed: () {
-                      Get.to(checkState());
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return checkState();
+                          }));
                     },
                     icon: Icon(
                       Icons.perm_contact_calendar_outlined,
@@ -86,7 +90,10 @@ class _MainPageState extends State<MainPage> {
                                   ]),
                             ),
                             onPressed: () {
-                              Get.to(KakaoMapTest());
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return aroundShelter();
+                                  }));
                             },
                           ),
                           SizedBox(
@@ -137,7 +144,10 @@ class _MainPageState extends State<MainPage> {
                         children: [
                           CupertinoButton(
                             onPressed: () {
-                              Get.to(ActionGuide());
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return ActionGuide();
+                                  }));
                             },
                             child: Row(
                               children: <Widget>[
@@ -205,7 +215,10 @@ class _MainPageState extends State<MainPage> {
                         children: [
                           CupertinoButton(
                             onPressed: () {
-                              Get.to(KakaoMapTest());
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return KakaoMapTest();
+                                  }));
                             },
                             child: Row(
                               children: <Widget>[
@@ -269,7 +282,10 @@ class _MainPageState extends State<MainPage> {
                         children: [
                           CupertinoButton(
                             onPressed: () {
-                              Get.to(ShowDisasterMsg());
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return ShowDisasterMsg();
+                                  }));
                             },
                             child: Row(
                               children: <Widget>[
