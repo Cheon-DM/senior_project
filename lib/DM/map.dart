@@ -135,7 +135,10 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
         ),
         leading: IconButton(
           onPressed: (){
-            Get.offAll(()=>MainPage());
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return MainPage();
+                }));
           },
           icon: Icon(
             Icons.arrow_back,
