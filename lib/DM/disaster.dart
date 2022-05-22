@@ -60,7 +60,10 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
         leading: IconButton(
           onPressed: (){
             // Get.to(MainPage());
-            Get.offAll(() => MainPage());
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return MainPage();
+                }));
           },
           icon: Icon(
               Icons.arrow_back,

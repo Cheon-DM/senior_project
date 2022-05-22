@@ -31,7 +31,6 @@ dependencies:
     sdk: flutter
   http: ^0.13.4
   cloud_firestore: ^3.1.7
-  flutter_kakao_map: ^0.0.4
   plugin_platform_interface: ^1.0.1
   firebase_core_platform_interface: ^4.2.4
   get: ^4.6.1
@@ -42,6 +41,8 @@ dependencies:
   location: ^4.2.0
   geolocator: ^8.2.1
   intl: ^0.17.0
+  excel: ^2.0.0-null-safety-2
+  vector_math: ^2.1.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -81,6 +82,7 @@ flutter:
     - assets/logo_square.png
     - assets/logo_white.png
     - assets/logo_square_white.png
+    - assets/shelterlist.xlsx
     - assets/neoguleman.jpeg
 
 
