@@ -16,19 +16,20 @@ import 'kakaomap_screen.dart';
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
 
-num calculate(double lat1, double lat2, double lng1, double lng2){
+double calculate(double lat1, double lat2, double lng1, double lng2){
   final R = 6371e3;
   final _lat1 = radians(lat1);
   final _lat2 = radians(lat2);
-  final lat_dif = radians(lat2-lat1);
-  final lng_dif = radians(lng2-lng1);
+  final lat_dif = lat2-lat1;
+  final lng_dif = lng2-lng1;
 
-  final a = sin(lat_dif/2) * sin(lat_dif/2) + cos(_lat1) * cos(_lat2) * sin(lng_dif/2) * sin(lng_dif/2);
-  final c = 2 * atan2(sqrt(a), sqrt(1-a));
+  final dis= sqrt(lat_dif*lat_dif+lng_dif*lng_dif);
 
+  //final a = sin(_lat1) * sin(_lat2) + cos(_lat1) * cos(_lat2) * cos(lng_dif);
+  //final c = atan(a);
+  //final dis = degrees(c) * 60 * 1.1515 * 1.609344;
 
-  final answer = c * R;
-  return answer / 1000;
+  return dis;
 }
 
 class aroundShelter extends StatefulWidget {
@@ -56,7 +57,7 @@ class _aroundShelterState extends State<aroundShelter> {
     int j=0;
     Map<int, List<dynamic>> mp = Map<int, List<dynamic>>();
 
-    num min_dis = 100000;
+    double min_dis = 100000;
     var min_index = 0;
 
 
@@ -66,22 +67,23 @@ class _aroundShelterState extends State<aroundShelter> {
       for (var row in excel.tables[table]!.rows) {
         List<dynamic> tmp = [];
         tmp.add(row[5]!.props.first);
-        tmp.add(row[9]!.props.first);
-        tmp.add(row[10]!.props.first);
+        tmp.add(row[9]!.props.first); // 경도
+        tmp.add(row[10]!.props.first); // 위도
         mp[j] = tmp;
-        print(tmp);
 
         j++;
       }
     }
 
     _locateMe();
-
+    print(mp.length);
     for(int i = 1; i< mp.length; i++){
       // lat : 위도, lng : 경도
       double lat2 = mp[i]![2];
       double lng2 = mp[i]![1];
+      print("${mp[i]![0]} :${calculate(my_lat, lat2, my_lng, lng2).runtimeType}");
       if (min_dis > calculate(my_lat, lat2, my_lng, lng2)){
+        //print(calculate(my_lat, lat2, my_lng, lng2));
         min_dis = calculate(my_lat, lat2, my_lng, lng2);
         min_index = i;
       }
@@ -90,13 +92,14 @@ class _aroundShelterState extends State<aroundShelter> {
     print(min_dis);
     print(min_index);
 
-    lat = mp[min_index]![2];
-    lng = mp[min_index]![1];
+
     print(mp[min_index]![2]);
     print(mp[min_index]![1]);
 
     setState(() {
       //refresh the UI
+      lat = mp[min_index]![2];
+      lng = mp[min_index]![1];
     });
 
   }
@@ -144,8 +147,8 @@ class _aroundShelterState extends State<aroundShelter> {
     print(position.longitude);
     print(position.latitude);
 
-    my_lat = position.longitude;
-    my_lng = position.latitude;
+    my_lat = position.latitude;
+    my_lng = position.longitude;
 
     setState(() {
       //refresh UI
@@ -155,7 +158,7 @@ class _aroundShelterState extends State<aroundShelter> {
   @override
   void initState(){
     super.initState();
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 6), () {
       setState(() {
         _isLoading = false;
         print(_isLoading);
@@ -166,6 +169,9 @@ class _aroundShelterState extends State<aroundShelter> {
   }
 
   Stream<Future<dynamic>> locate() async* {
+    Timer(Duration(seconds: 1), () {
+
+    });
     readExcelFile();
   }
 
