@@ -15,6 +15,7 @@ import '../DM/map.dart';
 import '../DM/disaster.dart';
 import '../HW/checkState.dart';
 import '../HW/friendlist.dart';
+import 'action_guide2.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -146,7 +147,7 @@ class _MainPageState extends State<MainPage> {
                             onPressed: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                    return ActionGuide();
+                                    return ActionGuide2();
                                   }));
                             },
                             child: Row(
