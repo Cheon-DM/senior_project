@@ -16,19 +16,28 @@ import 'kakaomap_screen.dart';
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
 
-double calculate(double lat1, double lat2, double lng1, double lng2){
-  final R = 6371e3;
-  final _lat1 = radians(lat1);
-  final _lat2 = radians(lat2);
-  final lat_dif = lat2-lat1;
-  final lng_dif = lng2-lng1;
+num calculate(double lat1, double lat2, double lng1, double lng2){
+  double dis;
+  final R = 6371;
 
-  final dis= sqrt(lat_dif*lat_dif+lng_dif*lng_dif);
+  final deltaLat = radians((lat1-lat2).abs());
+  final deltaLng = radians((lng1-lng2).abs());
 
-  //final a = sin(_lat1) * sin(_lat2) + cos(_lat1) * cos(_lat2) * cos(lng_dif);
-  //final c = atan(a);
-  //final dis = degrees(c) * 60 * 1.1515 * 1.609344;
+  final sinDeltaLat = sin(deltaLat/2);
+  final sinDeltaLng = sin(deltaLng/2);
+  final squareRoot = sqrt(sinDeltaLat * sinDeltaLat + cos(radians(lat1)) * cos(radians(lat2)) * sinDeltaLng * sinDeltaLng);
 
+  dis = 2 * R * asin(squareRoot);
+  // final R = 6371e3;
+  // final _lat1 = radians(lat1);
+  // final _lat2 = radians(lat2);
+  // final lat_dif = radians(lat2-lat1);
+  // final lng_dif = radians(lng2-lng1);
+  //
+  // final a = sin(_lat1) * sin(_lat2) + cos(_lat1) * cos(_lat2) * cos(lng_dif);
+  // final c = atan(a);
+  // final dis = degrees(c) * 60 * 1.1515 * 1.609344;
+  //
   return dis;
 }
 
@@ -49,6 +58,9 @@ class _aroundShelterState extends State<aroundShelter> {
   late LocationPermission _permissionGranted;
   bool haspermission = false;
 
+  Map<int, List<dynamic>> around1KM = Map<int, List<dynamic>>();
+  Map<int, List<dynamic>> around2KM = Map<int, List<dynamic>>();
+
   Future<void> readExcelFile() async {
     WidgetsFlutterBinding.ensureInitialized();
     ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
@@ -57,7 +69,8 @@ class _aroundShelterState extends State<aroundShelter> {
     int j=0;
     Map<int, List<dynamic>> mp = Map<int, List<dynamic>>();
 
-    double min_dis = 100000;
+
+    num min_dis = 100000;
     var min_index = 0;
 
 
@@ -70,31 +83,47 @@ class _aroundShelterState extends State<aroundShelter> {
         tmp.add(row[9]!.props.first); // 경도
         tmp.add(row[10]!.props.first); // 위도
         mp[j] = tmp;
+        // print(tmp);
 
         j++;
       }
     }
 
     _locateMe();
-    print(mp.length);
+    int a = 0; // 1km list
+    int b = 0; // 2km list
+
     for(int i = 1; i< mp.length; i++){
       // lat : 위도, lng : 경도
       double lat2 = mp[i]![2];
       double lng2 = mp[i]![1];
-      print("${mp[i]![0]} :${calculate(my_lat, lat2, my_lng, lng2).runtimeType}");
-      if (min_dis > calculate(my_lat, lat2, my_lng, lng2)){
-        //print(calculate(my_lat, lat2, my_lng, lng2));
-        min_dis = calculate(my_lat, lat2, my_lng, lng2);
+
+      num distance = calculate(my_lat, lat2, my_lng, lng2);
+
+      if (min_dis > distance){
+        min_dis = distance;
         min_index = i;
       }
+
+      if (distance <= 1){
+        List<dynamic> tmp = [];
+        tmp.add(lat2);
+        tmp.add(lng2);
+        around1KM[a] = tmp;
+        a++;
+      }
+
+      if(distance > 1 && distance <= 2){
+        List<dynamic> tmp = [];
+        tmp.add(lat2);
+        tmp.add(lng2);
+        around2KM[b++] = tmp;
+
+      }
     }
-
-    print(min_dis);
-    print(min_index);
-
-
-    print(mp[min_index]![2]);
-    print(mp[min_index]![1]);
+    //print(min_index);
+    //print(min_dis);
+    //print(around1KM[0]![0].runtimeType);
 
     setState(() {
       //refresh the UI
@@ -144,8 +173,8 @@ class _aroundShelterState extends State<aroundShelter> {
 
   getLocation() async {
     position = await Geolocator.getCurrentPosition();
-    print(position.longitude);
     print(position.latitude);
+    print(position.longitude);
 
     my_lat = position.latitude;
     my_lng = position.longitude;
@@ -158,7 +187,7 @@ class _aroundShelterState extends State<aroundShelter> {
   @override
   void initState(){
     super.initState();
-    Timer(Duration(seconds: 6), () {
+    Timer(Duration(seconds: 10), () {
       setState(() {
         _isLoading = false;
         print(_isLoading);
@@ -169,10 +198,16 @@ class _aroundShelterState extends State<aroundShelter> {
   }
 
   Stream<Future<dynamic>> locate() async* {
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(seconds: 10), () {
 
+      readExcelFile();
     });
-    readExcelFile();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+
   }
 
   @override
@@ -217,98 +252,10 @@ class _aroundShelterState extends State<aroundShelter> {
                 else {
                   print(_isLoading);
                   return Expanded(
-                    child: KakaoMapView(
-                      width: size.width,
-                      height: 400,
-                      kakaoMapKey: kakaoMapKey,
-                      lat: lat,
-                      lng: lng,
-                      showMapTypeControl: true,
-                      showZoomControl: true,
-                      draggableMarker: true,
-                      mapType: MapType.BICYCLE,
-                      mapController: (controller) {
-                        _mapController = controller;
-                      },
-                      polyline: KakaoFigure(
-                        path: [
-                          KakaoLatLng(
-                              lat: 33.45080604081833, lng: 126.56900858718982),
-                          KakaoLatLng(
-                              lat: 33.450766588506054, lng: 126.57263147947938),
-                          KakaoLatLng(
-                              lat: 33.45162008091554, lng: 126.5713226693152)
-                        ],
-                        strokeColor: Colors.blue,
-                        strokeWeight: 2.5,
-                        strokeColorOpacity: 0.9,
-                      ),
-                      polygon: KakaoFigure(
-                        path: [
-                          KakaoLatLng(
-                              lat: 33.45086654081833, lng: 126.56906858718982),
-                          KakaoLatLng(
-                              lat: 33.45010890948828, lng: 126.56898629127468),
-                          KakaoLatLng(
-                              lat: 33.44979857909499, lng: 126.57049357211622),
-                          KakaoLatLng(
-                              lat: 33.450137483918496, lng: 126.57202991943016),
-                          KakaoLatLng(
-                              lat: 33.450706188506054, lng: 126.57223147947938),
-                          KakaoLatLng(
-                              lat: 33.45164068091554, lng: 126.5713126693152)
-                        ],
-                        polygonColor: Colors.red,
-                        polygonColorOpacity: 0.3,
-                        strokeColor: Colors.deepOrange,
-                        strokeWeight: 2.5,
-                        strokeColorOpacity: 0.9,
-                        strokeStyle: StrokeStyle.shortdashdot,
-                      ),
-                      customOverlayStyle: '''<style>
-                                .customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
-.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
-.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
-.customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-                                </style>''',
-                      customOverlay: '''
-const content = '<div class="customoverlay">' +
-    '  <a href="https://map.kakao.com/link/map/11394059" target="_blank">' +
-    '    <span class="title">현재 위치!</span>' +
-    '  </a>' +
-    '</div>';
-
-const position = new kakao.maps.LatLng(${my_lat}, ${my_lng});
-
-const customOverlay = new kakao.maps.CustomOverlay({
-    map: map,
-    position: position,
-    content: content,
-    yAnchor: 1
-});
-                                ''',
-                      markerImageURL:
-                      'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
-                      onTapMarker: (message) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(message.message)));
-                      },
-                      zoomChanged: (message) {
-                        debugPrint('[zoom] ${message.message}');
-                      },
-                      cameraIdle: (message) {
-                        KakaoLatLng latLng =
-                        KakaoLatLng.fromJson(jsonDecode(message.message));
-                        debugPrint('[idle] ${latLng.lat}, ${latLng.lng}');
-                      },
-                      boundaryUpdate: (message) {
-                        KakaoBoundary boundary =
-                        KakaoBoundary.fromJson(jsonDecode(message.message));
-                        debugPrint(
-                            '[boundary] ne : ${boundary.neLat}, ${boundary.neLng}, sw : ${boundary.swLat}, ${boundary.swLng}');
-                      },
-                    ),
+                    child: _testingCustomScript(
+                        size: size,
+                        context: context,
+                    )
                   );
                 }
               }
@@ -406,6 +353,7 @@ const customOverlay = new kakao.maps.CustomOverlay({
 
     Navigator.push(
         context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: url)));
+
   }
 
 
@@ -416,10 +364,24 @@ const customOverlay = new kakao.maps.CustomOverlay({
         width: size.width,
         height: 400,
         kakaoMapKey: kakaoMapKey,
-        lat: 33.450701,
-        lng: 126.570667,
+        markerImageURL: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
+        showMapTypeControl: true,
+        showZoomControl: true,
+        lat: my_lat,
+        lng: my_lng,
         customScript: '''
     let markers = [];
+       
+    let data = ${around1KM};
+    
+    
+    const result = JSON.stringify(data); // string
+
+    for(let i in data) {
+  console.log(i); // key
+  console.log(data[i][0]); // value against the key
+}
+   
     
     function addMarker(position) {
     
@@ -430,8 +392,9 @@ const customOverlay = new kakao.maps.CustomOverlay({
       markers.push(marker);
     }
     
-    for(let i = 0 ; i < 3 ; i++){
-      addMarker(new kakao.maps.LatLng(33.450701 + 0.0003 * i, 126.570667 + 0.0003 * i));
+    for(let i = 0 ; i < Object.keys(data).length ; i++){
+      addMarker(new kakao.maps.LatLng(data[i][0] + 0.0003 * i, data[i][1] + 0.0003 * i));
+      
 
       kakao.maps.event.addListener(markers[i], 'click', (i) => {
         return function(){
