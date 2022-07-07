@@ -1,20 +1,15 @@
 import 'dart:ui';
 
+import 'package:excel/excel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/get_transition_mixin.dart';
+import 'package:flutter/services.dart';
 import 'package:senior_project/HS/action_guide.dart';
-
-import 'package:senior_project/HW/login.dart';
 
 import '../DM/disaster.dart';
 import '../DM/findShelter.dart';
 import '../DM/map.dart';
-
-import '../DM/disaster.dart';
 import '../HW/checkState.dart';
-import '../HW/friendlist.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -22,6 +17,30 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  Map<int, List<dynamic>> excelMap = Map<int, List<dynamic>>();
+
+  Future<void> readExcelFile() async {
+    ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+    int j = 0;
+
+    for (var table in excel.tables.keys) {
+      print(table);
+
+      for (var row in excel.tables[table]!.rows) {
+        List<dynamic> tmp = [];
+        tmp.add(row[5]!.props.first);
+        tmp.add(row[9]!.props.first); // 경도
+        tmp.add(row[10]!.props.first); // 위도
+        excelMap[j] = tmp;
+
+        j++;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -91,9 +110,8 @@ class _MainPageState extends State<MainPage> {
                             ),
                             onPressed: () {
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return aroundShelter();
-                                  }));
+                                  MaterialPageRoute(builder: (context) => aroundShelter()
+                                  ));
                             },
                           ),
                           SizedBox(

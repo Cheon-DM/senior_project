@@ -8,5 +8,5 @@ import 'HS/mainpage.dart';
 void main() async {
   authFirebase();
   runApp(MaterialApp(
-      home: MainPage()));
+      home: LandingPage()));
 }
