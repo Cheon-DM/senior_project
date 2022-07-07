@@ -1,8 +1,31 @@
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:senior_project/HS/myPage.dart';
 import 'package:get/get.dart';
 
 import 'friendlist.dart';
+
+
+/*class UserResult extends StatelessWidget{
+  final User eachUser;
+  UserResult(this.eachUser);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(3),
+      child: Container(
+
+      ),
+    )
+  }
+
+
+}*/
+
 
 
 class AddFriend extends StatefulWidget {
@@ -11,6 +34,78 @@ class AddFriend extends StatefulWidget {
 }
 
 class _AddFriendState extends State<AddFriend> {
+  ///////////////////////////////////////////////
+  TextEditingController searchTextEditingController = TextEditingController();
+
+
+  late Future<QuerySnapshot> futureSearchResults;
+
+
+  final userref=FirebaseFirestore.instance.collection('user');
+
+  var hello; // 나중에 지우기
+  //final showemail = FirebaseFirestore.instance.collection('user').doc('user');
+
+
+  void _sendName()async{ //나중에 지우기
+
+    final userData= await FirebaseFirestore.instance.collection('user').doc('uLOQtwoojbeKhYj0oglECxvRKnO2').get();
+    hello = userData.data()!['email'];
+    print(hello);
+  }
+
+
+
+
+
+
+
+  emptyTextFormField(){
+    searchTextEditingController.clear();
+  }
+
+
+  controlSearching(str) {
+    print(str);
+   // Future<QuerySnapshot> allUsers = userref.where('email', isEqualTo: str).get();
+    var hel = userref.where('email', isEqualTo: str).get();
+    if(hel!=null){print(hel);}
+    setState((){
+     // futureSearchResults = allUsers;
+      //if(hel!=null){print(hel);}
+    });
+  }
+
+
+/*
+  displayNoSearchResultScreen(context){
+    final Orientation orientation = MediaQuery.of(context).orientation;
+  }
+
+  displayUsersFoundScreen(){
+    return FutureBuilder(
+        future: futureSearchResults,
+        builder: (context, snapshot){
+          if(snapshot.hasData==false){
+            return CircularProgressIndicator();
+          }
+
+          List<UserResult> searchUserResult = [];
+          snapshot.data.
+        }
+    );
+  }
+*/
+
+
+
+
+
+  /////////////////////////////////////////////////////////////
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,20 +150,26 @@ class _AddFriendState extends State<AddFriend> {
               filled: true,
               prefixIcon: Icon(Icons.person_pin, color: Colors.grey[700], size: 20),
               suffixIcon: IconButton(icon: Icon(Icons.clear, color: Colors.grey[700]),
-                onPressed: (){},
+                onPressed: (){
+                  emptyTextFormField();
+                  _sendName();
+                },
+
 
                 //emptyTheTextFormField,
               ),
 
-            )
+            ),
+            onFieldSubmitted: controlSearching,
         ),
       ),
     );
   }
 }
 
-TextEditingController searchTextEditingController = TextEditingController();
 
-displayNoSearchResultScreen(context){
-  final Orientation orientation = MediaQuery.of(context).orientation;
-}
+
+
+
+
+
