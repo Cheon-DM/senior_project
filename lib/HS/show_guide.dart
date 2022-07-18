@@ -19,7 +19,7 @@ class _ShowGuideState extends State<ShowGuide> {
 
   @override
   void initState() {
-    ReadJsonData();
+    //ReadJsonData();
     super.initState();
   }
 
@@ -51,6 +51,9 @@ class _ShowGuideState extends State<ShowGuide> {
             ),
           ),
         ),
+
+        /*
+        //0718자 futurebuilder 원본
         body: FutureBuilder(
           future: ReadJsonData(),
           builder: (context, data) {
@@ -68,6 +71,50 @@ class _ShowGuideState extends State<ShowGuide> {
             }else{
               return Center(child: CircularProgressIndicator());
             }
+          },
+        )
+         */
+        body: FutureBuilder(
+          future: ReadJsonData(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if(snapshot.hasData == false) {
+              return CircularProgressIndicator();
+            }
+
+            else if(snapshot.hasError) {
+              return Padding(padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '${snapshot.error}'
+              ),);
+            }
+            else{
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  snapshot.data.toString(),
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              );
+            }
+            /*
+            if(data.hasError){
+              print('${"응 데이터에러야 ㅋㅋ"}');
+              return Center(child: Text("${data.error}"));
+            } else if(data.hasData) {
+              var items = data.data as List<GuideLineModel>;
+              print('${"우와! 데이터가 있다!"}');
+              return Container(
+                child: Text(
+                  items.toString(),
+                ),
+              );
+            }else{
+              return Center(child: CircularProgressIndicator());
+            }
+             */
+
           },
         )
     );
@@ -88,20 +135,14 @@ class _ShowGuideState extends State<ShowGuide> {
   }
    */
 
-  // 자료형 문제 좀 고쳐보려고 건드리는 부분
-  Future<String>ReadJsonData() async {
+  // 성공!!!!!!!!! 건드리지말기
+  Future<String> ReadJsonData() async {
     final jsonData = await rootBundle.rootBundle.loadString('assets/guide/guide1_1.json');
-    final list = json.decode(jsonData) as List<dynamic>;
+    final list = jsonDecode(jsonData) as dynamic;
     var item = list[0].toString();
-    print('${"으아아아"}');
-    print('${list[0]}');
-    print('${"아아아악"}');
-    print('${list[1]}');
-    print('${"출력값"}');
+    print('${"출력값 :"}');
     print('${item}');
-    print('${"리턴값"}');
     return item;
-
     //fromJson : map구조에서 새로운 user객체를 생성하는 생성자
     //toJson : user객체를 map구조로 변환하는 함수
 
