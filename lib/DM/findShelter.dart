@@ -6,12 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:excel/excel.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
 import 'package:flutter/material.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../HS/mainpage.dart';
+import '../Provider/LocateData.dart';
 import 'kakaomap_screen.dart';
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
@@ -47,16 +49,19 @@ class aroundShelter extends StatefulWidget {
 }
 
 class _aroundShelterState extends State<aroundShelter> {
+  //late BuildContext context;
   late WebViewController _mapController;
-  double my_lat = 0;
-  double my_lng = 0;
-  double lat = 0;
-  double lng = 0;
+  late LocateProvider _locateProvider = Provider.of<LocateProvider>(context,listen: false);
+
+  //double my_lat = 0;
+  //double my_lng = 0;
+  //double lat = 0;
+  //double lng = 0;
   bool _isLoading = true;
-  late Position position;
-  bool _serviceEnabled = false;
-  late LocationPermission _permissionGranted;
-  bool haspermission = false;
+  //late Position position;
+ // bool _serviceEnabled = false;
+ // late LocationPermission _permissionGranted;
+ // bool haspermission = false;
 
   Map<int, List<dynamic>> around1KM = Map<int, List<dynamic>>();
   Map<int, List<dynamic>> around2KM = Map<int, List<dynamic>>();
@@ -88,8 +93,8 @@ class _aroundShelterState extends State<aroundShelter> {
         j++;
       }
     }
-
-    _locateMe();
+    _locateProvider.locateMe();
+   // _locateMe();
     int a = 0; // 1km list
     int b = 0; // 2km list
 
@@ -98,7 +103,7 @@ class _aroundShelterState extends State<aroundShelter> {
       double lat2 = mp[i]![2];
       double lng2 = mp[i]![1];
 
-      num distance = calculate(my_lat, lat2, my_lng, lng2);
+      num distance = calculate(context.watch<LocateProvider>().my_lat, lat2, context.watch<LocateProvider>().my_lng, lng2);
 
       if (min_dis > distance){
         min_dis = distance;
@@ -127,13 +132,15 @@ class _aroundShelterState extends State<aroundShelter> {
 
     setState(() {
       //refresh the UI
-      lat = mp[min_index]![2];
-      lng = mp[min_index]![1];
+      _locateProvider.lat_change(mp[min_index]![2]);
+     // context.read<LocateProvider>().lat = mp[min_index]![2];
+     // lng = mp[min_index]![1];
+      _locateProvider.lng_change(mp[min_index]![1]);
     });
 
   }
 ////////////////////////////////////////////////////////////////////////////////
-  _locateMe() async {
+  /*_locateMe() async {
     _serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if(_serviceEnabled){
       _permissionGranted = await Geolocator.checkPermission();
@@ -182,7 +189,7 @@ class _aroundShelterState extends State<aroundShelter> {
     setState(() {
       //refresh UI
     });
-  }
+  }*/
 ////////////////////////////////////////////////////////////////////////////////
   @override
   void initState(){
@@ -193,7 +200,8 @@ class _aroundShelterState extends State<aroundShelter> {
         print(_isLoading);
       });
     });
-    _locateMe();
+    _locateProvider.locateMe();
+    //_locateMe();
     readExcelFile();
   }
 
@@ -297,7 +305,7 @@ class _aroundShelterState extends State<aroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript('''
-      addMarker(new kakao.maps.LatLng($my_lat + 0.0003, ${my_lng} + 0.0003));
+      addMarker(new kakao.maps.LatLng(${context.watch<LocateProvider>().my_lat} + 0.0003, ${context.watch<LocateProvider>().my_lng} + 0.0003));
       
       function addMarker(position) {
         let testMarker = new kakao.maps.Marker({position: position});
@@ -367,8 +375,8 @@ class _aroundShelterState extends State<aroundShelter> {
         markerImageURL: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
         showMapTypeControl: true,
         showZoomControl: true,
-        lat: my_lat,
-        lng: my_lng,
+        lat: context.watch<LocateProvider>().my_lat,
+        lng: context.watch<LocateProvider>().my_lng,
         customScript: '''
     let markers = [];
        
