@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -99,7 +102,142 @@ class Requested extends StatelessWidget {
                 )
               ],
             ),
+            Expanded(
+              child: Stack(
+                children: [
+                  FreindList(),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                  ),
+                ],
+              ),
+            ),
           ],
         ));
+  }
+}
+
+
+
+final user =FirebaseAuth.instance.currentUser;
+
+
+class FreindList extends StatefulWidget {
+  @override
+  _FreindListState createState() => _FreindListState();
+}
+
+class _FreindListState extends State<FreindList> {
+  @override
+
+  final user =FirebaseAuth.instance.currentUser;
+
+  Widget build(BuildContext context) {
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection("user").doc(user!.uid).collection('FriendAdmin')
+          .where('otheruser', isEqualTo: 1)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        return Scaffold(
+            body: ListView.separated(
+              itemCount:snapshot.data!.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  iconColor: Colors.grey,
+                  textColor: Colors.black,
+
+                  leading: Icon(
+                    Icons.account_circle,
+                    size: 40,
+                  ),
+                  title: Text(
+                     snapshot.data!.docs[index]['name'],
+
+                  ),
+                  subtitle: Text(snapshot.data!.docs[index]['email']),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: ()async{
+
+                          print('${snapshot.data!.docs[index]['email']}');
+
+                          var cUserName='';
+                          final cUser=FirebaseFirestore.instance.collection('user').doc(user!.uid);
+                          await cUser.get().then(
+                                  (value){
+                                    cUserName = value['userName'];
+                              }
+                          );
+
+
+                          await FirebaseFirestore.instance.collection('user').doc(user!.uid)
+                              .collection('FriendAdmin').doc('${snapshot.data!.docs[index]['uid']}').update({
+                            'otheruser': 0,
+                            'friend' : 1
+                          });
+
+                          await FirebaseFirestore.instance.collection('user').doc('${snapshot.data!.docs[index]['uid']}')
+                              .collection('FriendAdmin').doc(user!.uid).update({
+                            //'otheruser': 1,
+                            'friend' : 1,
+                            'email': user!.email,
+                            'name':cUserName,
+                            'uid': user!.uid
+                          });
+
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('친구 요청 수락.')));
+                        },
+                        child: Text(
+                          '수락',
+                          style: TextStyle(
+                            fontFamily: 'Leferi',
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async{
+
+                          await FirebaseFirestore.instance.collection('user').doc('${snapshot.data!.docs[index]['uid']}')
+                              .collection('FriendAdmin').doc(user!.uid).update({
+                              'me': 0,
+                          });
+                          await FirebaseFirestore.instance.collection('user').doc(user!.uid)
+                              .collection('FriendAdmin').doc('${snapshot.data!.docs[index]['uid']}').update({
+                            'otheruser': 0,
+                          });
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('친구 요청 거절.')));
+                        },
+                        child: Text(
+                          '거절',
+                          style: TextStyle(
+                            fontFamily: 'Leferi',
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(
+                  height: 0,
+                  color: Colors.grey,
+                );
+              },
+            ));
+      }
+    );
   }
 }

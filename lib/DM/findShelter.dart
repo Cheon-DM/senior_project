@@ -132,7 +132,7 @@ class _aroundShelterState extends State<aroundShelter> {
     });
 
   }
-
+////////////////////////////////////////////////////////////////////////////////
   _locateMe() async {
     _serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if(_serviceEnabled){
@@ -183,7 +183,7 @@ class _aroundShelterState extends State<aroundShelter> {
       //refresh UI
     });
   }
-
+////////////////////////////////////////////////////////////////////////////////
   @override
   void initState(){
     super.initState();
