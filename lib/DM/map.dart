@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:location/location.dart';
 import 'package:senior_project/DM//kakaomap_screen.dart';
 import 'package:flutter/material.dart';
@@ -137,17 +135,63 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
             stream: locate(),
             builder: (context, snapshot) {
               if (_isLoading){
-                print(_isLoading);
+                // print(_isLoading);
                 return const CircularProgressIndicator();
               }
               else {
-                print(_isLoading);
-                return Expanded(
-                  child: _testingCustomScript(
-                      size: size,
-                      context: context
-                  )
-                );
+                // print(_isLoading);
+                return KakaoMapView(
+                    width: size.width,
+                    height: 400,
+                    kakaoMapKey: kakaoMapKey,
+                    lat: 37.5515814,
+                    lng: 126.9249751,
+                    customScript: '''
+    let markers = [];
+    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+    
+    function addMarker(position, image) {
+    
+      let marker = new kakao.maps.Marker({position: position, image: image});
+
+      marker.setMap(map);
+    
+      markers.push(marker);
+    }
+    
+    function createMarkerImage(src, size, options) {
+      var markerImage = new kakao.maps.MarkerImage(src, size, options);
+      return markerImage;            
+    }
+    
+    var imageSize = new kakao.maps.Size(200, 100);
+    var imageOptions = {  
+                spriteOrigin: new kakao.maps.Point(0, 0),    
+                spriteSize: new kakao.maps.Size(36, 98)  
+            };
+    var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
+    
+    for(let i = 0 ; i < 3 ; i++){
+      addMarker(new kakao.maps.LatLng(37.5515814 + 0.0003 * i, 126.9249751 + 0.0003 * i), markerImage);
+
+      kakao.maps.event.addListener(markers[i], 'click', (i) => {
+        return function(){
+          onTapMarker.postMessage('marker ' + i + ' is tapped');
+        };
+      });
+    }
+    
+    
+		  const zoomControl = new kakao.maps.ZoomControl();
+      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+   
+      const mapTypeControl = new kakao.maps.MapTypeControl();
+      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+              ''',
+                    onTapMarker: (message) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(message.message)));
+                    });
                 }
               }
           ),
@@ -267,8 +311,9 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
         width: size.width,
         height: 400,
         kakaoMapKey: kakaoMapKey,
-        lat: 33.450701,
-        lng: 126.570667,
+        lat: 37.5515814,
+        lng: 126.9249751,
+        markerImageURL: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
         customScript: '''
     let markers = [];
     
@@ -282,7 +327,7 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
     }
     
     for(let i = 0 ; i < 3 ; i++){
-      addMarker(new kakao.maps.LatLng(33.450701 + 0.0003 * i, 126.570667 + 0.0003 * i));
+      addMarker(new kakao.maps.LatLng(37.5515814 + 0.0003 * i, 126.9249751 + 0.0003 * i));
 
       kakao.maps.event.addListener(markers[i], 'click', (i) => {
         return function(){

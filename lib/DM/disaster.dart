@@ -1,7 +1,7 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:senior_project/HS/mainpage.dart';
 import 'message.dart';
 
@@ -41,7 +41,9 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
 
   Future<void> getList() async {
     update();
-    crawling();
+    Timer(Duration(seconds: 5), () {
+      crawling();
+    });
   }
 
   @override
@@ -101,7 +103,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
             height: 0.0,
           ),
           StreamBuilder<QuerySnapshot>(
-            stream: firebaseFirestore.collection("disaster_message").snapshots(),
+            stream: firebaseFirestore.collection("disaster_message").orderBy("FRST_REGIST_DT", descending: true).snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting){
                 return CircularProgressIndicator();
