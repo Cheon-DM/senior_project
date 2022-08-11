@@ -12,7 +12,7 @@ void update() async {
 
   DateFormat formatter = DateFormat('yyyy-MM-dd');
 
-  String nowString1 = formatter.format(before_1);
+  String nowString1 = formatter.format(now);
   String pastString1 = formatter.format(before_1);
   String pastString2 = formatter.format(before_2);
   String pastString3 = formatter.format(before_3);
@@ -23,7 +23,7 @@ void update() async {
 
   ref.get().then((value) {
     for (var doc in value.docs) {
-      if (doc['FRST_REGIST_DT'] != nowString1 || doc['FRST_REGIST_DT'] != pastString1 || doc['FRST_REGIST_DT'] != pastString2 || doc['FRST_REGIST_DT'] != pastString3){
+      if (doc['FRST_REGIST_DT'] != nowString1 && doc['FRST_REGIST_DT'] != pastString1 && doc['FRST_REGIST_DT'] != pastString2 && doc['FRST_REGIST_DT'] != pastString3){
         deletelist.add(doc['BBS_ORDR']);
       }
     }
@@ -62,33 +62,42 @@ Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
   final item = FirebaseFirestore.instance.collection("disaster_message").doc("${BBS_ORDR}");
   var checking = await item.get();
 
-  // 송출 지역 뽑아내기
-  String parsingSentense = CONT;
-  final re = RegExp(r'^\[[ㄱ-ㅎ가-힣]+\]');
-  String LOCATION = parsingSentense.splitMapJoin(re, onMatch: (m) => '${m[0]}', onNonMatch: (n) => '');
-  // print('1: ${LOCATION}');
-  String sub = LOCATION.substring(1, 3);
-  print('2: ${sub}');
-  int areaNum = adminArea(sub);
-
-  if (areaNum == 0){
-    String fullLoc = LOCATION.substring(1, LOCATION.length-1);
-    switch (fullLoc){
-      case '광주광역시':
-        areaNum = 5;
-        break;
-      case '광주시청':
-        areaNum = 9;
-        break;
-      default:
-        areaNum = 18;
-        break;
-    }
-  }
-
   if(checking.exists){ // msg exist
+
   }
+
   else { // new msg
+    // 송출 지역 뽑아내기
+    String parsingSentense = CONT;
+    final re = RegExp(r'^\[[ㄱ-ㅎ가-힣]+\]');
+    String LOCATION = parsingSentense.splitMapJoin(re, onMatch: (m) => '${m[0]}', onNonMatch: (n) => '');
+    String sub = LOCATION.substring(1, 3);
+    // print('2: ${sub}');
+    int areaNum = adminArea(sub);
+
+    if (areaNum == 0){
+      String fullLoc = LOCATION.substring(1, LOCATION.length-1);
+      print('기타: ${fullLoc}');
+      switch (fullLoc){
+        case '광주광역시':
+        case '광주경찰청':
+          areaNum = 5;
+          break;
+        case '광주시청':
+          areaNum = 9;
+          break;
+        case '경상북도':
+          areaNum = 15;
+          break;
+        case '경상남도':
+          areaNum = 16;
+          break;
+        default:
+          areaNum = 18;
+          break;
+      }
+    }
+
     item.set({
       "BBS_ORDR": BBS_ORDR,
       "CONT": CONT,
@@ -102,6 +111,7 @@ int adminArea(String area){
   int areaNum;
 
   switch (area){
+    case '한강':
     case '서울':
     case '종로':
     case '용산':
@@ -350,7 +360,7 @@ int adminArea(String area){
       areaNum = 17;
       break;
     default:
-      areaNum = 18;
+      areaNum = 0;
       break;
   }
 

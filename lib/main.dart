@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_project/HS/landingpage.dart';
 import 'package:senior_project/HW/addFriend.dart';
-import 'package:senior_project/HW/demo.dart';
 import 'package:senior_project/HW/friendlist.dart';
 import 'package:senior_project/HW/login.dart';
 import 'DM/Auth.dart';
