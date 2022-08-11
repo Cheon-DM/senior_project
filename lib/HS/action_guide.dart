@@ -16,6 +16,7 @@ class _ActionGuideState extends State<ActionGuide> {
       title: 'action-guide',
 
       home: Scaffold(
+        resizeToAvoidBottomInset : false,
 
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
@@ -31,8 +32,10 @@ class _ActionGuideState extends State<ActionGuide> {
           ),
           leading: IconButton(
             onPressed: () {
-              // Get.to(MainPage());
-              Get.offAll(() => MainPage());
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) {
+                    return MainPage();
+                  }));
             },
             icon: Icon(
               Icons.arrow_back,

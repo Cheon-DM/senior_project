@@ -19,6 +19,8 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,

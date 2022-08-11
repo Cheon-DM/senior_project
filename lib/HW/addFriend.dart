@@ -14,6 +14,8 @@ class _AddFriendState extends State<AddFriend> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //키보드 밀려올라감 방지
+      resizeToAvoidBottomInset : false,
 
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),

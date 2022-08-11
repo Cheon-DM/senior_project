@@ -11,6 +11,8 @@ class Menu extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset : false,
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,

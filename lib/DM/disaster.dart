@@ -44,7 +44,9 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(
+        resizeToAvoidBottomInset : false,
+
+        appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,
 

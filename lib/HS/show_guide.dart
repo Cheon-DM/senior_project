@@ -9,6 +9,7 @@ import 'action_guide2.dart';
 
 
 class ShowGuide extends StatefulWidget {
+  late final int num;
 
   @override
   _ShowGuideState createState() => _ShowGuideState();
@@ -26,6 +27,8 @@ class _ShowGuideState extends State<ShowGuide> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset : false,
+
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
           elevation: 5,
@@ -52,28 +55,6 @@ class _ShowGuideState extends State<ShowGuide> {
           ),
         ),
 
-        /*
-        //0718자 futurebuilder 원본
-        body: FutureBuilder(
-          future: ReadJsonData(),
-          builder: (context, data) {
-            if(data.hasError){
-              print('${"응 데이터에러야 ㅋㅋ"}');
-              return Center(child: Text("${data.error}"));
-            } else if(data.hasData) {
-              var items = data.data as List<GuideLineModel>;
-              print('${"우와! 데이터가 있다!"}');
-              return Container(
-                child: Text(
-                  items.toString(),
-                ),
-              );
-            }else{
-              return Center(child: CircularProgressIndicator());
-            }
-          },
-        )
-         */
         body: FutureBuilder(
           future: ReadJsonData(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -88,33 +69,20 @@ class _ShowGuideState extends State<ShowGuide> {
               ),);
             }
             else{
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  snapshot.data.toString(),
-                  style: TextStyle(
-                    fontSize: 20,
+              return ExpansionTile(
+                title: Text(
+                  "제목 어쩌구",
+                ),
+                children: <Widget>[
+                  ListTile(
+                    title : Text(
+                      "소제목 어쩌구",
+                    ),
                   ),
-                ),
+                ],
               );
-            }
-            /*
-            if(data.hasError){
-              print('${"응 데이터에러야 ㅋㅋ"}');
-              return Center(child: Text("${data.error}"));
-            } else if(data.hasData) {
-              var items = data.data as List<GuideLineModel>;
-              print('${"우와! 데이터가 있다!"}');
-              return Container(
-                child: Text(
-                  items.toString(),
-                ),
-              );
-            }else{
-              return Center(child: CircularProgressIndicator());
-            }
-             */
 
+            }
           },
         )
     );

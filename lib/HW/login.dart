@@ -27,6 +27,9 @@ class login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //키보드 밀려올라감 방지
+      resizeToAvoidBottomInset : false,
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,
@@ -40,9 +43,11 @@ class login extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          onPressed: (){
-            // Get.to(MainPage());
-            Get.offAll(() => MainPage());
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return MainPage();
+                }));
           },
           icon: Icon(
             Icons.arrow_back,

@@ -28,6 +28,8 @@ class _MainPageState extends State<MainPage> {
     return MaterialApp(
       home: Container(
           child: Scaffold(
+              resizeToAvoidBottomInset : false,
+
               appBar: AppBar(
                 backgroundColor: const Color(0xff6157DE),
                 elevation: 0,
@@ -56,7 +58,6 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ],
               ),
-              resizeToAvoidBottomInset: false, //키보드로 밀려올라감 방지
               backgroundColor: Colors.grey[200],
               body: SafeArea(
                 child: Column(

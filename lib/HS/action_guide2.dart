@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:senior_project/HS/show_guide.dart';
 
 import 'mainpage.dart';
+import 'package:senior_project/HS/guideAPI/guideHTTP.dart';
 
 class ActionGuide2 extends StatefulWidget {
   @override
@@ -14,12 +15,16 @@ class ActionGuide2 extends StatefulWidget {
 
 class _ActionGuideState2 extends State<ActionGuide2> {
   bool isExpand = false;
+  GuideHTTP guidehttp = GuideHTTP();
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'action-guide',
       home: Scaffold(
+        resizeToAvoidBottomInset : false,
+
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
           elevation: 5,
@@ -33,9 +38,12 @@ class _ActionGuideState2 extends State<ActionGuide2> {
             ),
           ),
           leading: IconButton(
-            onPressed: () {
+            onPressed: (){
               // Get.to(MainPage());
-              Get.offAll(() => MainPage());
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) {
+                    return MainPage();
+                  }));
             },
             icon: Icon(
               Icons.arrow_back,
@@ -92,12 +100,7 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                               ),
                               textColor: Colors.black,
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return ShowGuide();
-                                  }),
-                                );
+                                guidehttp.callAPI();
                               },
                             ),
                             ListTile(
