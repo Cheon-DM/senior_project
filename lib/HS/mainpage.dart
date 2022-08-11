@@ -10,6 +10,8 @@ import '../DM/disaster.dart';
 import '../DM/findShelter.dart';
 import '../DM/map.dart';
 import '../HW/checkState.dart';
+import '../HW/friendlist.dart';
+import 'action_guide2.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -46,6 +48,8 @@ class _MainPageState extends State<MainPage> {
     return MaterialApp(
       home: Container(
           child: Scaffold(
+              resizeToAvoidBottomInset : false,
+
               appBar: AppBar(
                 backgroundColor: const Color(0xff6157DE),
                 elevation: 0,
@@ -74,7 +78,6 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ],
               ),
-              resizeToAvoidBottomInset: false, //키보드로 밀려올라감 방지
               backgroundColor: Colors.grey[200],
               body: SafeArea(
                 child: Column(
@@ -164,7 +167,7 @@ class _MainPageState extends State<MainPage> {
                             onPressed: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                    return ActionGuide();
+                                    return ActionGuide2();
                                   }));
                             },
                             child: Row(

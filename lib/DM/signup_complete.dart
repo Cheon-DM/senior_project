@@ -33,6 +33,8 @@ class _signup_completeState extends State<signup_complete> {
 
   Scaffold showComplete(userName) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,

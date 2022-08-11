@@ -27,6 +27,9 @@ class login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //키보드 밀려올라감 방지
+      resizeToAvoidBottomInset : false,
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,
@@ -40,9 +43,11 @@ class login extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          onPressed: (){
-            // Get.to(MainPage());
-            Get.offAll(() => MainPage());
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return MainPage();
+                }));
           },
           icon: Icon(
             Icons.arrow_back,
@@ -61,7 +66,7 @@ class login extends StatelessWidget {
                 key: ValueKey(5),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return '이메일 아이디 입력안됨';
+                    return '이메일 주소를 입력해주세요';
                   }
                   return null;
                 },
@@ -74,14 +79,14 @@ class login extends StatelessWidget {
 
                 decoration: InputDecoration(
                     icon: Icon(Icons.person),
-                    hintText: 'Username', border: OutlineInputBorder()),
+                    hintText: 'Email', border: OutlineInputBorder()),
               ),
               SizedBox(height: 20),
               TextFormField(
                 key: ValueKey(6),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return '제발 돼라';
+                    return '비밀번호를 입력해주세요';
                   }
                   return null;
                 },
@@ -93,7 +98,9 @@ class login extends StatelessWidget {
                 },
                 decoration: InputDecoration(
                     icon: Icon(Icons.vpn_key),
-                    hintText: 'Password', border: OutlineInputBorder()),
+                    hintText: 'Password',
+                    border: OutlineInputBorder()),
+                obscureText: true,
               ),
               SizedBox(height: 20),
               Text(
@@ -152,7 +159,7 @@ class login extends StatelessWidget {
                   SnackBar(content: Text('로그인 완료.')));
             }catch(e){
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('입력잘못')));
+                  SnackBar(content: Text('아이디, 비밀번호를 확인해주세요')));
               print(e);
             }
           },
