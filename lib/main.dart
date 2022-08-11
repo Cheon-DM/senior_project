@@ -21,22 +21,13 @@ void main() async {
   authFirebase();
   runApp(
     //home: MainPage())
-      MultiProvider(providers: [
-        ChangeNotifierProvider(create: (_)=>LocateProvider())
-      ],child: MaterialApp(
-          home:MainPage()))
+      MultiProvider(
+          providers: [ChangeNotifierProvider(create: (_)=>LocateProvider())],
+          child: MaterialApp(
+              home:MainPage()
+          )
+      )
   );
 }
 
-
-/*void main() async {
-
-//  WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
-  authFirebase();
-  runApp(
-      MaterialApp(
-          home:MainPage())
-  );
-}*/
 

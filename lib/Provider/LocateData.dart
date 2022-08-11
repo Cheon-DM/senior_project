@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 
 class LocateProvider extends ChangeNotifier{
 
-
   double _my_lat = 0;
   double _my_lng = 0;
   double _lat = 0;
@@ -43,9 +42,6 @@ class LocateProvider extends ChangeNotifier{
       }
 
       if(haspermission){
-        /*setState(() {
-          //refresh the UI
-        });*/
         notifyListeners();
         getLocation();
       }
@@ -53,11 +49,6 @@ class LocateProvider extends ChangeNotifier{
     else{
       print("GPS Service is not enabled, turn on GPS location");
     }
-
-
-    /*setState(() {
-      //refresh the UI
-    });*/
   }
 
   getLocation() async {
@@ -68,13 +59,7 @@ class LocateProvider extends ChangeNotifier{
     _my_lat = position.latitude;
     _my_lng = position.longitude;
 
-
     notifyListeners();
-
-
-   /* setState(() {
-      //refresh UI
-    });*/
   }
 
   void lat_change(double lat_ch) {
@@ -86,9 +71,4 @@ class LocateProvider extends ChangeNotifier{
     _lng =lng_ch;
     notifyListeners();
   }
-
-  /*set lat_change(double lat_ch){
-    _lat =lat_ch;
-    // notifyListeners();
-  }*/
 }
