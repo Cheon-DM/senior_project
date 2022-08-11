@@ -79,11 +79,15 @@ class _MyPageState extends State<MyPage> {
                 height: 50,
               ),
               Wrap(
+                direction: Axis.horizontal,
+                alignment: WrapAlignment.center,
                 //mainAxisAlignment: MainAxisAlignment.center,
                 //crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
+                  //나의 친구관리 버튼
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 25),
+                    margin: EdgeInsets.symmetric(horizontal: 5),
                     child: OutlinedButton(
                         onPressed: () {
                           Navigator.push(context,
@@ -101,8 +105,10 @@ class _MyPageState extends State<MyPage> {
                           ),
                         )),
                   ),
+
+                  //메인페이지 버튼
                   Container(
-                    margin: EdgeInsets.all(25),
+                    margin: EdgeInsets.symmetric(horizontal: 5),
                     child: OutlinedButton(
                       onPressed: () {
                         Navigator.push(context,
@@ -123,6 +129,7 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ],
               ),
+
               SizedBox(
                 height: 50,
               ),
