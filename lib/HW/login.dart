@@ -150,11 +150,11 @@ class login extends StatelessWidget {
                     SnackBar(content: Text('제대로된 입력 필요')));
               }
 
-              /*Navigator.push(context,
+              Navigator.push(context,
                     MaterialPageRoute(builder: (context) {
                       return MyPage();
-                    }));*/
-              Get.offAll(() => MyPage());
+                    }));
+              //Get.offAll(() => MyPage());
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('로그인 완료.')));
             }catch(e){

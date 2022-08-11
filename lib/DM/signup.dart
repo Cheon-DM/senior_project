@@ -96,6 +96,7 @@ class _signupState extends State<signup> {
                   },
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
+
                     icon: Icon(Icons.accessibility),
                     labelText: "사용자 이름",
                     labelStyle: TextStyle(
@@ -279,13 +280,33 @@ class _signupState extends State<signup> {
             _tryValidation();
 
             final newUser =
-                await _authentication.createUserWithEmailAndPassword(
-                    email: userEmail, password: userPassword);
 
-            await FirebaseFirestore.instance
-                .collection('user')
-                .doc(newUser.user!.uid)
-                .set({'userName': userName, 'email': userEmail});
+            await _authentication.createUserWithEmailAndPassword(
+                email: userEmail, password: userPassword);
+
+
+            ////////////////////////////////////////////////////////////////////////////////
+
+
+
+            await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
+                .set({
+              'userName' : userName,
+              'email' : userEmail,
+              'uid': newUser.user!.uid
+            });
+            
+           /* await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
+                .collection('FriendAdmin').doc('1234').set({
+                'send': 1
+            });
+
+            await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
+                .collection('FriendList');*/
+
+
+            ///////////////////////////////////////////////////////////////////////////////////
+
 
             if (newUser.user == null) {
               ScaffoldMessenger.of(context)
