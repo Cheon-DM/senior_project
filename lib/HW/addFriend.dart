@@ -154,10 +154,14 @@ class _AddFriendState extends State<AddFriend> {
                             final user =FirebaseAuth.instance.currentUser;
 
                             var cUserName='';
+                            double cUserLat=0;
+                            double cUserLng=0;
                             final cUser=FirebaseFirestore.instance.collection('user').doc(user!.uid);
                             await cUser.get().then(
                                 (value){
                                   cUserName = value['userName'];
+                                  cUserLat=value['my_lat'];
+                                  cUserLng=value['my_lng'];
                                 }
                             );
 
@@ -174,7 +178,9 @@ class _AddFriendState extends State<AddFriend> {
                               'otheruser': 1,
                               'email': user.email,
                               'name':cUserName,
-                              'uid': user.uid
+                              'uid': user.uid,
+                              'friend_lat': cUserLat,
+                              'friend_lng': cUserLng,
                             }); // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
 
 

@@ -171,10 +171,14 @@ class _FreindListState extends State<FreindList> {
                           print('${snapshot.data!.docs[index]['email']}');
 
                           var cUserName='';
+                          double cUserLat=0;
+                          double cUserLng=0;
                           final cUser=FirebaseFirestore.instance.collection('user').doc(user!.uid);
                           await cUser.get().then(
                                   (value){
                                     cUserName = value['userName'];
+                                    cUserLat=value['my_lat'];
+                                    cUserLng=value['my_lng'];
                               }
                           );
 
@@ -191,7 +195,9 @@ class _FreindListState extends State<FreindList> {
                             'friend' : 1,
                             'email': user!.email,
                             'name':cUserName,
-                            'uid': user!.uid
+                            'uid': user!.uid,
+                            'friend_lat': cUserLat,
+                            'friend_lng': cUserLng,
                           });
 
                           ScaffoldMessenger.of(context)
