@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-
 class LocateProvider extends ChangeNotifier{
 
   double _my_lat = 0;
@@ -21,8 +20,6 @@ class LocateProvider extends ChangeNotifier{
   double get lng => _lng;
 
   final user =FirebaseAuth.instance.currentUser;
-
-
 
   locateMe() async {
     _serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -69,16 +66,6 @@ class LocateProvider extends ChangeNotifier{
       'my_lng': _my_lng
     });
 
-    notifyListeners();
-  }
-
-  void lat_change(double lat_ch) {
-    _lat =lat_ch;
-    notifyListeners();
-  }
-
-  void lng_change(double lng_ch) {
-    _lng =lng_ch;
     notifyListeners();
   }
 }

@@ -185,11 +185,9 @@ class _aroundShelterState extends State<aroundShelter> {
                     stream: locate(),
                     builder: (context, snapshot) {
                       if (_isLoading){
-                        print('loading');
                         return const CircularProgressIndicator();
                       }
                       else {
-                        print('loading done');
                         return KakaoMapView(
                             width: size.width,
                             height: 400,

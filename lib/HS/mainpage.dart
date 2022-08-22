@@ -1,16 +1,12 @@
 import 'dart:ui';
 
-import 'package:excel/excel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:senior_project/HS/action_guide.dart';
 
 import '../DM/disaster.dart';
 import '../DM/findShelter.dart';
 import '../DM/map.dart';
 import '../HW/checkState.dart';
-import '../HW/friendlist.dart';
 import 'action_guide2.dart';
 
 class MainPage extends StatefulWidget {
@@ -20,36 +16,12 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
 
-  Map<int, List<dynamic>> excelMap = Map<int, List<dynamic>>();
-
-  Future<void> readExcelFile() async {
-    ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
-    int j = 0;
-
-    for (var table in excel.tables.keys) {
-      print(table);
-
-      for (var row in excel.tables[table]!.rows) {
-        List<dynamic> tmp = [];
-        tmp.add(row[5]!.props.first);
-        tmp.add(row[9]!.props.first); // 경도
-        tmp.add(row[10]!.props.first); // 위도
-        excelMap[j] = tmp;
-
-        j++;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Container(
           child: Scaffold(
               resizeToAvoidBottomInset : false,
-
               appBar: AppBar(
                 backgroundColor: const Color(0xff6157DE),
                 elevation: 0,
@@ -84,7 +56,6 @@ class _MainPageState extends State<MainPage> {
                   //버튼 4개 전체적으로 정렬
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
-
                   children: <Widget>[
                     SizedBox(
                       height: 0,
