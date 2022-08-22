@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -17,6 +19,8 @@ class LocateProvider extends ChangeNotifier{
   double get my_lng => _my_lng;
   double get lat => _lat;
   double get lng => _lng;
+
+  final user =FirebaseAuth.instance.currentUser;
 
 
 
@@ -58,6 +62,12 @@ class LocateProvider extends ChangeNotifier{
 
     _my_lat = position.latitude;
     _my_lng = position.longitude;
+
+    await FirebaseFirestore.instance.collection('user').doc(user!.uid)
+        .update({
+      'my_lat': _my_lat,
+      'my_lng': _my_lng
+    });
 
     notifyListeners();
   }
