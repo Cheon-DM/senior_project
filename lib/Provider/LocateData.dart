@@ -20,6 +20,7 @@ class LocateProvider extends ChangeNotifier{
   double get lng => _lng;
 
   final user =FirebaseAuth.instance.currentUser;
+  final ref = FirebaseFirestore.instance.collection('user');
 
   locateMe() async {
     _serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -54,17 +55,24 @@ class LocateProvider extends ChangeNotifier{
 
   getLocation() async {
     position = await Geolocator.getCurrentPosition();
-    print(position.latitude);
-    print(position.longitude);
 
-    _my_lat = position.latitude;
-    _my_lng = position.longitude;
+    double tmp1 = position.latitude;
+    double tmp2 = position.longitude;
 
-    await FirebaseFirestore.instance.collection('user').doc(user!.uid)
-        .update({
-      'my_lat': _my_lat,
-      'my_lng': _my_lng
-    });
+    if (_my_lat != tmp1 || _my_lng != tmp2){
+      print("change location");
+      print(position.latitude);
+      print(position.longitude);
+
+      _my_lat = position.latitude;
+      _my_lng = position.longitude;
+
+      await ref.doc(user!.uid)
+          .update({
+        'my_lat': _my_lat,
+        'my_lng': _my_lng
+      });
+    }
 
     notifyListeners();
   }
