@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:excel/excel.dart';
 
 import 'package:provider/provider.dart';
+import 'package:senior_project/Provider/ReadShelterData.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
 import 'package:flutter/material.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
@@ -40,6 +41,7 @@ class aroundShelter extends StatefulWidget {
 class _aroundShelterState extends State<aroundShelter> {
   late WebViewController _mapController;
   late LocateProvider _locateProvider = Provider.of<LocateProvider>(context, listen: false);
+  late ShelterProvider _shelterProvider = Provider.of<ShelterProvider>(context);
   bool _isLoading = true; // 로딩중
 
   List<Map<String, dynamic>> around1 = []; // 1km 근방
@@ -52,26 +54,28 @@ class _aroundShelterState extends State<aroundShelter> {
     List<Map<String, dynamic>> around1KM = [];
     List<Map<String, dynamic>> around2KM = [];
 
-    WidgetsFlutterBinding.ensureInitialized();
-    ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
+    // WidgetsFlutterBinding.ensureInitialized();
+    // ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
+    // var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    // var excel = Excel.decodeBytes(bytes);
     int j=0;
-    Map<int, List<dynamic>> mp = Map<int, List<dynamic>>(); // 대피소 저장 리스트
+    _shelterProvider.readShelterdata();
+    Map<int, List<dynamic>> mp = context.read<ShelterProvider>().mp; // 대피소 저장 리스트
 
     num min_dis = 100000;
     var min_index = 0;
 
-    for (var table in excel.tables.keys) {
-      for (var row in excel.tables[table]!.rows) {
-        List<dynamic> tmp = [];
-        tmp.add(row[5]!.props.first); // 대피소
-        tmp.add(row[9]!.props.first); // 경도
-        tmp.add(row[10]!.props.first); // 위도
-        mp[j] = tmp;
-        j++;
-      }
-    }
+    // for (var table in excel.tables.keys) {
+    //   for (var row in excel.tables[table]!.rows) {
+    //     List<dynamic> tmp = [];
+    //     tmp.add(row[5]!.props.first); // 대피소
+    //     tmp.add(row[9]!.props.first); // 경도
+    //     tmp.add(row[10]!.props.first); // 위도
+    //     mp[j] = tmp;
+    //     j++;
+    //   }
+    // }
+
     _locateProvider.locateMe(); // 내 위치
 
     int a = 0; // 1km list
@@ -113,8 +117,6 @@ class _aroundShelterState extends State<aroundShelter> {
 
     setState(() {
       //refresh the UI -> 가장 가까운 대피소 찍기
-      //_locateProvider.lat_change(mp[min_index]![2]);
-      //_locateProvider.lng_change(mp[min_index]![1]);
       around1 = around1KM;
       around2 = around2KM;
       jsonAround1 = jsonEncode(around1);
@@ -190,17 +192,20 @@ class _aroundShelterState extends State<aroundShelter> {
                       else {
                         return KakaoMapView(
                             width: size.width,
-                            height: 400,
+                            height: 600,
                             kakaoMapKey: kakaoMapKey,
                             showMapTypeControl: true,
                             showZoomControl: true,
                             lat: context.read<LocateProvider>().my_lat,
                             lng: context.read<LocateProvider>().my_lng,
+                            mapController: (controller) {
+                              _mapController = controller;
+                            },
                             customScript: '''
     var markers = [];
     var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
     
-    var objAround1 = ${jsonAround2};
+    var objAround1 = ${jsonAround1};
     
     var jsonObjKey = [];
     var jsonObjSpot = []; //jsonObj value 'spot' 담을 배열
@@ -213,11 +218,8 @@ class _aroundShelterState extends State<aroundShelter> {
     };   
 
     function addMarker(position, image) {
-
       var marker = new kakao.maps.Marker({position: position, image: image});
-
       marker.setMap(map);
-
       markers.push(marker);
     }
     
@@ -289,14 +291,25 @@ class _aroundShelterState extends State<aroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript('''
-      addMarker(new kakao.maps.LatLng(${context.read<LocateProvider>().my_lat} + 0.0003, ${context.read<LocateProvider>().my_lng} + 0.0003));
-      
-      function addMarker(position) {
-        let testMarker = new kakao.maps.Marker({position: position});
+    var markers = [];
+    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
+    
+    var objAround1 = ${jsonAround2};
+    
+    var jsonObjKey = [];
+    var jsonObjSpot = []; //jsonObj value 'spot' 담을 배열
+    var jsonObjLat = []; //jsonObj value 'lat' 담을 배열
+    var jsonObjLng = []; //jsonObj value 'lng' 담을 배열
+    for(var i=0; i<objAround1.length; i++){
+      jsonObjSpot.push(objAround1[i][Object.keys(objAround1[i])[0]]); // spot만 담음      
+      jsonObjLat.push(objAround1[i][Object.keys(objAround1[i])[1]]); // lat만 담음      
+      jsonObjLng.push(objAround1[i][Object.keys(objAround1[i])[2]]); // lng만 담음
+    };
 
-        testMarker.setMap(map);
-      }
-                      ''');
+    for(let i = 0 ; i < jsonObjSpot.length ; i++){
+      addMarker(new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), markerImage);
+    }
+              ''');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.amber,
@@ -308,6 +321,13 @@ class _aroundShelterState extends State<aroundShelter> {
               ),
               InkWell(
                 onTap: () async {
+                  _mapController.runJavascript('''
+    function deleteMarker(position) {
+      var delMarker = new Kakao.maps.Marker({position: position});
+      marker.setMap(null);
+    }
+                  ''');
+                  _locateProvider.locateMe();
                   await _mapController.reload();
                   debugPrint('[refresh] done');
                 },
