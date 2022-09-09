@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
 import 'package:senior_project/HS/guideLineModel.dart';
 
+import 'action_guide.dart';
 import 'action_guide2.dart';
 
 

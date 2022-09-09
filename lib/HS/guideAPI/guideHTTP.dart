@@ -7,7 +7,7 @@ class GuideHTTP {
   void callAPI() async {
     print('호출됐습니다~~1');
 
-    final url = Uri.parse('http://http://openapi.safekorea.go.kr/openapi/service/behaviorconductKnowHow/naturaldisaster/list?safety_cate=01001&serviceKey=$serviceKey');
+    final url = Uri.parse('http://openapi.safekorea.go.kr/openapi/service/behaviorconductKnowHow/naturaldisaster/list?safety_cate=01001&serviceKey=$serviceKey');
     print('호출됐습니다~~2');
 
     print('시작합니다~~3');

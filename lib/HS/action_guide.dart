@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:senior_project/HS/guidePages/guide101.dart';
 
 import 'mainpage.dart';
 
@@ -44,8 +45,7 @@ class _ActionGuideState extends State<ActionGuide> {
           ),
         ),
 
-        body: Padding(
-          padding: EdgeInsets.all(0),
+        body: SafeArea(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +85,13 @@ class _ActionGuideState extends State<ActionGuide> {
                               ),
                             ),
                             textColor: Colors.black,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return Guide101();
+                                  }));
+
+                            },
                           ),
 
                           ListTile(
