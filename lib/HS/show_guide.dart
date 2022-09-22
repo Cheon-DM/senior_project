@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -121,3 +122,5 @@ class _ShowGuideState extends State<ShowGuide> {
 
   }
 }
+
+ */

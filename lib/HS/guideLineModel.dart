@@ -14,8 +14,7 @@ class GuideLineModel {
   });
 
   factory GuideLineModel.fromJson(Map<String, dynamic> json) {
-    /*
-    if(json == null) {
+    /*    if(json == null) {
       return GuideLineModel(
           index: '-1',
           title1: 'title1',

@@ -99,7 +99,7 @@ class _ShowDisasterListState extends State<ShowDisasterList> {
         ),
         body: SafeArea(
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.90,
+            height: MediaQuery.of(context).size.height * 0.93,
 
             child: Column(
               children: [

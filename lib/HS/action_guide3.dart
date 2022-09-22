@@ -1,7 +1,6 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:senior_project/HS/guidePages/guide101.dart';
 
 import 'mainpage.dart';
 
