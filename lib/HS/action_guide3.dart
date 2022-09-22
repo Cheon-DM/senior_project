@@ -59,7 +59,7 @@ class _ActionGuideState3 extends State<ActionGuide3> {
               Size.fromHeight(MediaQuery.of(context).size.height * 0.07),
           child: AppBar(
             backgroundColor: const Color(0xff6157DE),
-            elevation: 5,
+            elevation: 0,
             title: Text(
               "행동지침3",
               style: TextStyle(
@@ -117,8 +117,35 @@ class _ActionGuideState3 extends State<ActionGuide3> {
 
                       if(_selections1[0] == true)...[
                         Text('나오니?1'),
-                        ListView(
-                          //actionGuide2처럼 좌측에 분류/오른쪽에 내용 만들기
+                        //actionGuide처럼 좌측에 분류/오른쪽에 내용 만들기
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                child: ListView(
+                                  children: <Widget>[
+
+                                    ExpansionTile(
+                                      title: Text("비상사태시 행동요령"),
+                                      backgroundColor: Colors.grey[200],
+                                      collapsedBackgroundColor: Color(0xff6157de),
+                                      collapsedTextColor: Colors.white,
+                                      textColor: Colors.black,
+                                      iconColor: Colors.black,
+                                      collapsedIconColor: Colors.white,
+
+                                      children: <Widget>[
+                                        ListTile(
+                                          title: Text("비상시 행동요령"),
+                                          //onTap:
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
                         )
                       ]else if(_selections1[1] == true)...[
                         Text('나오는구나!2'),
