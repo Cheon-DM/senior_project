@@ -39,9 +39,9 @@ class ShelterProvider extends ChangeNotifier {
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table]!.rows) {
         List<dynamic> tmp = [];
-        tmp.add(row[5]!.props.first); // 대피소
         tmp.add(row[9]!.props.first); // 경도
         tmp.add(row[10]!.props.first); // 위도
+//        tmp.add(row[5]!.props.first); // 대피소
         mp[j] = tmp;
         j++;
       }

@@ -53,30 +53,13 @@ class _aroundShelterState extends State<aroundShelter> {
   Future<void> readExcelFile() async {
     List<Map<String, dynamic>> around1KM = [];
     List<Map<String, dynamic>> around2KM = [];
-
-    // WidgetsFlutterBinding.ensureInitialized();
-    // ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
-    // var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    // var excel = Excel.decodeBytes(bytes);
     int j=0;
-    _shelterProvider.readShelterdata();
-    Map<int, List<dynamic>> mp = context.read<ShelterProvider>().mp; // 대피소 저장 리스트
-
     num min_dis = 100000;
     var min_index = 0;
 
-    // for (var table in excel.tables.keys) {
-    //   for (var row in excel.tables[table]!.rows) {
-    //     List<dynamic> tmp = [];
-    //     tmp.add(row[5]!.props.first); // 대피소
-    //     tmp.add(row[9]!.props.first); // 경도
-    //     tmp.add(row[10]!.props.first); // 위도
-    //     mp[j] = tmp;
-    //     j++;
-    //   }
-    // }
-
     _locateProvider.locateMe(); // 내 위치
+    _shelterProvider.readShelterdata();
+    Map<int, List<dynamic>> mp = context.read<ShelterProvider>().mp; // 대피소 저장 리스트
 
     int a = 0; // 1km list
     int b = 0; // 2km list
@@ -106,7 +89,7 @@ class _aroundShelterState extends State<aroundShelter> {
 
       if(distance > 1 && distance <= 2){
         Map<String, dynamic> tmp = {
-          'spot': spot,
+          'spot': spot as String,
           'lat': lat2,
           'lng': lng2,
         };
@@ -130,6 +113,7 @@ class _aroundShelterState extends State<aroundShelter> {
     super.initState();
     _locateProvider.locateMe();
     readExcelFile();
+
     Timer(Duration(seconds: 15), () {
       _isLoading = false;
       print(_isLoading); // 지도 뜨게 함.
@@ -137,7 +121,7 @@ class _aroundShelterState extends State<aroundShelter> {
   }
 
   Stream<Future<dynamic>> locate() async* {
-    Timer(Duration(seconds: 20), () {
+    Timer(Duration(seconds: 15), () {
       _locateProvider.locateMe();
       readExcelFile();
     });
@@ -201,9 +185,10 @@ class _aroundShelterState extends State<aroundShelter> {
                             mapController: (controller) {
                               _mapController = controller;
                             },
+                            zoomLevel: 6,
                             customScript: '''
     var markers = [];
-    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
+    var imageURL = 'https://w7.pngwing.com/pngs/96/889/png-transparent-marker-map-interesting-places-the-location-on-the-map-the-location-of-the-thumbnail.png';
     
     var objAround1 = ${jsonAround1};
     
@@ -260,7 +245,7 @@ class _aroundShelterState extends State<aroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() - 1, {animate: true})');
+                      'map.setLevel(map.getLevel() + 1, {animate: true})');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.red,
@@ -273,7 +258,7 @@ class _aroundShelterState extends State<aroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() + 1, {animate: true})');
+                      'map.setLevel(map.getLevel() - 1, {animate: true})');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.blue,
@@ -291,15 +276,14 @@ class _aroundShelterState extends State<aroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript('''
-    var markers = [];
     var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
-    
+    var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
     var objAround1 = ${jsonAround2};
     
-    var jsonObjKey = [];
-    var jsonObjSpot = []; //jsonObj value 'spot' 담을 배열
-    var jsonObjLat = []; //jsonObj value 'lat' 담을 배열
-    var jsonObjLng = []; //jsonObj value 'lng' 담을 배열
+    var jsonObjKey = new Array();
+    var jsonObjSpot = new Array(); //jsonObj value 'spot' 담을 배열
+    var jsonObjLat = new Array(); //jsonObj value 'lat' 담을 배열
+    var jsonObjLng = new Array(); //jsonObj value 'lng' 담을 배열
     for(var i=0; i<objAround1.length; i++){
       jsonObjSpot.push(objAround1[i][Object.keys(objAround1[i])[0]]); // spot만 담음      
       jsonObjLat.push(objAround1[i][Object.keys(objAround1[i])[1]]); // lat만 담음      
@@ -321,14 +305,9 @@ class _aroundShelterState extends State<aroundShelter> {
               ),
               InkWell(
                 onTap: () async {
-                  _mapController.runJavascript('''
-    function deleteMarker(position) {
-      var delMarker = new Kakao.maps.Marker({position: position});
-      marker.setMap(null);
-    }
-                  ''');
+
                   _locateProvider.locateMe();
-                  await _mapController.reload();
+                  await _mapController.clearCache();
                   debugPrint('[refresh] done');
                 },
                 child: CircleAvatar(
@@ -367,7 +346,7 @@ class _aroundShelterState extends State<aroundShelter> {
         context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: url)));
 
   }
-
+/////////////////////////////////////////////////////////////
   Widget _testingCustomScript(
       {required Size size, required BuildContext context}) {
     return KakaoMapView(
