@@ -25,8 +25,7 @@ class ShowDisasterList extends StatefulWidget {
 }
 
 class _ShowDisasterListState extends State<ShowDisasterList>{
-  final List<String> _AreaList = ['시도선택', '서울특별시', '부산광역시', '대구광역시', '인천광역시', '광주광역시', '대전광역시', '울산광역시',
-  '세종특별자치시', '경기도', '강원도', '충청북도', '충청남도', '전라북도', '전라남도', '경상북도', '경상남도', '제주특별자치도', '기타'];
+  final List<String> _AreaList = ['시도선택', '강원도', '경기도', '경상남도', '경상북도', '광주광역시', '대구광역시', '대전광역시', '부산광역시', '서울특별시', '세종특별자치시', '울산광역시', '인천광역시', '전라남도', '전라북도', '제주특별자치도', '충청남도', '충청북도'];
   String _selectArea = '시도선택';
   int _selectAreaNum = 0;
   bool loading = false;
@@ -106,7 +105,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
             future: getList(),
             builder: (context, snap) {
               return StreamBuilder<QuerySnapshot>(
-                stream: ref.orderBy("FRST_REGIST_DT", descending: true).snapshots(),
+                stream: ref.orderBy("CREATE_DT", descending: true).snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting){
                     return CircularProgressIndicator();
@@ -123,7 +122,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  child: Text('NO. ${snapshot.data!.docs[index]['BBS_ORDR']}',
+                                  child: Text('NO. ${snapshot.data!.docs[index]['MD101_SN']}',
                                     style: TextStyle(
                                         fontFamily: 'Leferi',
                                         fontSize: 15,
@@ -132,7 +131,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                                   alignment: Alignment.centerLeft,
                                 ),
                                 Container(
-                                  child: Text('${snapshot.data!.docs[index]['CONT']}',
+                                  child: Text('${snapshot.data!.docs[index]['MSG_CN']}',
                                     style: TextStyle(
                                         fontFamily: 'Leferi',
                                         fontSize: 17,
@@ -142,7 +141,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                                   alignment: Alignment.centerLeft,
                                 ),
                                 Container(
-                                  child: Text('DATE : ${snapshot.data!.docs[index]['FRST_REGIST_DT']}',
+                                  child: Text('DATE : ${snapshot.data!.docs[index]['CREATE_DT']}',
                                     style: TextStyle(
                                         fontFamily: 'Leferi',
                                         fontSize: 10,
@@ -175,7 +174,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                   }
                   else {
                     return StreamBuilder<QuerySnapshot>(
-                      stream: ref.where("AREA", isEqualTo: _selectAreaNum).snapshots(),
+                      stream: ref.where("LOC", isEqualTo: _selectAreaNum).snapshots(),
                       builder: (context, snap) {
                         return SizedBox(
                           height: MediaQuery.of(context).size.height*0.9,
@@ -188,7 +187,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                                 child: Column(
                                   children: <Widget>[
                                     Container(
-                                      child: Text('NO. ${snap.data!.docs[index]['BBS_ORDR']}',
+                                      child: Text('NO. ${snap.data!.docs[index]['MD101_SN']}',
                                         style: TextStyle(
                                             fontFamily: 'Leferi',
                                             fontSize: 15,
@@ -197,7 +196,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                                       alignment: Alignment.centerLeft,
                                     ),
                                     Container(
-                                      child: Text('${snap.data!.docs[index]['CONT']}',
+                                      child: Text('${snap.data!.docs[index]['MSG_CN']}',
                                         style: TextStyle(
                                             fontFamily: 'Leferi',
                                             fontSize: 17,
@@ -207,7 +206,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                                       alignment: Alignment.centerLeft,
                                     ),
                                     Container(
-                                      child: Text('DATE : ${snap.data!.docs[index]['FRST_REGIST_DT']}',
+                                      child: Text('DATE : ${snap.data!.docs[index]['CREATE_DT']}',
                                         style: TextStyle(
                                             fontFamily: 'Leferi',
                                             fontSize: 10,
