@@ -1,109 +1,117 @@
-import 'dart:async';
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
-void update() async {
-  DateTime now = DateTime.now();
-  DateTime before_1 = DateTime.now().subtract(Duration(days: 1));
-  DateTime before_2 = DateTime.now().subtract(Duration(days: 2));
-  DateTime before_3 = DateTime.now().subtract(Duration(days: 3));
+class DisasterMsgProvider extends ChangeNotifier{
+  var ref = FirebaseFirestore.instance.collection("disaster_message");
 
-  DateFormat formatter = DateFormat('yyyy-MM-dd');
+  CollectionReference<Map<String, dynamic>> get _ref => ref;
 
-  String nowString1 = formatter.format(now);
-  String pastString1 = formatter.format(before_1);
-  String pastString2 = formatter.format(before_2);
-  String pastString3 = formatter.format(before_3);
+  // 업데이트
+  update() async {
+    DateTime now = DateTime.now();
+    DateTime before_1 = DateTime.now().subtract(Duration(days: 1));
+    DateTime before_2 = DateTime.now().subtract(Duration(days: 2));
+    DateTime before_3 = DateTime.now().subtract(Duration(days: 3));
 
-  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  var ref = firebaseFirestore.collection("disaster_message");
-  List<int> deletelist = [];
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
 
-  ref.get().then((value) {
-    for (var doc in value.docs) {
-      if (doc['FRST_REGIST_DT'] != nowString1 && doc['FRST_REGIST_DT'] != pastString1 && doc['FRST_REGIST_DT'] != pastString2 && doc['FRST_REGIST_DT'] != pastString3){
-        deletelist.add(doc['BBS_ORDR']);
+    String nowString1 = formatter.format(now);
+    String pastString1 = formatter.format(before_1);
+    String pastString2 = formatter.format(before_2);
+    String pastString3 = formatter.format(before_3);
+
+    List<int> deletelist = [];
+
+    ref.get().then((value) {
+      for (var doc in value.docs) {
+        if (doc['FRST_REGIST_DT'] != nowString1 && doc['FRST_REGIST_DT'] != pastString1 && doc['FRST_REGIST_DT'] != pastString2 && doc['FRST_REGIST_DT'] != pastString3){
+          deletelist.add(doc['BBS_ORDR']);
+        }
       }
-    }
-    print(deletelist);
-    for (int i = 0; i < deletelist.length ; i++){
-      ref.doc('${deletelist[i]}').delete();
-    }
-  });
-}
-
-void crawling() async {
-  var url = Uri.parse("http://m.safekorea.go.kr/idsiSFK/neo/ext/json/disasterDataList/disasterDataList.json");
-
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    // 만약 서버로의 요청이 성공하면, JSON을 파싱합니다.
-    var responseBody = utf8.decode(response.bodyBytes);
-    // print('Response Body: ${response.body}');
-    final List result = jsonDecode(responseBody);
-    var item = result[0];
-    for (int i = 0; i < result.length; i++){
-      item = result[i];
-
-      create(item['BBS_ORDR'], item['CONT'], item['FRST_REGIST_DT']);
-    }
-  }
-
-  else {
-    // 만약 요청이 실패하면, 에러를 던집니다.
-    throw Exception('Failed to load post');
-  }
-}
-
-Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
-  final item = FirebaseFirestore.instance.collection("disaster_message").doc("${BBS_ORDR}");
-  var checking = await item.get();
-
-  if(checking.exists){ // msg exist
-
-  }
-
-  else { // new msg
-    // 송출 지역 뽑아내기
-    String parsingSentense = CONT;
-    final re = RegExp(r'^\[[ㄱ-ㅎ가-힣]+\]');
-    String LOCATION = parsingSentense.splitMapJoin(re, onMatch: (m) => '${m[0]}', onNonMatch: (n) => '');
-    String sub = LOCATION.substring(1, 3);
-    // print('2: ${sub}');
-    int areaNum = adminArea(sub);
-
-    if (areaNum == 0){
-      String fullLoc = LOCATION.substring(1, LOCATION.length-1);
-      print('기타: ${fullLoc}');
-      switch (fullLoc){
-        case '광주광역시':
-        case '광주경찰청':
-          areaNum = 5;
-          break;
-        case '광주시청':
-          areaNum = 9;
-          break;
-        case '경상북도':
-          areaNum = 15;
-          break;
-        case '경상남도':
-          areaNum = 16;
-          break;
-        default:
-          areaNum = 18;
-          break;
+      for (int i = 0; i < deletelist.length ; i++){
+        ref.doc('${deletelist[i]}').delete();
+        notifyListeners();
+        print('delete complete');
       }
-    }
-
-    item.set({
-      "BBS_ORDR": BBS_ORDR,
-      "CONT": CONT,
-      "FRST_REGIST_DT": FRST_REGIST_DT,
-      "AREA": areaNum,
     });
+  }
+
+  // 재난문자 크롤링
+  crawling() async {
+    var url = Uri.parse("http://m.safekorea.go.kr/idsiSFK/neo/ext/json/disasterDataList/disasterDataList.json");
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // 만약 서버로의 요청이 성공하면, JSON을 파싱합니다.
+      var responseBody = utf8.decode(response.bodyBytes);
+      final List result = jsonDecode(responseBody);
+      var item = result[0];
+      for (int i = 0; i < result.length; i++){
+        item = result[i];
+        create(item['BBS_ORDR'], item['CONT'], item['FRST_REGIST_DT']);
+        notifyListeners();
+      }
+
+    }
+
+    else {
+      // 만약 요청이 실패하면, 에러를 던집니다.
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<void> create (int BBS_ORDR, String CONT, String FRST_REGIST_DT) async {
+    final item = ref.doc("${BBS_ORDR}");
+    var checking = await item.get();
+
+    if(checking.exists){ // msg exist
+
+    }
+
+    else { // new msg
+      // 송출 지역 뽑아내기
+      String parsingSentense = CONT;
+      final re = RegExp(r'^\[[ㄱ-ㅎ가-힣]+\]');
+      String LOCATION = parsingSentense.splitMapJoin(re, onMatch: (m) => '${m[0]}', onNonMatch: (n) => '');
+      String sub = LOCATION.substring(1, 3);
+      // print('2: ${sub}');
+      int areaNum = adminArea(sub);
+
+      if (areaNum == 0){
+        String fullLoc = LOCATION.substring(1, LOCATION.length-1);
+        print('기타: ${fullLoc}');
+        switch (fullLoc){
+          case '광주광역시':
+          case '광주경찰청':
+            areaNum = 5;
+            break;
+          case '광주시청':
+            areaNum = 9;
+            break;
+          case '경상북도':
+            areaNum = 15;
+            break;
+          case '경상남도':
+            areaNum = 16;
+            break;
+          default:
+            areaNum = 18;
+            break;
+        }
+      }
+
+      item.set({
+        "BBS_ORDR": BBS_ORDR,
+        "CONT": CONT,
+        "FRST_REGIST_DT": FRST_REGIST_DT,
+        "AREA": areaNum,
+      });
+    }
   }
 }
 
@@ -367,4 +375,3 @@ int adminArea(String area){
   // 고성, 광주, 광역시 등등 처리 필요
   return areaNum;
 }
-

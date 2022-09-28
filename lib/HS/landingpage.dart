@@ -1,12 +1,7 @@
 import 'dart:async';
 
-import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'mainpage.dart';
-
-
 
 class LandingPage extends StatefulWidget {
   @override

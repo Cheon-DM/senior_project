@@ -146,50 +146,33 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
                     width: size.width,
                     height: 400,
                     kakaoMapKey: kakaoMapKey,
-                    lat: 37.5515814,
-                    lng: 126.9249751,
-                    customScript: '''
-    let markers = [];
-    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
-    
-    function addMarker(position, image) {
-    
-      let marker = new kakao.maps.Marker({position: position, image: image});
+                    lat: 37.4980044,
+                    lng: 127.0277062,
+                    markerImageURL: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
+                    customOverlayStyle: '''
+                    <div id="mapwrap"> 
+    <!-- 지도가 표시될 div -->
+    <div id="map" style="width:100%;height:350px;"></div>
+    <!-- 지도 위에 표시될 마커 카테고리 -->
+    <div class="category">
+        <ul>
+            <li id="coffeeMenu" onclick="changeMarker('coffee')">
+                <span class="ico_comm ico_coffee"></span>
+                커피숍
+            </li>
+            <li id="storeMenu" onclick="changeMarker('store')">
+                <span class="ico_comm ico_store"></span>
+                편의점
+            </li>
+            <li id="carparkMenu" onclick="changeMarker('carpark')">
+                <span class="ico_comm ico_carpark"></span>
+                주차장
+            </li>
+        </ul>
+    </div>
+</div>
+                    ''',
 
-      marker.setMap(map);
-    
-      markers.push(marker);
-    }
-    
-    function createMarkerImage(src, size, options) {
-      var markerImage = new kakao.maps.MarkerImage(src, size, options);
-      return markerImage;            
-    }
-    
-    var imageSize = new kakao.maps.Size(200, 100);
-    var imageOptions = {  
-                spriteOrigin: new kakao.maps.Point(0, 0),    
-                spriteSize: new kakao.maps.Size(36, 98)  
-            };
-    var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
-    
-    for(let i = 0 ; i < 3 ; i++){
-      addMarker(new kakao.maps.LatLng(37.5515814 + 0.0003 * i, 126.9249751 + 0.0003 * i), markerImage);
-
-      kakao.maps.event.addListener(markers[i], 'click', (i) => {
-        return function(){
-          onTapMarker.postMessage('marker ' + i + ' is tapped');
-        };
-      });
-    }
-    
-    
-		  const zoomControl = new kakao.maps.ZoomControl();
-      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-   
-      const mapTypeControl = new kakao.maps.MapTypeControl();
-      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-              ''',
                     onTapMarker: (message) {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(message.message)));
@@ -305,48 +288,4 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
         context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: url)));
   }
 
-
-
-  Widget _testingCustomScript(
-      {required Size size, required BuildContext context}) {
-    return KakaoMapView(
-        width: size.width,
-        height: 400,
-        kakaoMapKey: kakaoMapKey,
-        lat: 37.5515814,
-        lng: 126.9249751,
-        markerImageURL: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
-        customScript: '''
-    let markers = [];
-    
-    function addMarker(position) {
-    
-      let marker = new kakao.maps.Marker({position: position});
-
-      marker.setMap(map);
-    
-      markers.push(marker);
-    }
-    
-    for(let i = 0 ; i < 3 ; i++){
-      addMarker(new kakao.maps.LatLng(37.5515814 + 0.0003 * i, 126.9249751 + 0.0003 * i));
-
-      kakao.maps.event.addListener(markers[i], 'click', (i) => {
-        return function(){
-          onTapMarker.postMessage('marker ' + i + ' is tapped');
-        };
-      });
-    }
-    
-		  const zoomControl = new kakao.maps.ZoomControl();
-      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-   
-      const mapTypeControl = new kakao.maps.MapTypeControl();
-      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-              ''',
-        onTapMarker: (message) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(message.message)));
-        });
-  }
 }

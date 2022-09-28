@@ -5,8 +5,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:excel/excel.dart';
 
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:senior_project/Provider/ReadShelterData.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
 import 'package:flutter/material.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
@@ -40,53 +40,27 @@ class aroundShelter extends StatefulWidget {
 
 class _aroundShelterState extends State<aroundShelter> {
   late WebViewController _mapController;
-  late LocateProvider _locateProvider = Provider.of<LocateProvider>(context,listen: false);
+  late LocateProvider _locateProvider = Provider.of<LocateProvider>(context, listen: false);
+  late ShelterProvider _shelterProvider = Provider.of<ShelterProvider>(context);
+  bool _isLoading = true; // 로딩중
 
-  //double my_lat = 0;
-  //double my_lng = 0;
-  //double lat = 0;
-  //double lng = 0;
-  bool _isLoading = true;
-  //late Position position;
- // bool _serviceEnabled = false;
- // late LocationPermission _permissionGranted;
- // bool haspermission = false;
-
-  // Map<int, List<dynamic>> around1KM = Map<int, List<dynamic>>();
-  // Map<int, List<dynamic>> around2KM = Map<int, List<dynamic>>();
-  List<Map<String, dynamic>> around1 = [];
-  List<Map<String, dynamic>> around2 = [];
+  List<Map<String, dynamic>> around1 = []; // 1km 근방
+  List<Map<String, dynamic>> around2 = []; // 2km 근방
+  late String jsonAround1;
+  late String jsonAround2;
 
 
   Future<void> readExcelFile() async {
     List<Map<String, dynamic>> around1KM = [];
     List<Map<String, dynamic>> around2KM = [];
-
-    WidgetsFlutterBinding.ensureInitialized();
-    ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    var excel = Excel.decodeBytes(bytes);
     int j=0;
-    Map<int, List<dynamic>> mp = Map<int, List<dynamic>>();
-
     num min_dis = 100000;
     var min_index = 0;
 
+    _locateProvider.locateMe(); // 내 위치
+    _shelterProvider.readShelterdata();
+    Map<int, List<dynamic>> mp = context.read<ShelterProvider>().mp; // 대피소 저장 리스트
 
-    for (var table in excel.tables.keys) {
-      print(table);
-
-      for (var row in excel.tables[table]!.rows) {
-        List<dynamic> tmp = [];
-        tmp.add(row[5]!.props.first); // 대피소
-        tmp.add(row[9]!.props.first); // 경도
-        tmp.add(row[10]!.props.first); // 위도
-        mp[j] = tmp;
-        j++;
-      }
-    }
-    _locateProvider.locateMe();
-   // _locateMe();
     int a = 0; // 1km list
     int b = 0; // 2km list
 
@@ -96,7 +70,7 @@ class _aroundShelterState extends State<aroundShelter> {
       double lng2 = mp[i]![1]; // 경도
       String spot = mp[i]![0]; // 장소이름
 
-      num distance = calculate(context.watch<LocateProvider>().my_lat, lat2, context.watch<LocateProvider>().my_lng, lng2);
+      num distance = calculate(context.read<LocateProvider>().my_lat, lat2, context.read<LocateProvider>().my_lng, lng2); // 거리 계산
 
       if (min_dis > distance){
         min_dis = distance;
@@ -105,114 +79,50 @@ class _aroundShelterState extends State<aroundShelter> {
 
       if (distance <= 1){
         Map<String, dynamic> tmp = {
-          'spot': spot,
+          'spot': spot as String,
           'lat': lat2,
           'lng': lng2,
         };
-        // tmp.add(spot);
-        // tmp.add(lat2);
-        // tmp.add(lng2);
         around1KM.add(tmp);
-        // print(tmp);
-        print(around1KM[a]['spot'].runtimeType);
         a++;
       }
 
       if(distance > 1 && distance <= 2){
         Map<String, dynamic> tmp = {
-          'spot': spot,
+          'spot': spot as String,
           'lat': lat2,
           'lng': lng2,
         };
-        // List<dynamic> tmp = [];
-        // tmp.add(spot);
-        // tmp.add(lat2);
-        // tmp.add(lng2);
         around2KM.add(tmp);
         b++;
       }
     }
 
     setState(() {
-      //refresh the UI
-      // lat = mp[min_index]![2];
-      // lng = mp[min_index]![1];
-      _locateProvider.lat_change(mp[min_index]![2]);
-      _locateProvider.lng_change(mp[min_index]![1]);
+      //refresh the UI -> 가장 가까운 대피소 찍기
       around1 = around1KM;
       around2 = around2KM;
-      print(around1.length);
+      jsonAround1 = jsonEncode(around1);
+      jsonAround2 = jsonEncode(around2);
     });
 
   }
-////////////////////////////////////////////////////////////////////////////////
-  /*_locateMe() async {
-    _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if(_serviceEnabled){
-      _permissionGranted = await Geolocator.checkPermission();
 
-      if (_permissionGranted == LocationPermission.denied) {
-        _permissionGranted = await Geolocator.requestPermission();
-        if (_permissionGranted == LocationPermission.denied) {
-          print('Location permissions are denied');
-        }
-        else if(_permissionGranted == LocationPermission.deniedForever){
-          print("'Location permissions are permanently denied");
-        }
-        else{
-          haspermission = true;
-        }
-      }
-      else{
-        haspermission = true;
-      }
-
-      if(haspermission){
-        setState(() {
-          //refresh the UI
-        });
-
-        getLocation();
-      }
-    }
-    else{
-      print("GPS Service is not enabled, turn on GPS location");
-    }
-
-    setState(() {
-      //refresh the UI
-    });
-  }
-
-  getLocation() async {
-    position = await Geolocator.getCurrentPosition();
-    //print(position.latitude);
-    //print(position.longitude);
-
-    my_lat = position.latitude;
-    my_lng = position.longitude;
-
-    setState(() {
-      //refresh UI
-    });
-  }*/
-////////////////////////////////////////////////////////////////////////////////
   @override
   void initState(){
     super.initState();
-    Timer(Duration(seconds: 20), () {
-      setState(() {
-        _isLoading = false;
-    });
-    });
     _locateProvider.locateMe();
-    //_locateMe();
     readExcelFile();
+
+    Timer(Duration(seconds: 15), () {
+      _isLoading = false;
+      print(_isLoading); // 지도 뜨게 함.
+    });
   }
 
   Stream<Future<dynamic>> locate() async* {
-    Timer(Duration(seconds: 10), () {
-
+    Timer(Duration(seconds: 15), () {
+      _locateProvider.locateMe();
       readExcelFile();
     });
   }
@@ -220,7 +130,6 @@ class _aroundShelterState extends State<aroundShelter> {
   @override
   void dispose(){
     super.dispose();
-
   }
 
   @override
@@ -262,44 +171,57 @@ class _aroundShelterState extends State<aroundShelter> {
                     stream: locate(),
                     builder: (context, snapshot) {
                       if (_isLoading){
-                        print('loading');
                         return const CircularProgressIndicator();
                       }
                       else {
-                        print('loading done');
                         return KakaoMapView(
                             width: size.width,
-                            height: 400,
+                            height: 600,
                             kakaoMapKey: kakaoMapKey,
                             showMapTypeControl: true,
                             showZoomControl: true,
-                            lat: context.watch<LocateProvider>().my_lat,
-                            lng: context.watch<LocateProvider>().my_lng,
+                            lat: context.read<LocateProvider>().my_lat,
+                            lng: context.read<LocateProvider>().my_lng,
+                            mapController: (controller) {
+                              _mapController = controller;
+                            },
+                            zoomLevel: 6,
                             customScript: '''
     var markers = [];
-    //console.log("..");
+    var imageURL = 'https://w7.pngwing.com/pngs/96/889/png-transparent-marker-map-interesting-places-the-location-on-the-map-the-location-of-the-thumbnail.png';
+    
+    var objAround1 = ${jsonAround1};
+    
+    var jsonObjKey = [];
+    var jsonObjSpot = []; //jsonObj value 'spot' 담을 배열
+    var jsonObjLat = []; //jsonObj value 'lat' 담을 배열
+    var jsonObjLng = []; //jsonObj value 'lng' 담을 배열
+    for(var i=0; i<objAround1.length; i++){
+      jsonObjSpot.push(objAround1[i][Object.keys(objAround1[i])[0]]); // spot만 담음      
+      jsonObjLat.push(objAround1[i][Object.keys(objAround1[i])[1]]); // lat만 담음      
+      jsonObjLng.push(objAround1[i][Object.keys(objAround1[i])[2]]); // lng만 담음
+    };   
 
-    //console.log("${around1}");
-    //console.log("${around1.length}");
-
-    //var result = JSON.stringtify(${around1[0]});
-    //console.log(result);    
-
-    function addMarker(position) {
-
-      var marker = new kakao.maps.Marker({position: position});
-
+    function addMarker(position, image) {
+      var marker = new kakao.maps.Marker({position: position, image: image});
       marker.setMap(map);
-
       markers.push(marker);
     }
+    
+    function createMarkerImage(src, size, options) {
+      var markerImage = new kakao.maps.MarkerImage(src, size, options);
+      return markerImage;            
+    }
+    
+    var imageSize = new kakao.maps.Size(200, 100);
+    var imageOptions = {  
+                spriteOrigin: new kakao.maps.Point(0, 0),    
+                spriteSize: new kakao.maps.Size(20, 50)  
+            };
+    var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
 
-    for(let i = 0 ; i < 3 ; i++){
-
-      // addMarker(new kakao.maps.LatLng(result[i][0], result[i][1]));
-      //console.log('lat: ', + result[i][0]);
-      //console.log('lng: ', + result[i][1]);
-
+    for(let i = 0 ; i < jsonObjSpot.length ; i++){
+      addMarker(new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), markerImage);
     }
 
 		  const zoomControl = new kakao.maps.ZoomControl();
@@ -323,7 +245,7 @@ class _aroundShelterState extends State<aroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() - 1, {animate: true})');
+                      'map.setLevel(map.getLevel() + 1, {animate: true})');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.red,
@@ -336,7 +258,7 @@ class _aroundShelterState extends State<aroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() + 1, {animate: true})');
+                      'map.setLevel(map.getLevel() - 1, {animate: true})');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.blue,
@@ -354,14 +276,24 @@ class _aroundShelterState extends State<aroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript('''
-      addMarker(new kakao.maps.LatLng(${context.watch<LocateProvider>().my_lat} + 0.0003, ${context.watch<LocateProvider>().my_lng} + 0.0003));
-      
-      function addMarker(position) {
-        let testMarker = new kakao.maps.Marker({position: position});
+    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
+    var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
+    var objAround1 = ${jsonAround2};
+    
+    var jsonObjKey = new Array();
+    var jsonObjSpot = new Array(); //jsonObj value 'spot' 담을 배열
+    var jsonObjLat = new Array(); //jsonObj value 'lat' 담을 배열
+    var jsonObjLng = new Array(); //jsonObj value 'lng' 담을 배열
+    for(var i=0; i<objAround1.length; i++){
+      jsonObjSpot.push(objAround1[i][Object.keys(objAround1[i])[0]]); // spot만 담음      
+      jsonObjLat.push(objAround1[i][Object.keys(objAround1[i])[1]]); // lat만 담음      
+      jsonObjLng.push(objAround1[i][Object.keys(objAround1[i])[2]]); // lng만 담음
+    };
 
-        testMarker.setMap(map);
-      }
-                      ''');
+    for(let i = 0 ; i < jsonObjSpot.length ; i++){
+      addMarker(new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), markerImage);
+    }
+              ''');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.amber,
@@ -373,7 +305,9 @@ class _aroundShelterState extends State<aroundShelter> {
               ),
               InkWell(
                 onTap: () async {
-                  await _mapController.reload();
+
+                  _locateProvider.locateMe();
+                  await _mapController.clearCache();
                   debugPrint('[refresh] done');
                 },
                 child: CircleAvatar(
@@ -412,11 +346,7 @@ class _aroundShelterState extends State<aroundShelter> {
         context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: url)));
 
   }
-
-
-
-
-
+/////////////////////////////////////////////////////////////
   Widget _testingCustomScript(
       {required Size size, required BuildContext context}) {
     return KakaoMapView(
@@ -425,8 +355,8 @@ class _aroundShelterState extends State<aroundShelter> {
         kakaoMapKey: kakaoMapKey,
         showMapTypeControl: true,
         showZoomControl: true,
-        lat: context.watch<LocateProvider>().my_lat,
-        lng: context.watch<LocateProvider>().my_lng,
+        lat: context.read<LocateProvider>().my_lat,
+        lng: context.read<LocateProvider>().my_lng,
         customScript: '''
     var markers = [];
     console.log('..');
