@@ -32,15 +32,15 @@ class ShelterProvider extends ChangeNotifier {
   var min_index = 0;
 
   Future<void> readExcelFile() async {
-    ByteData data = await rootBundle.load("assets/EQ_Shelter.xlsx");
+    ByteData data = await rootBundle.load("assets/Nationwide_shelter.xlsx");
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var excel = Excel.decodeBytes(bytes);
 
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table]!.rows) {
         List<dynamic> tmp = [];
-        tmp.add(row[9]!.props.first); // 경도
-        tmp.add(row[10]!.props.first); // 위도
+        tmp.add(row[8]!.props.first); // 경도
+        tmp.add(row[9]!.props.first); // 위도
 //        tmp.add(row[5]!.props.first); // 대피소
         mp[j] = tmp;
         j++;
