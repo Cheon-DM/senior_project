@@ -1,8 +1,9 @@
 import 'dart:html';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'mainpage.dart';
+import 'dart:developer';
 
 const List<Widget> buttons = <Widget>[
   Text('비상사태 피해'),
@@ -116,34 +117,20 @@ class _ActionGuideState3 extends State<ActionGuide3> {
 
                       if(_selections1[0] == true)...[
                         Text('나오니?1'),
-                        //actionGuide처럼 좌측에 분류/오른쪽에 내용 만들기
                         Row(
                           children: [
                             Expanded(
-                              child: Container(
-                                child: ListView(
-                                  children: <Widget>[
-
-                                    ExpansionTile(
-                                      title: Text("비상사태시 행동요령"),
-                                      backgroundColor: Colors.grey[200],
-                                      collapsedBackgroundColor: Color(0xff6157de),
-                                      collapsedTextColor: Colors.white,
-                                      textColor: Colors.black,
-                                      iconColor: Colors.black,
-                                      collapsedIconColor: Colors.white,
-
-                                      children: <Widget>[
-                                        ListTile(
-                                          title: Text("비상시 행동요령"),
-                                          //onTap:
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
+                                child: Container(
+                              color: Colors.red,
+                            ),
+                            flex: 1,
+                            ),
+                            Expanded(
+                                child: Container(
+                              color: Colors.green,
+                            ),
+                            flex: 2,
+                            ),
                           ],
                         )
                       ]else if(_selections1[1] == true)...[
