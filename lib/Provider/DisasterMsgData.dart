@@ -28,12 +28,11 @@ class DisasterMsgProvider extends ChangeNotifier {
 
     ref.get().then((value) {
       for (var doc in value.docs) {
-        if (doc['CREATE_DT'] != nowString1 && doc['CREATE_DT'] != pastString1 &&
-            doc['CREATE_DT'] != pastString2 &&
-            doc['CREATE_DT'] != pastString3) {
+        if (doc['CREATE_DT'] != nowString1) {
           deletelist.add(doc['MD101_SN']);
         }
       }
+      print(deletelist);
       for (int i = 0; i < deletelist.length; i++) {
         ref.doc('${deletelist[i]}').delete();
         notifyListeners();
@@ -114,13 +113,14 @@ class DisasterMsgProvider extends ChangeNotifier {
       for (int j = 0; j < bodyDecode.length; j++) {
         var DATE = bodyDecode[j]["MODF_DT"];
         final splitted = DATE.split(" ");
-
         var CREATE_DT = splitted[0];
+
         var MD101_SN = bodyDecode[j]["MD101_SN"];
         var DSSTR_SE_ID = bodyDecode[j]["DSSTR_SE_ID"];
         DSSTR_SE_ID = int.parse(DSSTR_SE_ID);
-        var RCV_AREA_ID = bodyDecode[j]["RCV_AREA_ID"];
-        RCV_AREA_ID = int.parse(RCV_AREA_ID);
+        var multiarea = bodyDecode[j]["RCV_AREA_ID"];
+        final RCV_AREA = multiarea.split(",");
+        var RCV_AREA_ID = int.parse(RCV_AREA[0]);
         var LOC;
         if (RCV_AREA_ID >= 2 && RCV_AREA_ID <= 20)
           LOC = 1;
