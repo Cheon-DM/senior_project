@@ -72,6 +72,26 @@ class LocateProvider extends ChangeNotifier{
         'my_lat': _my_lat,
         'my_lng': _my_lng
       });
+      QuerySnapshot querySnapshot = await ref.doc(user!.uid)
+          .collection('FriendAdmin').get();
+
+      // Get data from docs and convert map to List
+      // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+      final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
+      //for a specific field
+
+      print('나와라ㅏ와라');
+      print(allData);
+
+      for(var s in allData){
+        print(s);
+        await FirebaseFirestore.instance.collection('user').doc(s)
+            .collection('FriendAdmin').doc(user!.uid).update({
+          'friend_lat': tmp1,
+          'friend_lng': tmp2,
+        });
+        print('왜 안되지.....');
+      }
     }
 
     notifyListeners();

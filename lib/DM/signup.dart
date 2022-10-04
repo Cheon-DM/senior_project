@@ -22,6 +22,7 @@ class _signupState extends State<signup> {
   String userName = '';
   String userEmail = '';
   String userPassword = '';
+  String checkPassword='';
 
   void _tryValidation() {
     final isValid = _formkey.currentState!.validate();
@@ -235,6 +236,7 @@ class _signupState extends State<signup> {
                   key: ValueKey(4),
                   //비밀번호 확인 키: 4
                   validator: (value) {
+                    checkPassword != value;
                     if (value != userPassword) {
                       return '비밀번호가 일치하지 않습니다';
                     } else if (value!.isEmpty) {
@@ -280,8 +282,28 @@ class _signupState extends State<signup> {
         child: ElevatedButton(
           onPressed: () async {
             _tryValidation();
+            var newUser=null;
+            if(checkPassword==userPassword){
+              newUser =
+              await _authentication.createUserWithEmailAndPassword(
+                  email: userEmail, password: userPassword);
 
-            final newUser =
+
+              ////////////////////////////////////////////////////////////////////////////////
+
+              late LocateProvider _locateProvider = Provider.of<LocateProvider>(context,listen: false);
+
+
+              await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
+                  .set({
+                'userName' : userName,
+                'email' : userEmail,
+                'uid': newUser.user!.uid
+              });
+
+              _locateProvider.locateMe();
+            }
+            /*final newUser =
             await _authentication.createUserWithEmailAndPassword(
                 email: userEmail, password: userPassword);
 
@@ -298,7 +320,7 @@ class _signupState extends State<signup> {
               'uid': newUser.user!.uid
             });
 
-            _locateProvider.locateMe();
+            _locateProvider.locateMe();*/
 
            /* await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
                 .collection('FriendAdmin').doc('1234').set({

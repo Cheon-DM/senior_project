@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:senior_project/HW/addFriend.dart';
 import 'package:senior_project/HW/requestedFriend.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+import 'package:xml2json/xml2json.dart';
 import '../HS/myPage.dart';
 
 var name='';
@@ -19,6 +22,8 @@ void _sendName() async {
   //name = userData.data()!['userName'];
   print(userData);
 }
+
+
 
 
 class Menu extends StatelessWidget {
@@ -173,6 +178,8 @@ class _FreindListState extends State<FreindList> {
   @override
 
 
+
+
   void showProfile(context, name, email) {
     showDialog(
         context: context,
@@ -300,11 +307,133 @@ class _FreindListState extends State<FreindList> {
         });
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /*final _fireStore = FirebaseFirestore.instance;
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _fireStore.collection('user').doc(user!.uid)
+        .collection('FriendAdmin').get();
+
+    // Get data from docs and convert map to List
+   // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
+    //for a specific field
+
+    print('나와라ㅏ와라');
+    print(allData);
+
+    for(var s in allData){
+      print(s);
+      await FirebaseFirestore.instance.collection('user').doc(s)
+          .collection('FriendAdmin').doc(user!.uid).update({
+        'friend_lat': 37.483409,
+        'friend_lng': 126.970844,
+      });
+      print('왜 안되지.....');
+    }
+
+
+  }*/
+    //////////////////////////////////////////////////////////////////////////
+
+
+   Future<List> getUserLocation(friendLat, friendLng) async {
+    var kakaoGeoUrl = Uri.parse('https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$friendLng&y=$friendLat&input_coord=WGS84');
+    var kakaoGeo = await http.get(kakaoGeoUrl, headers: {"Authorization": "KakaoAK c4238e0ca7c5003d25786b53e52b1062"});
+
+    String addr = kakaoGeo.body;
+    var addrData = jsonDecode(addr);
+
+    print(addrData['documents'][0]['address']['address_name']);
+    //print(addrData['documents'][1]['road_address']['address_name']);
+
+
+    var address = addrData['documents'][0]['address']['address_name'];
+    //var roadAddress = addrData['documents'][1]['road_address']['address_name'];
+
+    List<String> friendAdd = [address];
+
+    return friendAdd;
+  }
+
+
+  void showFriendLocation(context, name, friendLat, friendLng) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              child: Container(
+                width: 400,
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: FutureBuilder(
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData == false){
+                      return CircularProgressIndicator();
+                    }
+                    else{
+                      List ll =snapshot.data as List;
+                      return Column(
+                        children: [
+                          SizedBox(height: 30),
+                          Text(
+                            name + '님의 위치\n\n'
+                            +'지번주소: ' +ll[0]
+                            +'\n',
+                            //+'도로명주소: ' +ll[1],
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+
+
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(content: Text('친구위치확인.')));
+                                },
+                                child: Text(
+                                  '확인',
+                                  style: TextStyle(
+                                    fontFamily: 'Leferi',
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+
+                            ],
+                          )
+                        ],
+                      );
+                    }
+                  },
+                  future: getUserLocation(friendLat, friendLng)),
+                )
+
+
+              );
+
+         }
+    );}
+
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection("user").doc(user!.uid).collection('FriendAdmin')
-          .where('friend', isEqualTo: 1)
+
+      return StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("user").doc(user!.uid).collection('FriendAdmin')
+              .where('friend', isEqualTo: 1)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -321,6 +450,7 @@ class _FreindListState extends State<FreindList> {
               collapsedTextColor: Colors.black,
               collapsedBackgroundColor: Colors.white,
               backgroundColor: Colors.grey[200],
+
 
               leading: Icon(
                 Icons.account_circle,
@@ -348,7 +478,20 @@ class _FreindListState extends State<FreindList> {
                     //contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
                     tileColor: Colors.white,
 
-                    title: Text('마지막 위치'),
+                    title: ElevatedButton(
+                      onPressed: ()async{
+                        print('확인하기');
+                        //getData();
+                        print(snapshot.data!.docs[index]['friend_lat']);
+                        showFriendLocation(context, snapshot.data!.docs[index]['name'],snapshot.data!.docs[index]['friend_lat'],snapshot.data!.docs[index]['friend_lng']);
+                      }, child: Text(
+                      '친구위치 확인하기',
+                      style: TextStyle(
+                        fontFamily: 'Leferi',
+                        fontSize: 13,
+                        color: Colors.black,
+                      ),),
+                    ),
 
                     subtitle: TextFormField(
                       decoration: InputDecoration(
