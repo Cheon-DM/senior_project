@@ -66,9 +66,9 @@ class _aroundShelterState extends State<aroundShelter> {
 
     for(int i = 1; i< mp.length; i++){
       // lat : 위도, lng : 경도
-      double lat2 = mp[i]![2]; // 위도
-      double lng2 = mp[i]![1]; // 경도
-      String spot = mp[i]![0]; // 장소이름
+      double lat2 = mp[i]![1]; // 위도
+      double lng2 = mp[i]![0]; // 경도
+      String spot = mp[i]![2]; // 장소이름
 
       num distance = calculate(context.read<LocateProvider>().my_lat, lat2, context.read<LocateProvider>().my_lng, lng2); // 거리 계산
 
@@ -80,8 +80,8 @@ class _aroundShelterState extends State<aroundShelter> {
       if (distance <= 1){
         Map<String, dynamic> tmp = {
           'spot': spot as String,
-          'lat': lat2,
-          'lng': lng2,
+          'lat': lat2 as double,
+          'lng': lng2 as double,
         };
         around1KM.add(tmp);
         a++;
@@ -114,14 +114,14 @@ class _aroundShelterState extends State<aroundShelter> {
     _locateProvider.locateMe();
     readExcelFile();
 
-    Timer(Duration(seconds: 60), () {
+    Timer(Duration(seconds: 30), () {
       _isLoading = false;
       print(_isLoading); // 지도 뜨게 함.
     });
   }
 
   Stream<Future<dynamic>> locate() async* {
-    Timer(Duration(seconds: 60), () {
+    Timer(Duration(seconds: 30), () {
       _locateProvider.locateMe();
       readExcelFile();
     });

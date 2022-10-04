@@ -47,6 +47,7 @@ dependencies:
   path_provider: ^2.0.2
   sqflite: ^2.0.0+4
   xml2json: ^5.3.2
+  html: ^0.15.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -90,6 +91,7 @@ flutter:
     - assets/shelterlist.xlsx
     - assets/neoguleman.jpeg
     - assets/EQ_Shelter.xlsx
+    - assets/test.xlsx
     - assets/Nationwide_shelter.xlsx
     - assets/marker_red.png
     - assets/marker_blue.png
