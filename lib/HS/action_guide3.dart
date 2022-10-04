@@ -116,22 +116,23 @@ class _ActionGuideState3 extends State<ActionGuide3> {
                       ),
 
                       if(_selections1[0] == true)...[
-                        Text('나오니?1'),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              color: Colors.red,
+                        SafeArea(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    color: Colors.red,
+                                  ),
+                                  flex: 1,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    color: Colors.green,
+                                  ),
+                                  flex: 2,
+                                ),
+                              ],
                             ),
-                            flex: 1,
-                            ),
-                            Expanded(
-                                child: Container(
-                              color: Colors.green,
-                            ),
-                            flex: 2,
-                            ),
-                          ],
                         )
                       ]else if(_selections1[1] == true)...[
                         Text('나오는구나!2'),
