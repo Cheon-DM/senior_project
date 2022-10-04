@@ -114,14 +114,14 @@ class _aroundShelterState extends State<aroundShelter> {
     _locateProvider.locateMe();
     readExcelFile();
 
-    Timer(Duration(seconds: 30), () {
+    Timer(Duration(seconds: 100), () {
       _isLoading = false;
       print(_isLoading); // 지도 뜨게 함.
     });
   }
 
   Stream<Future<dynamic>> locate() async* {
-    Timer(Duration(seconds: 30), () {
+    Timer(Duration(seconds: 100), () {
       _locateProvider.locateMe();
       readExcelFile();
     });
