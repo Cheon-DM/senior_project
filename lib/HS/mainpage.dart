@@ -10,6 +10,13 @@ import '../HW/checkState.dart';
 import 'action_guide2.dart';
 import 'action_guide3.dart';
 
+
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:xml2json/xml2json.dart';
+
+
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
