@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
 import 'package:senior_project/HS/guideLineModel.dart';
 
+import 'action_guide.dart';
 import 'action_guide2.dart';
 
 
@@ -120,3 +122,5 @@ class _ShowGuideState extends State<ShowGuide> {
 
   }
 }
+
+ */

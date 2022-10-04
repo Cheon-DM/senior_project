@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +7,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:senior_project/HS/show_guide.dart';
 
 import 'mainpage.dart';
-import 'package:senior_project/HS/guideAPI/guideHTTP.dart';
 
 class ActionGuide2 extends StatefulWidget {
   @override
@@ -15,7 +15,6 @@ class ActionGuide2 extends StatefulWidget {
 
 class _ActionGuideState2 extends State<ActionGuide2> {
   bool isExpand = false;
-  GuideHTTP guidehttp = GuideHTTP();
 
 
   @override
@@ -367,3 +366,5 @@ class _ActionGuideState2 extends State<ActionGuide2> {
     );
   }
 }
+
+*/
