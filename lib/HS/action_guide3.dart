@@ -1,9 +1,7 @@
-import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'mainpage.dart';
-import 'dart:developer';
+
 
 const List<Widget> buttons = <Widget>[
   Text('비상사태 피해'),
@@ -19,7 +17,7 @@ class ActionGuide3 extends StatefulWidget {
 
 class _ActionGuideState3 extends State<ActionGuide3> {
   //List<bool> _selections1 = List.generate(4, (index) => false);
-  List<bool> _selections1 = <bool>[false, false, false, false];
+  List<bool> _selections1 = <bool>[true, false, false, false];
   FocusNode focusButton1 = FocusNode();
   FocusNode focusButton2 = FocusNode();
   FocusNode focusButton3 = FocusNode();
@@ -117,25 +115,182 @@ class _ActionGuideState3 extends State<ActionGuide3> {
 
                       if(_selections1[0] == true)...[
                         SafeArea(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    color: Colors.red,
-                                  ),
-                                  flex: 1,
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    color: Colors.green,
-                                  ),
-                                  flex: 2,
-                                ),
-                              ],
-                            ),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child : ListView(
+                                  children: <Widget>[
+
+                                    //1.1. 비상시 행동요령
+                                    ExpansionTile(
+                                      title: Text(
+                                        "1.1. 비상시 행동요령",
+                                        style: TextStyle(
+                                          fontFamily: 'Leferi',
+                                          fontSize: 15
+                                        ),
+                                      ),
+                                      children: <Widget>[
+                                        ListTile(
+                                          title : Text(
+                                            "1.1.1. 비상시 정부대응",
+                                            style: TextStyle(
+                                                fontFamily: 'Leferi',
+                                                fontSize: 15
+                                            ),
+                                          ),
+                                          onTap: (){
+
+                                          },
+                                        ),
+                                        ListTile(
+                                          title : Text(
+                                            "1.1.2. 비상시 국민행동요령",
+                                            style: TextStyle(
+                                                fontFamily: 'Leferi',
+                                                fontSize: 15
+                                            ),
+                                          ),
+                                          onTap: (){
+
+                                          },
+                                        ),
+                                        ListTile(
+                                          title : Text(
+                                            "1.1.3. 국가동원령 선포",
+                                            style: TextStyle(
+                                                fontFamily: 'Leferi',
+                                                fontSize: 15
+                                            ),
+                                          ),
+                                          onTap: (){
+
+                                          },
+                                        ),
+                                        ListTile(
+                                          title : Text(
+                                            "1.1.4. 배급제 안내",
+                                            style: TextStyle(
+                                                fontFamily: 'Leferi',
+                                                fontSize: 15
+                                            ),
+                                          ),
+                                          onTap: (){
+
+                                          },
+                                        ),
+                                        ListTile(
+                                          title : Text(
+                                            "1.1.5. 신고 요령",
+                                            style: TextStyle(
+                                                fontFamily: 'Leferi',
+                                                fontSize: 15
+                                            ),
+                                          ),
+                                          onTap: (){
+
+                                          },
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )
+                              )
+                            ],
+                          ),
                         )
+
+
+                        //화생방 피해대비 행동요령
                       ]else if(_selections1[1] == true)...[
-                        Text('나오는구나!2'),
+                        SafeArea(
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                  child : ListView(
+                                    children: <Widget>[
+
+                                      //1.1. 비상시 행동요령
+                                      ExpansionTile(
+                                        title: Text(
+                                          "1.1. 비상시 행동요령",
+                                          style: TextStyle(
+                                              fontFamily: 'Leferi',
+                                              fontSize: 15
+                                          ),
+                                        ),
+                                        children: <Widget>[
+                                          ListTile(
+                                            title : Text(
+                                              "1.1.1. 비상시 정부대응",
+                                              style: TextStyle(
+                                                  fontFamily: 'Leferi',
+                                                  fontSize: 15
+                                              ),
+                                            ),
+                                            onTap: (){
+
+                                            },
+                                          ),
+                                          ListTile(
+                                            title : Text(
+                                              "1.1.2. 비상시 국민행동요령",
+                                              style: TextStyle(
+                                                  fontFamily: 'Leferi',
+                                                  fontSize: 15
+                                              ),
+                                            ),
+                                            onTap: (){
+
+                                            },
+                                          ),
+                                          ListTile(
+                                            title : Text(
+                                              "1.1.3. 국가동원령 선포",
+                                              style: TextStyle(
+                                                  fontFamily: 'Leferi',
+                                                  fontSize: 15
+                                              ),
+                                            ),
+                                            onTap: (){
+
+                                            },
+                                          ),
+                                          ListTile(
+                                            title : Text(
+                                              "1.1.4. 배급제 안내",
+                                              style: TextStyle(
+                                                  fontFamily: 'Leferi',
+                                                  fontSize: 15
+                                              ),
+                                            ),
+                                            onTap: (){
+
+                                            },
+                                          ),
+                                          ListTile(
+                                            title : Text(
+                                              "1.1.5. 신고 요령",
+                                              style: TextStyle(
+                                                  fontFamily: 'Leferi',
+                                                  fontSize: 15
+                                              ),
+                                            ),
+                                            onTap: (){
+
+                                            },
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  )
+                              )
+                            ],
+                          ),
+                        )
+
+
+                        //화생방 피해대비 행동요령
                       ]else if(_selections1[2] == true)...[
                         Text('나오는구나!3'),
                       ]else if(_selections1[3] == true)...[

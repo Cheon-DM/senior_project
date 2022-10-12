@@ -7,6 +7,7 @@ import '../DM/disaster.dart';
 import '../DM/findShelter.dart';
 import '../DM/map.dart';
 import '../HW/checkState.dart';
+import 'action_guide.dart';
 import 'action_guide2.dart';
 import 'action_guide3.dart';
 
@@ -139,7 +140,7 @@ class _MainPageState extends State<MainPage> {
                             onPressed: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                    return ActionGuide3();
+                                    return ActionGuide();
                                   }));
                             },
                             child: Row(

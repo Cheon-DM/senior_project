@@ -1,10 +1,6 @@
 /*
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:senior_project/HS/show_guide.dart';
 
 import 'mainpage.dart';
 
@@ -366,5 +362,4 @@ class _ActionGuideState2 extends State<ActionGuide2> {
     );
   }
 }
-
-*/
+ */
