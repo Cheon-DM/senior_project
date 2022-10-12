@@ -48,13 +48,16 @@ class _aroundShelterState extends State<aroundShelter> {
   List<Map<String, dynamic>> around2 = []; // 2km 근방
   late String jsonAround1;
   late String jsonAround2;
-
+  double min_lat = 0;
+  double min_lng = 0;
+  String min_spot = "";
 
   Future<void> readExcelFile() async {
     List<Map<String, dynamic>> around1KM = [];
     List<Map<String, dynamic>> around2KM = [];
     int j=0;
     num min_dis = 100000;
+
     var min_index = 0;
 
     _locateProvider.locateMe(); // 내 위치
@@ -75,6 +78,9 @@ class _aroundShelterState extends State<aroundShelter> {
       if (min_dis > distance){
         min_dis = distance;
         min_index = i;
+        min_lat = lat2;
+        min_lng = lng2;
+        min_spot = spot;
       }
 
       if (distance <= 1){
@@ -114,14 +120,14 @@ class _aroundShelterState extends State<aroundShelter> {
     _locateProvider.locateMe();
     readExcelFile();
 
-    Timer(Duration(seconds: 100), () {
+    Timer(Duration(seconds: 90), () {
       _isLoading = false;
       print(_isLoading); // 지도 뜨게 함.
     });
   }
 
   Stream<Future<dynamic>> locate() async* {
-    Timer(Duration(seconds: 100), () {
+    Timer(Duration(seconds: 90), () {
       _locateProvider.locateMe();
       readExcelFile();
     });
@@ -185,10 +191,10 @@ class _aroundShelterState extends State<aroundShelter> {
                             mapController: (controller) {
                               _mapController = controller;
                             },
-                            zoomLevel: 6,
+                            zoomLevel: 2,
                             customScript: '''
     var markers = [];
-    var imageURL = 'https://w7.pngwing.com/pngs/96/889/png-transparent-marker-map-interesting-places-the-location-on-the-map-the-location-of-the-thumbnail.png';
+    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
     
     var objAround1 = ${jsonAround1};
     
@@ -202,8 +208,8 @@ class _aroundShelterState extends State<aroundShelter> {
       jsonObjLng.push(objAround1[i][Object.keys(objAround1[i])[2]]); // lng만 담음
     };   
 
-    function addMarker(position, image) {
-      var marker = new kakao.maps.Marker({position: position, image: image});
+    function addMarker(marker, image) {
+      // var marker = new kakao.maps.Marker({position: position, image: image, clickable: true});
       marker.setMap(map);
       markers.push(marker);
     }
@@ -213,6 +219,17 @@ class _aroundShelterState extends State<aroundShelter> {
       return markerImage;            
     }
     
+    function clickMarker(marker, iwContent, iwRemoveable) {
+      // var marker = new kakao.maps.Marker({position: position, clickable: true});
+      var infowindow = new kakao.maps.InfoWindow({
+        content : iwContent,
+        removable : iwRemoveable
+      });
+      
+      kakao.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+      });
+    }
     var imageSize = new kakao.maps.Size(200, 100);
     var imageOptions = {  
                 spriteOrigin: new kakao.maps.Point(0, 0),    
@@ -221,7 +238,9 @@ class _aroundShelterState extends State<aroundShelter> {
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
 
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
-      addMarker(new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), markerImage);
+      var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage, clickable: true});
+      addMarker(marker, markerImage);
+      clickMarker(marker, jsonObjSpot[i], true);
     }
 
 		  const zoomControl = new kakao.maps.ZoomControl();
@@ -291,7 +310,9 @@ class _aroundShelterState extends State<aroundShelter> {
     };
 
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
-      addMarker(new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), markerImage);
+      var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage, clickable: true});
+      addMarker(marker, markerImage);
+      clickMarker(marker, jsonObjSpot[i], true);
     }
               ''');
                 },
@@ -338,7 +359,7 @@ class _aroundShelterState extends State<aroundShelter> {
 
     /// This is short form of the above comment
     String url =
-    await util.getMapScreenURL(37.402056, 127.108212, name: 'Kakao 본사');
+    await util.getMapScreenURL(min_lat, min_lng, name: min_spot);
 
     debugPrint('url : $url');
 
