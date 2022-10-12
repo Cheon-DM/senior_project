@@ -41,9 +41,10 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
 
   Future<void> getList() async {
     _msgProvider.update();
-    _msgProvider.crawling();
     Timer(Duration(seconds: 1), () {
     });
+    _msgProvider.crawling();
+
   }
 
   @override

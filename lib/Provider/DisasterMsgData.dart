@@ -28,7 +28,11 @@ class DisasterMsgProvider extends ChangeNotifier {
 
     ref.get().then((value) {
       for (var doc in value.docs) {
-        if (doc['CREATE_DT'] != nowString1) {
+        if (doc['CREATE_DT'] == nowString1 || doc['CREATE_DT'] == pastString1 || doc['CREATE_DT'] == pastString2 || doc['CREATE_DT'] == pastString3) {
+          print(doc['CREATE_DT'] == pastString1);
+          continue;
+        }
+        else {
           deletelist.add(doc['MD101_SN']);
         }
       }
