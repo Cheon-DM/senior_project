@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:excel/excel.dart';
 
 import 'package:provider/provider.dart';
+import 'package:senior_project/Provider/DisasterMsg.dart';
 import 'package:senior_project/Provider/ReadShelterData.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
 import 'package:flutter/material.dart';
@@ -131,8 +132,8 @@ class _aroundShelterState extends State<aroundShelter> {
 
   Stream<Future<dynamic>> locate() async* {
     Timer(Duration(seconds: 40), () {
-      _locateProvider.locateMe();
       readExcelFile();
+      _locateProvider.locateMe();
     });
   }
 
@@ -385,11 +386,12 @@ class _aroundShelterState extends State<aroundShelter> {
     /// This is short form of the above comment
     String url =
     await util.getMapScreenURL(min_lat, min_lng, name: min_spot);
+    String testURL1 = "https://map.kakao.com/link/to/" + min_spot + "," + min_lat.toString() + "," + min_lng.toString() + "/from/내 위치," + context.read<LocateProvider>().my_lat.toString() + "," + context.read<LocateProvider>().my_lng.toString() ;
 
-    debugPrint('url : $url');
+    print('url : $url');
 
     Navigator.push(
-        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: url)));
+        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1)));
 
   }
 /////////////////////////////////////////////////////////////
