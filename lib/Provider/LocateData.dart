@@ -9,6 +9,10 @@ class LocateProvider extends ChangeNotifier{
   double _my_lng = 0;
   double _lat = 0;
   double _lng = 0;
+  var _friend_lat = [];
+  var _friend_lng = [];
+  var _friend_name = [];
+
   late Position position;
   bool _serviceEnabled = false;
   late LocationPermission _permissionGranted;
@@ -18,6 +22,9 @@ class LocateProvider extends ChangeNotifier{
   double get my_lng => _my_lng;
   double get lat => _lat;
   double get lng => _lng;
+  List get friend_lat => _friend_lat;
+  List get friend_lng => _friend_lng;
+  List get friend_name => _friend_name;
 
   final user =FirebaseAuth.instance.currentUser;
   final ref = FirebaseFirestore.instance.collection('user');
@@ -75,12 +82,8 @@ class LocateProvider extends ChangeNotifier{
       QuerySnapshot querySnapshot = await ref.doc(user!.uid)
           .collection('FriendAdmin').get();
 
-      // Get data from docs and convert map to List
-      // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
       final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
-      //for a specific field
 
-      print('나와라ㅏ와라');
       print(allData);
 
       for(var s in allData){
@@ -90,10 +93,25 @@ class LocateProvider extends ChangeNotifier{
           'friend_lat': tmp1,
           'friend_lng': tmp2,
         });
-        print('왜 안되지.....');
+
       }
     }
 
     notifyListeners();
   }
+
+  friendLocation() async{
+    QuerySnapshot querySnapshot = await ref.doc(user!.uid)
+        .collection('FriendAdmin').where('friend', isEqualTo: 1).get();
+
+    _friend_lat = querySnapshot.docs.map((doc) => doc.get('friend_lat')).toList();
+    _friend_lng = querySnapshot.docs.map((doc) => doc.get('friend_lng')).toList();
+    _friend_name = querySnapshot.docs.map((doc) => doc.get('name')).toList();
+    print("여기가 궁금:");
+    print(_friend_lng);
+    print(_friend_lat);
+    print(_friend_name);
+    print(_friend_name.runtimeType);
+    print("여기까지가 궁금");
+}
 }

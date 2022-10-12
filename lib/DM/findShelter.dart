@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:excel/excel.dart';
 
@@ -60,6 +62,7 @@ class _aroundShelterState extends State<aroundShelter> {
 
     var min_index = 0;
 
+    _locateProvider.friendLocation(); //친구위치
     _locateProvider.locateMe(); // 내 위치
     _shelterProvider.readShelterdata();
     Map<int, List<dynamic>> mp = context.read<ShelterProvider>().mp; // 대피소 저장 리스트
@@ -120,14 +123,14 @@ class _aroundShelterState extends State<aroundShelter> {
     _locateProvider.locateMe();
     readExcelFile();
 
-    Timer(Duration(seconds: 90), () {
+    Timer(Duration(seconds: 10), () {
       _isLoading = false;
       print(_isLoading); // 지도 뜨게 함.
     });
   }
 
   Stream<Future<dynamic>> locate() async* {
-    Timer(Duration(seconds: 90), () {
+    Timer(Duration(seconds: 40), () {
       _locateProvider.locateMe();
       readExcelFile();
     });
@@ -193,10 +196,17 @@ class _aroundShelterState extends State<aroundShelter> {
                             },
                             zoomLevel: 2,
                             customScript: '''
+
     var markers = [];
-    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
+    var imageURL = 'https://w7.pngwing.com/pngs/96/889/png-transparent-marker-map-interesting-places-the-location-on-the-map-the-location-of-the-thumbnail.png';
+    var friendImageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
     
     var objAround1 = ${jsonAround1};
+    var flat = ${_locateProvider.friend_lat};
+    var flng = ${_locateProvider.friend_lng};console.log("박혜원");
+    var fname = new Array();
+    fname=${_locateProvider.friend_name}
+    
     
     var jsonObjKey = [];
     var jsonObjSpot = []; //jsonObj value 'spot' 담을 배열
@@ -214,6 +224,12 @@ class _aroundShelterState extends State<aroundShelter> {
       markers.push(marker);
     }
     
+    function addFriendMarker(marker, image) {
+      //var marker = new kakao.maps.Marker({position: position, image: image});
+      marker.setMap(map);
+      markers.push(marker);
+    }
+
     function createMarkerImage(src, size, options) {
       var markerImage = new kakao.maps.MarkerImage(src, size, options);
       return markerImage;            
@@ -236,11 +252,20 @@ class _aroundShelterState extends State<aroundShelter> {
                 spriteSize: new kakao.maps.Size(20, 50)  
             };
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
-
+    
+    var friendMarkerImage = createMarkerImage(friendImageURL, imageSize, imageOptions);
+    
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
       var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage, clickable: true});
       addMarker(marker, markerImage);
       clickMarker(marker, jsonObjSpot[i], true);
+    }
+    for(let i = 0 ; i < flat.length ; i++){    
+    var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(flat[i], flng[i]), image: friendMarkerImage, clickable: true});
+      addMarker(marker, friendMarkerImage);
+      clickMarker(marker, fName[i], true);
+    
+      
     }
 
 		  const zoomControl = new kakao.maps.ZoomControl();
