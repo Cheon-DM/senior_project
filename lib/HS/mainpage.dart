@@ -160,9 +160,7 @@ class _MainPageState extends State<MainPage> {
                                     child: Icon(
                                       Icons.menu_book_rounded,
                                       color: Colors.black,
-                                      size: MediaQuery.of(context).size.height *
-                                          0.12 *
-                                          0.4,
+                                      size: MediaQuery.of(context).size.height * 0.12 * 0.4,
                                     ),
                                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                   ),

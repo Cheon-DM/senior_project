@@ -85,7 +85,7 @@ class DisasterMsgProvider extends ChangeNotifier {
     final int statusCode = initResponse.statusCode;
     print("--- 상태 코드 ---");
     print(statusCode);
-
+    print("--- ------- ---");
     var rtnPageCnt = jsonDecode(initResponse.body)['rtnResult']['pageSize'];
     print("---필요 page 수---");
     print(rtnPageCnt);
