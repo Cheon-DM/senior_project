@@ -14,6 +14,8 @@ import 'package:vector_math/vector_math.dart';
 //
 // }
 
+
+
 class ShelterProvider extends ChangeNotifier {
   int j=0; // 대피소 저장 리스트 인덱스
   Map<int, List<dynamic>> mp = Map<int, List<dynamic>>(); // 대피소 저장 리스트
@@ -38,10 +40,12 @@ class ShelterProvider extends ChangeNotifier {
 
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table]!.rows) {
+       // print(row[9]);
         List<dynamic> tmp = [];
         tmp.add(row[8]!.props.first); // 경도
         tmp.add(row[9]!.props.first); // 위도
-//        tmp.add(row[5]!.props.first); // 대피소
+        tmp.add(row[0]!.props.first); // 대피소
+
         mp[j] = tmp;
         j++;
       }
