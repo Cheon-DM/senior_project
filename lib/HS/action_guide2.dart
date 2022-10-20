@@ -1,5 +1,7 @@
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:senior_project/HS/show_guide.dart';
@@ -12,16 +14,21 @@ class ActionGuide2 extends StatefulWidget {
 }
 
 class _ActionGuideState2 extends State<ActionGuide2> {
+  bool isExpand = false;
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'action-guide',
       home: Scaffold(
+        resizeToAvoidBottomInset : false,
+
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
           elevation: 5,
           title: Text(
-            "행동지침",
+            "행동지침1",
             style: TextStyle(
               fontFamily: 'Leferi',
               color: Colors.white,
@@ -30,9 +37,12 @@ class _ActionGuideState2 extends State<ActionGuide2> {
             ),
           ),
           leading: IconButton(
-            onPressed: () {
+            onPressed: (){
               // Get.to(MainPage());
-              Get.offAll(() => MainPage());
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) {
+                    return MainPage();
+                  }));
             },
             icon: Icon(
               Icons.arrow_back,
@@ -43,11 +53,11 @@ class _ActionGuideState2 extends State<ActionGuide2> {
         body: SafeArea(
           child: Container(
             decoration: BoxDecoration(
-                color: const Color(0xff6157DE),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15),
-                ),
+              color: const Color(0xff6157DE),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+              ),
             ),
             child: Container(
               padding: EdgeInsets.only(
@@ -55,12 +65,9 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                 right: 10,
               ),
               child: ListView(
-
                 children: <Widget>[
-
                   Container(
                     child: Container(
-
                       //1. 비상사태시 행동요령
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
@@ -82,7 +89,6 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                           iconColor: Colors.black,
                           collapsedIconColor: Colors.white,
                           children: <Widget>[
-
                             ListTile(
                               title: Text(
                                 "1.1.비상시 행동요령",
@@ -93,13 +99,7 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                               ),
                               textColor: Colors.black,
                               onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                      return ShowGuide();
-                                    }
-                                    ),
-                                );
-
+                                guidehttp.callAPI();
                               },
                             ),
                             ListTile(
@@ -130,11 +130,9 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                     ),
                   ),
 
-
                   //2. 화생방 피해대비 행동요령
                   Container(
                     child: Container(
-
                       //1. 비상사태시 행동요령
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
@@ -155,7 +153,6 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                           iconColor: Colors.black,
                           collapsedIconColor: Colors.white,
                           children: <Widget>[
-
                             ListTile(
                               title: Text(
                                 "2.1.핵/방사능 피폭대비 행동요령",
@@ -166,13 +163,12 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                               ),
                               textColor: Colors.black,
                               onTap: () {
-                                Navigator.push(context,
+                                Navigator.push(
+                                  context,
                                   MaterialPageRoute(builder: (context) {
                                     return ShowGuide();
-                                  }
-                                  ),
+                                  }),
                                 );
-
                               },
                             ),
                             ListTile(
@@ -208,18 +204,15 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                               textColor: Colors.black,
                               onTap: () {},
                             )
-
                           ],
                         ),
                       ),
                     ),
                   ),
 
-
                   //3. 인명/시설 피해시 행동요령
                   Container(
                     child: Container(
-
                       //1. 비상사태시 행동요령
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
@@ -240,7 +233,6 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                           iconColor: Colors.black,
                           collapsedIconColor: Colors.white,
                           children: <Widget>[
-
                             ListTile(
                               title: Text(
                                 "3.1.대형건물 붕괴/화재 행동요령",
@@ -251,13 +243,12 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                               ),
                               textColor: Colors.black,
                               onTap: () {
-                                Navigator.push(context,
+                                Navigator.push(
+                                  context,
                                   MaterialPageRoute(builder: (context) {
                                     return ShowGuide();
-                                  }
-                                  ),
+                                  }),
                                 );
-
                               },
                             ),
                             ListTile(
@@ -293,18 +284,15 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                               textColor: Colors.black,
                               onTap: () {},
                             )
-
                           ],
                         ),
                       ),
                     ),
                   ),
 
-
                   //4. 비상대비물자 준비 및 사용요령
                   Container(
                     child: Container(
-
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(15),
@@ -324,7 +312,6 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                           iconColor: Colors.black,
                           collapsedIconColor: Colors.white,
                           children: <Widget>[
-
                             ListTile(
                               title: Text(
                                 "4.1.비상대비물자 준비요령",
@@ -335,13 +322,12 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                               ),
                               textColor: Colors.black,
                               onTap: () {
-                                Navigator.push(context,
+                                Navigator.push(
+                                  context,
                                   MaterialPageRoute(builder: (context) {
                                     return ShowGuide();
-                                  }
-                                  ),
+                                  }),
                                 );
-
                               },
                             ),
                             ListTile(
@@ -371,7 +357,6 @@ class _ActionGuideState2 extends State<ActionGuide2> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -381,3 +366,5 @@ class _ActionGuideState2 extends State<ActionGuide2> {
     );
   }
 }
+
+*/

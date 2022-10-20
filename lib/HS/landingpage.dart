@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'mainpage.dart';
 
 class LandingPage extends StatefulWidget {
@@ -10,12 +9,14 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage>{
+
   @override
   void initState() {
-    Timer(Duration(seconds: 3), () {
-      Get.offAll(()=>MainPage());
-    });
     super.initState();
+    Timer(Duration(seconds: 3), () {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context)=>MainPage()));
+    });
   }
 
   @override

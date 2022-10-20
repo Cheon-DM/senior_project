@@ -2,20 +2,22 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/get_transition_mixin.dart';
-import 'package:senior_project/HS/action_guide.dart';
-
-import 'package:senior_project/HW/login.dart';
+import 'package:provider/provider.dart';
+import 'package:senior_project/Provider/ReadShelterData.dart';
 
 import '../DM/disaster.dart';
 import '../DM/findShelter.dart';
 import '../DM/map.dart';
-
-import '../DM/disaster.dart';
 import '../HW/checkState.dart';
-import '../HW/friendlist.dart';
 import 'action_guide2.dart';
+import 'action_guide3.dart';
+
+
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:xml2json/xml2json.dart';
+
 
 class MainPage extends StatefulWidget {
   @override
@@ -23,11 +25,15 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  late ShelterProvider _shelterProvider = Provider.of<ShelterProvider>(context);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Container(
           child: Scaffold(
+              resizeToAvoidBottomInset : false,
               appBar: AppBar(
                 backgroundColor: const Color(0xff6157DE),
                 elevation: 0,
@@ -56,14 +62,12 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ],
               ),
-              resizeToAvoidBottomInset: false, //키보드로 밀려올라감 방지
               backgroundColor: Colors.grey[200],
               body: SafeArea(
                 child: Column(
                   //버튼 4개 전체적으로 정렬
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
-
                   children: <Widget>[
                     SizedBox(
                       height: 0,
@@ -92,9 +96,8 @@ class _MainPageState extends State<MainPage> {
                             ),
                             onPressed: () {
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return aroundShelter();
-                                  }));
+                                  MaterialPageRoute(builder: (context) => aroundShelter()
+                                  ));
                             },
                           ),
                           SizedBox(
@@ -147,7 +150,7 @@ class _MainPageState extends State<MainPage> {
                             onPressed: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                    return ActionGuide2();
+                                    return ActionGuide3();
                                   }));
                             },
                             child: Row(
@@ -157,9 +160,7 @@ class _MainPageState extends State<MainPage> {
                                     child: Icon(
                                       Icons.menu_book_rounded,
                                       color: Colors.black,
-                                      size: MediaQuery.of(context).size.height *
-                                          0.12 *
-                                          0.4,
+                                      size: MediaQuery.of(context).size.height * 0.12 * 0.4,
                                     ),
                                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                   ),

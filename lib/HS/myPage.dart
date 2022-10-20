@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
 import 'package:senior_project/HS/mainpage.dart';
 import 'package:senior_project/HW/addFriend.dart';
 import '../HW/friendlist.dart';
 import '../HW/login.dart';
+import '../Provider/LocateData.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -15,10 +17,13 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   final _authentication = FirebaseAuth.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
+  late LocateProvider _locateProvider = Provider.of<LocateProvider>(context,listen: false);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,
@@ -76,14 +81,19 @@ class _MyPageState extends State<MyPage> {
               SizedBox(
                 height: 50,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              Wrap(
+                direction: Axis.horizontal,
+                alignment: WrapAlignment.center,
+                //mainAxisAlignment: MainAxisAlignment.center,
+                //crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
+                  //나의 친구관리 버튼
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 25),
+                    margin: EdgeInsets.symmetric(horizontal: 5),
                     child: OutlinedButton(
                         onPressed: () {
+                          _locateProvider.locateMe();
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return Menu();
@@ -99,8 +109,10 @@ class _MyPageState extends State<MyPage> {
                           ),
                         )),
                   ),
+
+                  //메인페이지 버튼
                   Container(
-                    margin: EdgeInsets.all(25),
+                    margin: EdgeInsets.symmetric(horizontal: 5),
                     child: OutlinedButton(
                       onPressed: () {
                         Navigator.push(context,
@@ -121,6 +133,7 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ],
               ),
+
               SizedBox(
                 height: 50,
               ),

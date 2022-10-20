@@ -1,12 +1,31 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:senior_project/HS/landingpage.dart';
+import 'package:provider/provider.dart';
+import 'package:senior_project/HS/mainpage.dart';
+import 'package:senior_project/Provider/ReadShelterData.dart';
 import 'DM/Auth.dart';
-import 'DM/findShelter.dart';
-import 'DM/message.dart';
-import 'HS/mainpage.dart';
+import 'Provider/DisasterMsgData.dart';
+import 'Provider/GuideData.dart';
+import 'Provider/LocateData.dart';
 
 void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+   await Firebase.initializeApp();
   authFirebase();
-  runApp(MaterialApp(
-      home: MainPage()));
+  runApp(
+      MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_)=>LocateProvider()),
+            ChangeNotifierProvider(create: (_)=>DisasterMsgProvider()),
+            ChangeNotifierProvider(create: (_)=>ShelterProvider()),
+            ChangeNotifierProvider(create: (_)=>GuideDataProvider()),
+          ],
+          child: MaterialApp(
+              home: MainPage()
+          )
+      )
+  );
 }
+
+

@@ -1,9 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:senior_project/HW/addFriend.dart';
 import 'package:senior_project/HW/requestedFriend.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+import 'package:xml2json/xml2json.dart';
 import '../HS/myPage.dart';
+
+var name='';
+final user = FirebaseAuth.instance.currentUser;
+
+void _sendName() async {
+
+  final userData = await FirebaseFirestore.instance
+      .collection("user").doc(user!.uid).collection('FriendAdmin')
+      .where('otheruser', isEqualTo: 1)
+      .get();
+  //name = userData.data()!['userName'];
+  print(userData);
+}
+
+
+
 
 class Menu extends StatelessWidget {
   @override
@@ -11,6 +32,8 @@ class Menu extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset : false,
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,
@@ -97,6 +120,10 @@ class Menu extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
+
+
+                  _sendName();
+
                   //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('나중에 다른페이지로 넘어갑니다')));
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Requested()));
@@ -149,28 +176,9 @@ class FreindList extends StatefulWidget {
 
 class _FreindListState extends State<FreindList> {
   @override
-  var nameList = [
-    '박혜원',
-    '천다미',
-    '정혜선',
-    '박소정',
-    '홀롤로로',
-    '호롤롤로로롤',
-    '혜원띠',
-    '디미띠',
-    '혜선ㄸㅣ'
-  ];
-  var emailList = [
-    '혜원@hongik',
-    '다미@hongik',
-    '혜선@hongik',
-    '소정@hongik',
-    '',
-    '',
-    '',
-    '',
-    ''
-  ];
+
+
+
 
   void showProfile(context, name, email) {
     showDialog(
@@ -229,7 +237,7 @@ class _FreindListState extends State<FreindList> {
         });
   }
 
-  void showDelete(context, name, email) {
+  void showDelete(context, name, email, uid) {
     showDialog(
         context: context,
         builder: (context) {
@@ -256,7 +264,16 @@ class _FreindListState extends State<FreindList> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: ()async {
+                        await FirebaseFirestore.instance.collection('user').doc(uid)
+                            .collection('FriendAdmin').doc(user!.uid).update({
+                          'friend': 0,
+                        });
+                        await FirebaseFirestore.instance.collection('user').doc(user!.uid)
+                            .collection('FriendAdmin').doc(uid).update({
+                          'friend': 0,
+                        });
+
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text('삭제되었습니다.')));
@@ -290,85 +307,234 @@ class _FreindListState extends State<FreindList> {
         });
   }
 
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: ListView.separated(
-      itemCount: nameList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ExpansionTile(
-          iconColor: Colors.grey,
-          collapsedIconColor: Colors.grey,
-          textColor: Colors.black,
-          collapsedTextColor: Colors.black,
-          collapsedBackgroundColor: Colors.white,
-          backgroundColor: Colors.grey[200],
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-          leading: Icon(
-            Icons.account_circle,
-            size: 40,
-          ),
-          title: Text(
-            nameList[index],
-          ),
-          subtitle: Text(emailList[index]),
-          //backgroundColor: Colors.amber,
-          children: <Widget>[
-            /*
-            Divider(
-              height: 3,
-              color: Colors.white,
-              indent: 20,
-              endIndent: 20,
-            ),
-             */
-            Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: ListTile(
-                //contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                tileColor: Colors.white,
+  /*final _fireStore = FirebaseFirestore.instance;
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _fireStore.collection('user').doc(user!.uid)
+        .collection('FriendAdmin').get();
 
-                title: Text('마지막 위치'),
+    // Get data from docs and convert map to List
+   // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
+    //for a specific field
 
-                subtitle: TextFormField(
-                  decoration: InputDecoration(
-                      prefixText: '메모',
-                      hintText: 'memo',
-                      border: OutlineInputBorder()),
+    print('나와라ㅏ와라');
+    print(allData);
+
+    for(var s in allData){
+      print(s);
+      await FirebaseFirestore.instance.collection('user').doc(s)
+          .collection('FriendAdmin').doc(user!.uid).update({
+        'friend_lat': 37.483409,
+        'friend_lng': 126.970844,
+      });
+      print('왜 안되지.....');
+    }
+
+
+  }*/
+    //////////////////////////////////////////////////////////////////////////
+
+
+   Future<List> getUserLocation(friendLat, friendLng) async {
+    var kakaoGeoUrl = Uri.parse('https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$friendLng&y=$friendLat&input_coord=WGS84');
+    var kakaoGeo = await http.get(kakaoGeoUrl, headers: {"Authorization": "KakaoAK c4238e0ca7c5003d25786b53e52b1062"});
+
+    String addr = kakaoGeo.body;
+    var addrData = jsonDecode(addr);
+
+    print(addrData['documents'][0]['address']['address_name']);
+    //print(addrData['documents'][1]['road_address']['address_name']);
+
+
+    var address = addrData['documents'][0]['address']['address_name'];
+    //var roadAddress = addrData['documents'][1]['road_address']['address_name'];
+
+    List<String> friendAdd = [address];
+
+    return friendAdd;
+  }
+
+
+  void showFriendLocation(context, name, friendLat, friendLng) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              child: Container(
+                width: 400,
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
                 ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(width: 5),
-                    ElevatedButton(
-                        onPressed: () {
-                          showDelete(
-                              context, nameList[index], emailList[index]);
-                        },
-                        child: Text(
-                          '친구 삭제',
-                          style: TextStyle(
-                            fontFamily: 'Leferi',
-                            fontSize: 13,
-                            color: Colors.black,
+                child: FutureBuilder(
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData == false){
+                      return CircularProgressIndicator();
+                    }
+                    else{
+                      List ll =snapshot.data as List;
+                      return Column(
+                        children: [
+                          SizedBox(height: 30),
+                          Text(
+                            name + '님의 위치\n\n'
+                            +'지번주소: ' +ll[0]
+                            +'\n',
+                            //+'도로명주소: ' +ll[1],
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                        )),
-                    SizedBox(width: 10)
-                  ],
-                ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+
+
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(content: Text('친구위치확인.')));
+                                },
+                                child: Text(
+                                  '확인',
+                                  style: TextStyle(
+                                    fontFamily: 'Leferi',
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+
+                            ],
+                          )
+                        ],
+                      );
+                    }
+                  },
+                  future: getUserLocation(friendLat, friendLng)),
+                )
+
+
+              );
+
+         }
+    );}
+
+  Widget build(BuildContext context) {
+
+      return StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("user").doc(user!.uid).collection('FriendAdmin')
+              .where('friend', isEqualTo: 1)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        return Scaffold(
+            body: ListView.separated(
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ExpansionTile(
+              iconColor: Colors.grey,
+              collapsedIconColor: Colors.grey,
+              textColor: Colors.black,
+              collapsedTextColor: Colors.black,
+              collapsedBackgroundColor: Colors.white,
+              backgroundColor: Colors.grey[200],
+
+
+              leading: Icon(
+                Icons.account_circle,
+                size: 40,
               ),
-            ),
-          ],
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return const Divider(
-          height: 0,
-          color: Colors.grey,
-        );
-      },
-    ));
+              title: Text(
+                snapshot.data!.docs[index]['name'],
+              ),
+              subtitle: Text(
+                  snapshot.data!.docs[index]['email']
+              ),
+              //backgroundColor: Colors.amber,
+              children: <Widget>[
+                /*
+                Divider(
+                  height: 3,
+                  color: Colors.white,
+                  indent: 20,
+                  endIndent: 20,
+                ),
+                 */
+                Padding(
+                  padding: const EdgeInsets.only(left: 40),
+                  child: ListTile(
+                    //contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    tileColor: Colors.white,
+
+                    title: ElevatedButton(
+                      onPressed: ()async{
+                        print('확인하기');
+                        //getData();
+                        print(snapshot.data!.docs[index]['friend_lat']);
+                        showFriendLocation(context, snapshot.data!.docs[index]['name'],snapshot.data!.docs[index]['friend_lat'],snapshot.data!.docs[index]['friend_lng']);
+                      }, child: Text(
+                      '친구위치 확인하기',
+                      style: TextStyle(
+                        fontFamily: 'Leferi',
+                        fontSize: 13,
+                        color: Colors.black,
+                      ),),
+                    ),
+
+                    subtitle: TextFormField(
+                      decoration: InputDecoration(
+                          prefixText: '메모',
+                          hintText: 'memo',
+                          border: OutlineInputBorder()),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(width: 5),
+                        ElevatedButton(
+                            onPressed: () {
+                              showDelete(
+                                  context, snapshot.data!.docs[index]['name'], snapshot.data!.docs[index]['email'],snapshot.data!.docs[index]['uid']);
+                            },
+                            child: Text(
+                              '친구 삭제',
+                              style: TextStyle(
+                                fontFamily: 'Leferi',
+                                fontSize: 13,
+                                color: Colors.black,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                            )),
+                        SizedBox(width: 10)
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              height: 0,
+              color: Colors.grey,
+            );
+          },
+        ));
+      }
+    );
   }
 }

@@ -8,6 +8,8 @@ class testUI extends StatelessWidget {
     return GetMaterialApp(
       title: 'testUI',
       home: Scaffold(
+        resizeToAvoidBottomInset : false,
+
         appBar: AppBar(
           title: Text('testUI demo'),
         ),
