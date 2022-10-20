@@ -52,82 +52,128 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ],
               ),
-              backgroundColor: Colors.grey[200],
+              backgroundColor: Colors.white,
               body: SafeArea(
                 child: Column(
                   //버튼 4개 전체적으로 정렬
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                      height: 0,
-                    ),
-                    Container(
-                      child: Column(
-                        //텍스트 위치 정렬
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CupertinoButton(
-                            child: Text(
-                              "내 주변 대피소",
-                              style: TextStyle(
-                                  fontFamily: 'Leferi',
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  shadows: [
-                                    Shadow(
-                                      color: Colors.black.withOpacity(0.5),
-                                      offset: Offset(0, 2),
-                                      blurRadius: 5,
-                                    )
-                                  ]),
-                            ),
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => aroundShelter()
-                                  ));
-                            },
-                          ),
-                          SizedBox(
-                            height: 0,
-                          ),
-                          Text(
-                            "나와 가장 가까운 대피소",
-                            style: TextStyle(
-                              fontFamily: 'Leferi',
-                              color: Colors.grey[300],
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                        ],
-                      ),
+                    Stack(
+                      children: [
+                        // 그림자처럼 깔린...그 부분
+                        Positioned(
+                          left: -10,
+                          bottom: -20,
 
-                      //보라색(내 주변 대피소)
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      width: MediaQuery.of(context).size.width,
-                      margin:
-                          const EdgeInsets.only(left: 0, right: 0, bottom: 30),
-                      decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(0),
-                            bottomLeft: Radius.circular(100),
-                          ),
-                          color: const Color(0xff6157DE),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 10,
-                              spreadRadius: 5,
-                              offset: Offset(0, 5),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            width: MediaQuery.of(context).size.width+10,
+                            margin: const EdgeInsets.only(left: 0, right: 0, bottom: 30),
+
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                bottomRight: Radius.circular(0),
+                                bottomLeft: Radius.circular(100),
+                              ),
+                              gradient: LinearGradient(
+                                  colors: [
+                                    Color.fromRGBO(100, 94, 255, 0.35),
+                                    Color.fromRGBO(200, 32, 255, 0.35)
+                                  ],
+                                  begin: Alignment.bottomRight,
+                                  end : Alignment.topLeft
+                              ),
                             ),
-                          ]),
+                          ),
+                        ),
+
+                        Container(
+                          child: Column(
+                            //텍스트 위치 정렬
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              CupertinoButton(
+                                child: Text(
+                                  "내 주변 대피소",
+                                  style: TextStyle(
+                                      fontFamily: 'Leferi',
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.deepPurple.withOpacity(1.0),
+                                          offset: Offset(0, 0),
+                                          blurRadius: 20,
+                                        )
+                                      ]),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => aroundShelter()
+                                      ));
+                                },
+                              ),
+                              Text(
+                                "나와 가장 가까운 대피소",
+                                style: TextStyle(
+                                  fontFamily: 'Leferi',
+                                  color: Colors.white.withOpacity(0.75),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+
+                                    shadows: [
+                                      Shadow(
+                                        color: Colors.white.withOpacity(0.7),
+                                        offset: Offset(0, 0),
+                                        blurRadius: 5,
+                                      )
+                                    ]
+                                ),
+                              ),
+                              SizedBox(
+                                height: 50,
+                              ),
+                            ],
+                          ),
+
+                          //보라색(내 주변 대피소)
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.only(left: 0, right: 0, bottom: 30),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(0),
+                              bottomLeft: Radius.circular(100),
+                            ),
+                            gradient: LinearGradient(
+                                colors: [
+                                  Color(0xff6157DE),
+                                  Color.fromRGBO(180, 39, 255, 1.0)
+                                ],
+                                begin: Alignment.topCenter,
+                                end : Alignment.bottomCenter
+                            ),
+
+                            /*
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromRGBO(245, 245, 250, 1.0),
+                                blurRadius: 20,
+                                spreadRadius: 10,
+                                offset: Offset(0, 20),
+                              ),
+                            ]
+                            */
+                          ),
+                        ),
+
+
+                      ],
                     ),
+
 
                     //행동지침
                     Container(
@@ -162,7 +208,7 @@ class _MainPageState extends State<MainPage> {
                                   style: TextStyle(
                                     fontFamily: 'Leferi',
                                     color: Colors.black,
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -184,13 +230,13 @@ class _MainPageState extends State<MainPage> {
                             topLeft: Radius.circular(30),
                             bottomLeft: Radius.circular(30),
                           ),
-                          color: Colors.grey[200],
+                          color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 15,
-                              spreadRadius: 1,
-                              offset: Offset(4, 4),
+                              color: Color.fromRGBO(240, 240, 247, 1.0),
+                              blurRadius: 10,
+                              spreadRadius: 5,
+                              offset: Offset(0, 4),
                             ),
                             BoxShadow(
                               color: Colors.white,
@@ -198,7 +244,8 @@ class _MainPageState extends State<MainPage> {
                               spreadRadius: 1,
                               offset: Offset(-4, -4),
                             )
-                          ]),
+                          ]
+                      ),
                     ),
 
                     //위치공유
@@ -233,7 +280,7 @@ class _MainPageState extends State<MainPage> {
                                   style: TextStyle(
                                     fontFamily: 'Leferi',
                                     color: Colors.black,
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -251,13 +298,13 @@ class _MainPageState extends State<MainPage> {
                             topLeft: Radius.circular(30),
                             bottomLeft: Radius.circular(30),
                           ),
-                          color: Colors.grey[200],
+                          color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 15,
-                              spreadRadius: 1,
-                              offset: Offset(4, 4),
+                              color: Color.fromRGBO(240, 240, 247, 1.0),
+                              blurRadius: 10,
+                              spreadRadius: 5,
+                              offset: Offset(0, 4),
                             ),
                             BoxShadow(
                               color: Colors.white,
@@ -265,7 +312,8 @@ class _MainPageState extends State<MainPage> {
                               spreadRadius: 1,
                               offset: Offset(-4, -4),
                             )
-                          ]),
+                          ]
+                      ),
                     ),
 
                     //재난문자
@@ -300,7 +348,7 @@ class _MainPageState extends State<MainPage> {
                                   style: TextStyle(
                                     fontFamily: 'Leferi',
                                     color: Colors.black,
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -318,13 +366,13 @@ class _MainPageState extends State<MainPage> {
                             topLeft: Radius.circular(30),
                             bottomLeft: Radius.circular(30),
                           ),
-                          color: Colors.grey[200],
+                          color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 15,
-                              spreadRadius: 1,
-                              offset: Offset(4, 4),
+                              color: Color.fromRGBO(240, 240, 247, 1.0),
+                              blurRadius: 10,
+                              spreadRadius: 5,
+                              offset: Offset(0, 4),
                             ),
                             BoxShadow(
                               color: Colors.white,
@@ -332,7 +380,8 @@ class _MainPageState extends State<MainPage> {
                               spreadRadius: 1,
                               offset: Offset(-4, -4),
                             )
-                          ]),
+                          ]
+                      ),
                     ),
                   ],
                 ),
