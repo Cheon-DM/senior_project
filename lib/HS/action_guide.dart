@@ -1,8 +1,4 @@
-/*
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:senior_project/HS/guidePages/guide101.dart';
 
 import 'mainpage.dart';
 
@@ -22,7 +18,7 @@ class _ActionGuideState extends State<ActionGuide> {
 
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
-          elevation: 5,
+          elevation: 0,
           title: Text(
             "행동지침",
             style: TextStyle(
@@ -51,11 +47,9 @@ class _ActionGuideState extends State<ActionGuide> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               //화면 좌측 분할부(메뉴)
               Expanded(
-                child:
-                Container(
+                child: Container(
                   color: Color(0xff6157de),
                   child: ListView(
                     children: <Widget>[
@@ -63,10 +57,10 @@ class _ActionGuideState extends State<ActionGuide> {
                       //행동요령 매뉴얼 내용부
                       ExpansionTile(
                         title: Text(
-                          "1.비상사태시 행동요령",
+                          "비상사태",
                           style: TextStyle(
                             fontFamily: 'Leferi',
-                            fontSize: 15,
+                            fontSize: 14,
                           ),
                         ),
                         backgroundColor: Colors.grey[200],
@@ -82,14 +76,19 @@ class _ActionGuideState extends State<ActionGuide> {
                               "1.1.비상시 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
                             onTap: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                    return Guide101();
+                                    return SafeArea(
+                                        child: Container(
+                                          child: Text(
+                                            "뭔가 떠라",
+                                          ),
+                                        ));
                                   }));
 
                             },
@@ -100,7 +99,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "1.2.민방공 경보 발령시 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -112,7 +111,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "1.3.일상생활 비상대비 3가지",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -126,10 +125,10 @@ class _ActionGuideState extends State<ActionGuide> {
 
                       ExpansionTile(
                         title: Text(
-                          "2.화생방 피해대비 행동요령",
+                          "화생방 피해",
                           style: TextStyle(
                             fontFamily: 'Leferi',
-                            fontSize: 15,
+                            fontSize: 14,
                           ),
                         ),
                         backgroundColor: Colors.grey[200],
@@ -145,7 +144,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "2.1.핵/방사능 피폭대비 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -157,7 +156,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "2.2.핵/방사능 피폭대비 생존상식",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -169,7 +168,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "2.3.생물학무기 피해대비 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -181,7 +180,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "2.4.화학무기 피해대비 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -194,10 +193,10 @@ class _ActionGuideState extends State<ActionGuide> {
 
                       ExpansionTile(
                         title: Text(
-                          "3.인명/시설 피해시 행동요령",
+                          "인명/시설 피해",
                           style: TextStyle(
                             fontFamily: 'Leferi',
-                            fontSize: 15,
+                            fontSize: 14,
                           ),
                         ),
                         backgroundColor: Colors.grey[200],
@@ -213,7 +212,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "3.1.대형건물 붕괴/화재 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -225,7 +224,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "3.2.전기/물/가스 공급 중단시 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -237,7 +236,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "3.3.지하철 피해시 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -249,7 +248,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "3.4.인명/시설 피해복구 행동요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -261,10 +260,10 @@ class _ActionGuideState extends State<ActionGuide> {
 
                       ExpansionTile(
                         title: Text(
-                          "4.비상대비물자 준비 및 사용요령",
+                          "비상대비물자",
                           style: TextStyle(
                             fontFamily: 'Leferi',
-                            fontSize: 15,
+                            fontSize: 14,
                           ),
                         ),
                         backgroundColor: Colors.grey[200],
@@ -280,7 +279,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "4.1.비상대비물자 준비요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -292,7 +291,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "4.2.화생방 대비물자 사용요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -304,7 +303,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               "4.3.부상자 응급조치 요령",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             textColor: Colors.black,
@@ -318,7 +317,7 @@ class _ActionGuideState extends State<ActionGuide> {
                     ],
                   ),
                 ),
-                flex: 1,
+                flex: 2,
               ),
 
               //화면 우측 분할부(내용)
@@ -344,13 +343,13 @@ class _ActionGuideState extends State<ActionGuide> {
                         "상황별 행동지침(국민재난안전포털 웹크롤링)",
                         style: TextStyle(
                           fontFamily: 'Leferi',
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
                       )
                     ],
                   ),
                 ),
-                flex: 2,
+                flex: 3,
               ),
 
               /*
@@ -386,4 +385,3 @@ class _ActionGuideState extends State<ActionGuide> {
   }
 }
 
- */
