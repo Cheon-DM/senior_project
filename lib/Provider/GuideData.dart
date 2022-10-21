@@ -6,10 +6,46 @@ import 'package:xml/xml.dart';
 
 class GuideDataProvider extends ChangeNotifier{
 
-  List<String> statement = [];
+  List<List<String>> statement = []; // 행동요령
+  List<String> subHead = [];
+  int step = 0;
 
-  int getNationalGuideStep(int number){
-    return 1;
+  getNationalGuide(int number) async{
+    // 자연재난 (safety_cate=01001~01015)
+    List<String> NationalList = ['01001', '01002', '01003', '01004', '01005', '01006', '01007', '01008', '01009', '01010', '01011', '01012', '01013', '01014', '01015'];
+    String url = 'http://openapi.safekorea.go.kr/openapi/service/behaviorconductKnowHow/naturaldisaster/list?safety_cate=';
+    final String safety_cate = NationalList[number];
+    final String serviceKey = '&serviceKey=yoSJ384pthej3NXwL5MttpP8%2FNOoNFAov7nWzBppOC7CGW%2F%2FuuVjkeqUuU2z8agn4TkZWDYXqbDYUL7DWu8pFg%3D%3D';
+    url = url + safety_cate + serviceKey;
+    final response = await http.get(Uri.parse(url));
+
+    var utfBody = utf8.decode(response.bodyBytes);
+    var body = XmlDocument.parse(utfBody);
+
+    var num = body.findAllElements('safetyCateNm3');
+    Set<String> numList = Set();
+    num.forEach((element) {
+      numList.add(element.text);
+    });
+    step = numList.length;
+    subHead.clear();
+    subHead = numList.toList();
+    final wantData = body.findAllElements('item');
+
+    statement.clear();
+    for (var i  = 0; i < subHead.length; i++) {
+      wantData.forEach((element) {
+        if (subHead[i] == element.getElement('safetyCateNm3')?.text){
+          if (element.getElement('actRmks')?.text == null) {
+
+          }
+          else {
+            print(element.getElement('actRmks')!.text);
+            statement[i].add(element.getElement('actRmks')!.text);
+          }
+        }
+      });
+    }
   }
 
   getNational(int number) async {
@@ -24,28 +60,31 @@ class GuideDataProvider extends ChangeNotifier{
     var utfBody = utf8.decode(response.bodyBytes);
     var body = XmlDocument.parse(utfBody);
 
-    final wantData = body.findAllElements('item');
-
-    var num = body.findAllElements('safetyCate3');
-    var numList = Set();
+    var num = body.findAllElements('safetyCateNm3');
+    Set<String> numList = Set();
     num.forEach((element) {
       numList.add(element.text);
     });
+    step = numList.length;
+    subHead.clear();
+    subHead = numList.toList();
+    final wantData = body.findAllElements('item');
 
     statement.clear();
-    for (var i in numList) {
+    for (var i  = 0; i < subHead.length; i++) {
       wantData.forEach((element) {
-        if (i == element.getElement('safetyCate3')?.text){
-          print(element.getElement('actRmks')?.text);
+        if (subHead[i] == element.getElement('safetyCateNm3')?.text){
           if (element.getElement('actRmks')?.text == null) {
 
           }
           else {
-            statement.add(element.getElement('actRmks')!.text);
+            print(element.getElement('actRmks')!.text);
+            statement[i].add(element.getElement('actRmks')!.text);
           }
         }
       });
     }
+    //Future.delayed(Duration(seconds: 1));
   }
 
   getSocialGuideLine(){

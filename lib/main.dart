@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/HS/mainpage.dart';
 import 'package:senior_project/Provider/ReadShelterData.dart';
 import 'DM/Auth.dart';
-import 'Provider/DisasterMsgData.dart';
+import 'HS/mainpage.dart';
+import 'Provider/DisasterMsg.dart';
 import 'Provider/GuideData.dart';
 import 'Provider/LocateData.dart';
 
@@ -22,7 +22,7 @@ void main() async {
             ChangeNotifierProvider(create: (_)=>GuideDataProvider()),
           ],
           child: MaterialApp(
-              home: MainPage()
+            home: MainPage()
           )
       )
   );
