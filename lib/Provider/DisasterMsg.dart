@@ -61,7 +61,7 @@ class DisasterModel {
       Msg TEXT,
       BigArea INTEGER,
       SmallArea INTEGER,
-      CreateDate DATETIME)
+      CreateDate TEXT)
     ''';
 
     db.execute(sql);
@@ -73,12 +73,13 @@ class DisasterModel {
     await db.insert('disasterTable', item.toMap());
   }
 
-  Future<dynamic> Read(int No) async {
+  Future<int> Read(int No) async {
     final db = await database;
 
     final List<Map<String, dynamic>> map = await db.query('disasterTable', where: 'No = ?', whereArgs: [No]);
 
-    return map.isNotEmpty ? map.first['No'] : null;
+    //print(map.first['No'] as int);
+    return map.isNotEmpty ? map.first['No'] as int : 0;
   }
 
   Future<List<Disaster>> SelectArea(int BigArea) async {
@@ -118,9 +119,15 @@ class DisasterModel {
 
     await db.delete(
         'disasterTable',
-      where: 'CreateDate < ?',
+      where: 'CreateDate = ?',
       whereArgs: [CreateDate]
     );
+  }
+
+  Future<void> Reset() async{
+    var db = await database;
+
+    db.delete("disasterTable");
   }
 }
 
@@ -129,10 +136,9 @@ class DisasterMsgProvider extends ChangeNotifier {
   final String url = 'https://www.safekorea.go.kr/idsiSFK/sfk/cs/sua/web/DisasterSmsList.do';
 
   void delete() async{
-    DateTime before = DateTime.now().subtract(Duration(days: 2));
+    DateTime before = DateTime.now().subtract(Duration(days: 1));
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     String pastString = formatter.format(before);
-    print('success');
     await _model.Delete(pastString);
   }
 
@@ -144,13 +150,17 @@ class DisasterMsgProvider extends ChangeNotifier {
 
   Future<List<Disaster>> select() async {
     var list = await _model.SelectAll();
-    print('success');
+    print(list);
     return list;
+  }
+
+  void reset() async {
+    await _model.Reset();
   }
 
   void insert() async {
     DateTime now = DateTime.now();
-    DateTime before = DateTime.now().subtract(Duration(days: 1));
+    DateTime before = DateTime.now().subtract(Duration(days: 2));
     DateFormat formatter = DateFormat('yyyy-MM-dd');
 
     String nowString = formatter.format(now);
@@ -261,7 +271,9 @@ class DisasterMsgProvider extends ChangeNotifier {
         var RCV_AREA_NM = bodyDecode[j]["RCV_AREA_NM"];
         var MSG_CN = bodyDecode[j]["MSG_CN"];
 
-        if (_model.Read(MD101_SN) == null){
+        int preReader = await _model.Read(MD101_SN);
+        if (preReader == 0){
+          print("insert -ing");
           await _model.Insert(Disaster(
               No: MD101_SN,
               DisID: DSSTR_SE_ID,
@@ -270,6 +282,9 @@ class DisasterMsgProvider extends ChangeNotifier {
               SmallArea: RCV_AREA_ID,
               CreateDate: CREATE_DT
           ));
+        }
+        else {
+          //print("already");
         }
       }
     }
