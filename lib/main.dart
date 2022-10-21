@@ -5,6 +5,7 @@ import 'package:senior_project/HS/mainpage.dart';
 import 'package:senior_project/Provider/ReadShelterData.dart';
 import 'DM/Auth.dart';
 import 'Provider/DisasterMsgData.dart';
+import 'Provider/GuideData.dart';
 import 'Provider/LocateData.dart';
 
 void main() async {
@@ -17,7 +18,8 @@ void main() async {
           providers: [
             ChangeNotifierProvider(create: (_)=>LocateProvider()),
             ChangeNotifierProvider(create: (_)=>DisasterMsgProvider()),
-            ChangeNotifierProvider(create: (_)=>ShelterProvider())
+            ChangeNotifierProvider(create: (_)=>ShelterProvider()),
+            ChangeNotifierProvider(create: (_)=>GuideDataProvider()),
           ],
           child: MaterialApp(
               home: MainPage()

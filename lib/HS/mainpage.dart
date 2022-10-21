@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:senior_project/Provider/ReadShelterData.dart';
 
 import '../DM/disaster.dart';
 import '../DM/findShelter.dart';
@@ -11,12 +13,21 @@ import 'action_guide.dart';
 import 'action_guide2.dart';
 import 'action_guide3.dart';
 
+
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:xml2json/xml2json.dart';
+
+
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+
+  late ShelterProvider _shelterProvider = Provider.of<ShelterProvider>(context);
 
   @override
   Widget build(BuildContext context) {
@@ -196,9 +207,7 @@ class _MainPageState extends State<MainPage> {
                                     child: Icon(
                                       Icons.menu_book_rounded,
                                       color: Colors.black,
-                                      size: MediaQuery.of(context).size.height *
-                                          0.12 *
-                                          0.4,
+                                      size: MediaQuery.of(context).size.height * 0.12 * 0.4,
                                     ),
                                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                   ),

@@ -41,9 +41,10 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
 
   Future<void> getList() async {
     _msgProvider.update();
-    _msgProvider.crawling();
     Timer(Duration(seconds: 1), () {
     });
+    _msgProvider.crawling();
+
   }
 
   @override
@@ -136,7 +137,6 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                                               fontWeight: FontWeight.normal
                                           ),
                                         ),
-                                        alignment: Alignment.centerLeft,
                                       ),
                                       Container(
                                         child: Text('DATE : ${snapshot.data!.docs[index]['CREATE_DT']}',
@@ -146,8 +146,9 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                                               fontWeight: FontWeight.normal
                                           ),
                                         ),
-                                        alignment: Alignment.centerRight,
                                       ),
+                                        alignment: Alignment.centerRight,
+                                    )
                                     ],
                                   ),
                                   //메세지 카드
@@ -238,11 +239,15 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
                           );
                         }
                       }
+
                   );
                 }
-            )
-          ],
-        )
+            }
+              );
+        }
+          )
+        ],
+          )
     );
   }
 }

@@ -217,13 +217,9 @@ class _FreindListState extends State<FreindList> {
                         onPressed: () async{
 
                           await FirebaseFirestore.instance.collection('user').doc('${snapshot.data!.docs[index]['uid']}')
-                              .collection('FriendAdmin').doc(user!.uid).update({
-                              'me': 0,
-                          });
+                              .collection('FriendAdmin').doc(user!.uid).delete();
                           await FirebaseFirestore.instance.collection('user').doc(user!.uid)
-                              .collection('FriendAdmin').doc('${snapshot.data!.docs[index]['uid']}').update({
-                            'otheruser': 0,
-                          });
+                              .collection('FriendAdmin').doc('${snapshot.data!.docs[index]['uid']}').delete();
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('친구 요청 거절.')));
                         },
