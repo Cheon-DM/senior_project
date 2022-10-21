@@ -36,19 +36,10 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
   @override
   void initState(){
     super.initState();
+    //_msgProvider.reset();
+    Future.delayed(Duration(seconds: 2));
     _msgProvider.insert();
     _msgProvider.delete();
-  }
-
-  // Future<List<Disaster>> readAll() async {
-  //
-  // }
-
-  Future<void> getList() async {
-    _msgProvider.insert();
-    _msgProvider.delete();
-    Timer(Duration(seconds: 1), () {
-    });
   }
 
   @override
