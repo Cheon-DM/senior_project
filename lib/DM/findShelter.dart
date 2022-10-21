@@ -199,14 +199,13 @@ class _aroundShelterState extends State<aroundShelter> {
                             customScript: '''
 
     var markers = [];
-    var imageURL = 'https://w7.pngwing.com/pngs/96/889/png-transparent-marker-map-interesting-places-the-location-on-the-map-the-location-of-the-thumbnail.png';
+    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
     var friendImageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
     
     var objAround1 = ${jsonAround1};
     var flat = ${_locateProvider.friend_lat};
     var flng = ${_locateProvider.friend_lng};console.log("박혜원");
-    var fname = new Array();
-    fname=${_locateProvider.friend_name}
+    var fname = ${_locateProvider.friend_name};
     
     
     var jsonObjKey = [];
@@ -264,9 +263,7 @@ class _aroundShelterState extends State<aroundShelter> {
     for(let i = 0 ; i < flat.length ; i++){    
     var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(flat[i], flng[i]), image: friendMarkerImage, clickable: true});
       addMarker(marker, friendMarkerImage);
-      clickMarker(marker, fName[i], true);
-    
-      
+      clickMarker(marker, fname[i], true);
     }
 
 		  const zoomControl = new kakao.maps.ZoomControl();

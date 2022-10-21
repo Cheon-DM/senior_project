@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -104,9 +106,10 @@ class LocateProvider extends ChangeNotifier{
     QuerySnapshot querySnapshot = await ref.doc(user!.uid)
         .collection('FriendAdmin').where('friend', isEqualTo: 1).get();
 
+    // Map<String, dynamic> data = querySnapshot.docs.map((e) => null)
     _friend_lat = querySnapshot.docs.map((doc) => doc.get('friend_lat')).toList();
     _friend_lng = querySnapshot.docs.map((doc) => doc.get('friend_lng')).toList();
-    _friend_name = querySnapshot.docs.map((doc) => doc.get('name')).toList();
+    _friend_name = querySnapshot.docs.map((doc) => jsonEncode(doc.get('name').toString())).toList();
     print("여기가 궁금:");
     print(_friend_lng);
     print(_friend_lat);
