@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:senior_project/Provider/GuideData.dart';
 
 import 'mainpage.dart';
 
@@ -17,6 +21,18 @@ class _ActionGuideState extends State<ActionGuide> {
   , '승강기 안전사고', '미세먼지', '소화전사용법', '가정 안전점검'];
 
   List<String> EmergencyList = ['비상사태', '민방공', '화생방무기'];
+
+  int guideNumber = 0;
+  List<String> title = ["title"]; // head = title1 모음
+  List<List<String>> subTitle = [["subTitle"]];
+  List<List<List<String>>> statement = [[["test"]]];
+  // Stream<int> get _getGuideNumber => guideNumber;
+
+  Stream<int> showGuide() async*{
+    yield guideNumber;
+  }
+
+  late GuideDataProvider guideDataProvider = Provider.of<GuideDataProvider>(context, listen: false);
 
   @override
   Widget build(BuildContext context) {
@@ -94,17 +110,29 @@ class _ActionGuideState extends State<ActionGuide> {
                                     ),
                                     textColor: Colors.black,
                                     onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                            return SafeArea(
-                                                child: Container(
-                                                  child: Text(
-                                                    "뭔가 떠라",
-                                                  ),
-                                                )
-                                            );
-                                          })
-                                      );
+                                      guideDataProvider.getNationalGuide(index);
+                                      setState(() {
+                                        guideNumber = index;
+                                        title.clear();
+                                        subTitle.clear();
+                                        statement.clear();
+                                        title = context.read<GuideDataProvider>().title;
+                                        subTitle = context.read<GuideDataProvider>().subTitle;
+                                        statement = context.read<GuideDataProvider>().statement;
+                                      });
+                                      print(guideNumber);
+                                      print(title);
+                                      // Navigator.push(context,
+                                      //     MaterialPageRoute(builder: (context) {
+                                      //       return SafeArea(
+                                      //           child: Container(
+                                      //             child: Text(
+                                      //               index.toString(),
+                                      //             ),
+                                      //           )
+                                      //       );
+                                      //     })
+                                      // );
                                     }
                                   )
                           ),
@@ -258,35 +286,60 @@ class _ActionGuideState extends State<ActionGuide> {
               ),
 
               //화면 우측 분할부(내용)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "메뉴1.1 value",
-                        style: TextStyle(
-                          fontFamily: 'Leferi',
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        height: 15,
-                      ),
-                      Text(
-                        "상황별 행동지침(국민재난안전포털 웹크롤링)",
-                        style: TextStyle(
-                          fontFamily: 'Leferi',
-                          fontSize: 12,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                flex: 3,
+              StreamBuilder(
+                stream: showGuide(),
+                builder: (context, snapshot) {
+                  return Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: context.read<GuideDataProvider>().title.length,
+                        itemBuilder: (context, index) =>
+                            ExpansionTile(
+                              title: Text(context.read<GuideDataProvider>().title.elementAt(index).toString()),
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: context.read<GuideDataProvider>().subTitle.elementAt(index).length,
+                                          itemBuilder: (ctx, idx) => ListTile(
+                                            title: Text(context.read<GuideDataProvider>().subTitle.elementAt(index).elementAt(idx).toString(),
+                                              style: TextStyle(fontFamily: 'Leferi', fontSize: 15),
+                                            ),
+                                            onTap: () {
+                                              showDialog(
+                                                  useRootNavigator: false,
+                                                  context: ctx,
+                                                  builder: (builder) {
+                                                    return AlertDialog(
+                                                      scrollable: true,
+                                                      content: Column(
+                                                        children: <Widget>[
+                                                          Text(context.read<GuideDataProvider>().statement.elementAt(index).elementAt(idx).toString()),
+                                                        ],
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(ctx).pop();
+                                                            },
+                                                            child: Text("OK"))
+                                                      ],
+                                                    );
+                                                  });
+                                            },
+                                          )
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                    ),
+                    flex: 3,
+                  );
+                }
               ),
             ],
           ),
@@ -307,3 +360,33 @@ class _ActionGuideState extends State<ActionGuide> {
 * 02, 13, 18, 04, 05, 06, 19, 08, 07, 12, 09, 16, 10, 20, 11
 *
 * */
+
+/**
+ * child: Padding(
+    padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+    Text(
+    snapshot.data.toString(),
+    style: TextStyle(
+    fontFamily: 'Leferi',
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    Container(
+    height: 15,
+    ),
+    Text(
+    statement[0].toString(),
+    style: TextStyle(
+    fontFamily: 'Leferi',
+    fontSize: 12,
+    ),
+    )
+    ],
+    ),
+    )
+ */

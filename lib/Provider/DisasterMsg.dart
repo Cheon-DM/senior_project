@@ -85,7 +85,7 @@ class DisasterModel {
   Future<List<Disaster>> SelectArea(int BigArea) async {
     var db = await database;
 
-    final List<Map<String, dynamic>> map = await db.query('disasterTable', where: 'BigArea = ?', whereArgs: [BigArea]);
+    final List<Map<String, dynamic>> map = await db.query('disasterTable', where: 'BigArea = ?', whereArgs: [BigArea], orderBy: 'No DESC');
 
     return List.generate(map.length, (index) {
       return Disaster(
@@ -101,7 +101,7 @@ class DisasterModel {
 
   Future<List<Disaster>> SelectAll() async {
     var db = await database;
-    final List<Map<String, dynamic>> map = await db.query('disasterTable');
+    final List<Map<String, dynamic>> map = await db.query('disasterTable', orderBy: 'No DESC');
     return List.generate(map.length, (index) {
       return Disaster(
         No: map[index]['No'] as int,
@@ -119,7 +119,7 @@ class DisasterModel {
 
     await db.delete(
         'disasterTable',
-      where: 'CreateDate = ?',
+      where: 'CreateDate < ?',
       whereArgs: [CreateDate]
     );
   }
