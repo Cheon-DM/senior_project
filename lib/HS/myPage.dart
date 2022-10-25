@@ -23,7 +23,8 @@ class _MyPageState extends State<MyPage> {
   late LocateProvider _locateProvider = Provider.of<LocateProvider>(context,listen: false);
   final _user = FirebaseAuth.instance.currentUser;
   var userPhoto="";
-  String heee="";
+  String photourl="";
+
 
 
 
@@ -35,7 +36,7 @@ class _MyPageState extends State<MyPage> {
 
   void _prepare() async{
     var ref1 =await FirebaseStorage.instance.ref().child("profile/${_user?.uid}");
-    await ref1.getDownloadURL().then((loc) => setState(() =>  heee= loc));
+    await ref1.getDownloadURL().then((loc) => setState(() =>  photourl= loc));
     final cUser=FirebaseFirestore.instance.collection('user').doc(_user!.uid);
     await cUser.get().then(
             (value){
@@ -99,7 +100,7 @@ class _MyPageState extends State<MyPage> {
                userPhoto == null ? Image.asset('assets/neoguleman.jpeg',
                 fit: BoxFit.contain,
                 height: 200,)
-                :Image.network(heee,fit: BoxFit.cover),
+                :Image.network(photourl,fit: BoxFit.cover),
 
 
                   Container(
