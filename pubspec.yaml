@@ -101,6 +101,7 @@ flutter:
     - assets/Nationwide_shelter.xlsx
     - assets/marker_red.png
     - assets/marker_blue.png
+    - assets/guide/guide1.json
     - assets/guide/guide1_1.txt
     - assets/guide/guide1_2.txt
     - assets/guide/guide1_3.txt
