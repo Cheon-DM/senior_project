@@ -24,7 +24,7 @@ class _MyPageState extends State<MyPage> {
   final _user = FirebaseAuth.instance.currentUser;
   var userPhoto="";
   String photourl="";
-  var d="";
+  var d000="";
 
 
 
