@@ -57,6 +57,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.3.17
   provider: ^6.0.3
+  image_picker: ^0.8.6
+  firebase_storage: ^10.3.11
+
 
 dependency_overrides:
   plugin_platform_interface: ^2.0.0
