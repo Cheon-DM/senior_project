@@ -276,7 +276,7 @@ String getEmail = "";
                   filled: true,
                   prefixIcon: Icon(Icons.person_pin, color: Colors.grey[700], size: 20),
 
-                  suffixIcon: IconButton(icon: Icon(Icons.clear, color: Colors.grey[700]),
+                  suffixIcon: IconButton(icon: Icon(Icons.search, color: Colors.grey[700]),
                     onPressed: (){
                         print("살려줘어ㅓ어어어어어어어엉");
                         _buildbody(context, getEmail);
