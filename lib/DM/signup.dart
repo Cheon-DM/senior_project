@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,27 +18,23 @@ class signup extends StatefulWidget {
 }
 
 class _signupState extends State<signup> {
+  //late LocateProvider _locateProvider = Provider.of<LocateProvider>(context, listen: false);
   final _formkey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
+  final user = FirebaseAuth.instance.currentUser;
+
 
   String userName = '';
   String userEmail = '';
   String userPassword = '';
   String checkPassword='';
+  var ch=0;
 
   void _tryValidation() {
     final isValid = _formkey.currentState!.validate();
     if (isValid) {
       _formkey.currentState!.save();
     }
-  }
-
-  void _sendName() async {
-    final user = FirebaseAuth.instance.currentUser;
-    final userData = await FirebaseFirestore.instance
-        .collection('user')
-        .doc(user!.uid)
-        .get();
   }
 
   @override
@@ -238,11 +236,16 @@ class _signupState extends State<signup> {
                   validator: (value) {
                     checkPassword != value;
                     if (value != userPassword) {
+                      ch=1;
                       return '비밀번호가 일치하지 않습니다';
+
                     } else if (value!.isEmpty) {
                       return '비밀번호를 입력해주세요';
                     }
-                    return null;
+                    else{
+                      ch=0;return null;
+                    }
+
                   },
 
                   keyboardType: TextInputType.text,
@@ -282,8 +285,8 @@ class _signupState extends State<signup> {
         child: ElevatedButton(
           onPressed: () async {
             _tryValidation();
-            var newUser=null;
-            if(checkPassword==userPassword){
+            var newUser;
+            if(ch==0) {
               newUser =
               await _authentication.createUserWithEmailAndPassword(
                   email: userEmail, password: userPassword);
@@ -293,28 +296,33 @@ class _signupState extends State<signup> {
 
               late LocateProvider _locateProvider = Provider.of<LocateProvider>(context,listen: false);
 
-
+              _locateProvider.locateMe();
               await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
                   .set({
                 'userName' : userName,
                 'email' : userEmail,
-                'uid': newUser.user!.uid
+                'uid': newUser.user!.uid,
+                'userPhotoUrl': null,
+                'my_lat': context.read<LocateProvider>().my_lat,
+                'my_lng': context.read<LocateProvider>().my_lng
 
               });
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return signup_complete(userName);
+              }));
+              //_locateProvider.locateMe();
+            }
+            else{ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('제대로된 입력 필요')));
 
-              _locateProvider.locateMe();
+
             }
 
 
 
-            if (newUser.user == null) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text('제대로된 입력 필요')));
-            }
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return signup_complete(userName);
-            }));
+
+
           },
           child: Container(
             padding: EdgeInsets.only(top: 9),

@@ -173,14 +173,17 @@ class _FreindListState extends State<FreindList> {
                           var cUserName='';
                           double cUserLat=0;
                           double cUserLng=0;
+                          var userPhoto;
                           final cUser=FirebaseFirestore.instance.collection('user').doc(user!.uid);
                           await cUser.get().then(
                                   (value){
                                     cUserName = value['userName'];
                                     cUserLat=value['my_lat'];
                                     cUserLng=value['my_lng'];
+                                    userPhoto = value['userPhotoUrl'];
                               }
                           );
+
 
 
                           await FirebaseFirestore.instance.collection('user').doc(user!.uid)
@@ -198,6 +201,7 @@ class _FreindListState extends State<FreindList> {
                             'uid': user!.uid,
                             'friend_lat': cUserLat,
                             'friend_lng': cUserLng,
+                            'userPhotoUrl' : userPhoto
                           });
 
                           ScaffoldMessenger.of(context)
