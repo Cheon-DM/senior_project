@@ -79,7 +79,7 @@ class _MainPageState extends State<MainPage> {
                               gradient: LinearGradient(
                                   colors: [
                                     Color.fromRGBO(100, 94, 255, 0.35),
-                                    Color.fromRGBO(200, 32, 255, 0.35)
+                                    Color.fromRGBO(160, 32, 255, 0.35)
                                   ],
                                   begin: Alignment.bottomRight,
                                   end : Alignment.topLeft
@@ -151,7 +151,7 @@ class _MainPageState extends State<MainPage> {
                             gradient: LinearGradient(
                                 colors: [
                                   Color(0xff6157DE),
-                                  Color.fromRGBO(180, 39, 255, 1.0)
+                                  Color.fromRGBO(170, 79, 255, 1.0)
                                 ],
                                 begin: Alignment.topCenter,
                                 end : Alignment.bottomCenter
