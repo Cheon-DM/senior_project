@@ -102,10 +102,9 @@ flutter:
     - assets/marker_red.png
     - assets/marker_blue.png
     - assets/guide/guide1.json
-    - assets/guide/guide1_1.txt
-    - assets/guide/guide1_2.txt
-    - assets/guide/guide1_3.txt
-    - assets/guide/guide1_1.json
+    - assets/guide/guide2.json
+    - assets/guide/guide3.json
+    - assets/guide/guide4.json
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

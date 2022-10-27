@@ -36,7 +36,7 @@ class _AddFriendState extends State<AddFriend> {
   TextEditingController searchTextEditingController = TextEditingController();
 
 
-  late Future<QuerySnapshot> futureSearchResults;
+  Future<QuerySnapshot>? futureSearchResults;
 
 
   final userref=FirebaseFirestore.instance.collection('user');
@@ -52,6 +52,12 @@ class _AddFriendState extends State<AddFriend> {
   controlSearching(str) {
     print(str);
     print("입력");
+
+    Future<QuerySnapshot> allUsers = userref.where(
+        'email', isGreaterThanOrEqualTo: str).get();
+    setState(() {
+      futureSearchResults = allUsers;
+    });
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("users")
@@ -96,7 +102,6 @@ class _AddFriendState extends State<AddFriend> {
           );
         }
 
-
     );
 
 
@@ -105,8 +110,18 @@ class _AddFriendState extends State<AddFriend> {
 
 
 
-  displayNoSearchResultScreen(context){
+  displayNoSearchResultScreen(){
     final Orientation orientation = MediaQuery.of(context).orientation;
+    return Container(
+      child: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Text("search users"),
+          ],
+        ),
+      ),
+    );
   }
 
 
@@ -124,25 +139,29 @@ class _AddFriendState extends State<AddFriend> {
           print("으아아아아아아아아아아아아아아아아아아아아아dkdk악");
           print(snapshot.data!.docs.length);
           return Scaffold(
-              body: Stack(
+              body: SafeArea(
+                child: Stack(
             children: <Widget>[
-              ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (ctx, index) => Container(
-                  padding: EdgeInsets.only(left: 15, right: 15, top: 15),
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.red,
-                          child: Text(
-                            ' ${snapshot.data!.docs[index]['email']}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Leferi',
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
+                ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (ctx, index) => Container(
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 15),
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            color: Colors.red,
+                            child: Text(
+                              ' ${snapshot.data!.docs[index]['email']}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Leferi',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            alignment: Alignment.centerLeft,
                           ),
+
                           alignment: Alignment.centerLeft,
                         ),
                         ElevatedButton(
@@ -203,17 +222,17 @@ class _AddFriendState extends State<AddFriend> {
                               fontFamily: 'Leferi',
                             ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
+                      padding: EdgeInsets.all(15),
                     ),
-                    padding: EdgeInsets.all(15),
+                    color: Colors.grey[200],
                   ),
-                  color: Colors.grey[200],
                 ),
-              ),
             ],
-          ));
+          ),
+              ));
         });
   }
 
@@ -227,55 +246,32 @@ String getEmail = "";
     return Scaffold(
       //키보드 밀려올라감 방지
       resizeToAvoidBottomInset : false,
-
       appBar: AppBar(
-        backgroundColor: const Color(0xff6157DE),
-        elevation: 5,
-        title: Text(
-          "나의 친구관리",
-          style: TextStyle(
-            fontFamily: 'Leferi',
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: (){
-            // Get.to(MainPage());
-            Get.offAll(() => Menu());
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: TextFormField(
+        title : Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: TextFormField(
                 //controller: searchTextEditingController,
-              validator: (value) {
+                validator: (value) {
 
-                if (value!.isEmpty) {
-                  return '이메일 입력안됨';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                getEmail = value!;
-              },
-              onChanged: (value) {
-                getEmail = value!;
-              },
+                  if (value!.isEmpty) {
+                    return '이메일 입력안됨';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  getEmail = value!;
+                },
+                onChanged: (value) {
+                  getEmail = value!;
+                },
                 decoration: InputDecoration(
                   hintText: 'Search',
                   hintStyle: TextStyle(
                     color: Colors.grey[700],
                   ),
-                               enabledBorder:
+                  enabledBorder:
                   UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: const Color(0xff6157DE))
@@ -283,21 +279,21 @@ String getEmail = "";
                   filled: true,
                   prefixIcon: Icon(Icons.person_pin, color: Colors.grey[700], size: 20),
 
-                  suffixIcon: IconButton(icon: Icon(Icons.clear, color: Colors.grey[700]),
+                  suffixIcon: IconButton(icon: Icon(Icons.search, color: Colors.grey[700]),
                     onPressed: (){
-                        print("살려줘어ㅓ어어어어어어어엉");
-                        _buildbody(context, getEmail);
+                      print("살려줘어ㅓ어어어어어어어엉");
+                      _buildbody(context, getEmail);
                       //emptyTextFormField();
-                       /* Navigator.push(context,
+                      /* Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                               return _buildbody(context, getEmail);
                             }));*/
                       // _buildbody(context, getEmail);
                       //_sendName();
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                              return FindFriend(getEmail);
-                            }));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return FindFriend(getEmail);
+                          }));
                       //FindFriend(getEmail);
                     },
 
@@ -308,12 +304,17 @@ String getEmail = "";
 
                 ),
                 //onFieldSubmitted: controlSearching,
+              ),
             ),
-          ),
-        ],
+          ],
+
+        ),
       ),
+      body: futureSearchResults == null ? displayNoSearchResultScreen() :
+    FindFriend(getEmail),
     );
   }
+
 }
 
 class FindFriend extends StatefulWidget {
@@ -323,6 +324,7 @@ class FindFriend extends StatefulWidget {
   @override
   _FindFriendState createState() => _FindFriendState();
 }
+
 
 class _FindFriendState extends State<FindFriend> {
   @override
