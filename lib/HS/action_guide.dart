@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:senior_project/Provider/GuideData.dart';
 
 import 'mainpage.dart';
 
@@ -8,6 +12,28 @@ class ActionGuide extends StatefulWidget {
 }
 
 class _ActionGuideState extends State<ActionGuide> {
+  List<String> NationalList = ['태풍', '홍수', '호우', '강풍', '대설', '한파', '풍랑', '황사', '폭염', '가뭄', '지진', '지진해일', '해일', '산사태', '화산폭발'];
+
+  List<String> SocialList = ['해양오염사고', '대규모 수질오염', '식용수', '공동구 재난', '가축질병', '감염병 예방', '철도,지하철사고', '금융전산', '원전사고', '화학물질사고', '화재'
+  , '산불', '건축물 붕괴', '댐 붕괴', '폭발', '항공기사고', '화생방사고', '정전', '전기,가스사고', '유도선 사고', '수난사고', '테러발생시', '전력수급단계별'];
+
+  List<String> LifeList = ['응급처치', '심폐소생술', '소화기사용법', '식중독', '산행안전', '놀이시설', '실종유괴 예방', '성폭력 예방', '학교 폭력 예방', '가정 폭력 예방', '억류 및 납치 시 대처요령', '교통사고'
+  , '승강기 안전사고', '미세먼지', '소화전사용법', '가정 안전점검'];
+
+  List<String> EmergencyList = ['비상사태', '민방공', '화생방무기'];
+
+  int guideNumber = 0;
+  List<String> title = ["title"]; // head = title1 모음
+  List<List<String>> subTitle = [["subTitle"]];
+  List<List<List<String>>> statement = [[["test"]]];
+  // Stream<int> get _getGuideNumber => guideNumber;
+
+  Stream<int> showGuide() async*{
+    yield guideNumber;
+  }
+
+  late GuideDataProvider guideDataProvider = Provider.of<GuideDataProvider>(context, listen: false);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,11 +79,10 @@ class _ActionGuideState extends State<ActionGuide> {
                   color: Color(0xff6157de),
                   child: ListView(
                     children: <Widget>[
-
                       //행동요령 매뉴얼 내용부
-                      ExpansionTile(
+                      ExpansionTile( // 자연재난
                         title: Text(
-                          "비상사태",
+                          "자연재난행동요령",
                           style: TextStyle(
                             fontFamily: 'Leferi',
                             fontSize: 14,
@@ -71,196 +96,52 @@ class _ActionGuideState extends State<ActionGuide> {
                         collapsedIconColor: Colors.white,
 
                         children: <Widget>[
-                          ListTile(
-                            title: Text(
-                              "1.1.비상시 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return SafeArea(
-                                        child: Container(
-                                          child: Text(
-                                            "뭔가 떠라",
-                                          ),
-                                        ));
-                                  }));
-
-                            },
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "1.2.민방공 경보 발령시 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "1.3.일상생활 비상대비 3가지",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          )
-
-
-                        ],
-                      ),
-
-
-                      ExpansionTile(
-                        title: Text(
-                          "화생방 피해",
-                          style: TextStyle(
-                            fontFamily: 'Leferi',
-                            fontSize: 14,
-                          ),
-                        ),
-                        backgroundColor: Colors.grey[200],
-                        collapsedBackgroundColor: Color(0xff6157de),
-                        collapsedTextColor: Colors.white,
-                        textColor: Colors.black,
-                        iconColor: Colors.black,
-                        collapsedIconColor: Colors.white,
-
-                        children: <Widget>[
-                          ListTile(
-                            title: Text(
-                              "2.1.핵/방사능 피폭대비 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "2.2.핵/방사능 피폭대비 생존상식",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "2.3.생물학무기 피해대비 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "2.4.화학무기 피해대비 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                        ],
-                      ),
-
-
-                      ExpansionTile(
-                        title: Text(
-                          "인명/시설 피해",
-                          style: TextStyle(
-                            fontFamily: 'Leferi',
-                            fontSize: 14,
-                          ),
-                        ),
-                        backgroundColor: Colors.grey[200],
-                        collapsedBackgroundColor: Color(0xff6157de),
-                        collapsedTextColor: Colors.white,
-                        textColor: Colors.black,
-                        iconColor: Colors.black,
-                        collapsedIconColor: Colors.white,
-
-                        children: <Widget>[
-                          ListTile(
-                            title: Text(
-                              "3.1.대형건물 붕괴/화재 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "3.2.전기/물/가스 공급 중단시 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "3.3.지하철 피해시 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "3.4.인명/시설 피해복구 행동요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 15,
+                              itemBuilder: (context, index) =>
+                                  ListTile(
+                                    title: Text(
+                                      NationalList[index],
+                                      style: TextStyle(
+                                        fontFamily: 'Leferi',
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    textColor: Colors.black,
+                                    onTap: () {
+                                      guideDataProvider.getNationalGuide(index);
+                                      setState(() {
+                                        guideNumber = index;
+                                        title.clear();
+                                        subTitle.clear();
+                                        statement.clear();
+                                        title = context.read<GuideDataProvider>().title;
+                                        subTitle = context.read<GuideDataProvider>().subTitle;
+                                        statement = context.read<GuideDataProvider>().statement;
+                                      });
+                                      print(guideNumber);
+                                      print(title);
+                                      // Navigator.push(context,
+                                      //     MaterialPageRoute(builder: (context) {
+                                      //       return SafeArea(
+                                      //           child: Container(
+                                      //             child: Text(
+                                      //               index.toString(),
+                                      //             ),
+                                      //           )
+                                      //       );
+                                      //     })
+                                      // );
+                                    }
+                                  )
                           ),
                         ],
                       ),
 
-
-                      ExpansionTile(
+                      ExpansionTile( // 사회재난
                         title: Text(
-                          "비상대비물자",
+                          "사회재난행동요령",
                           style: TextStyle(
                             fontFamily: 'Leferi',
                             fontSize: 14,
@@ -274,46 +155,130 @@ class _ActionGuideState extends State<ActionGuide> {
                         collapsedIconColor: Colors.white,
 
                         children: <Widget>[
-                          ListTile(
-                            title: Text(
-                              "4.1.비상대비물자 준비요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 23,
+                              itemBuilder: (context, index) =>
+                                  ListTile(
+                                      title: Text(
+                                        SocialList[index],
+                                        style: TextStyle(
+                                          fontFamily: 'Leferi',
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      textColor: Colors.black,
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) {
+                                              return SafeArea(
+                                                  child: Container(
+                                                    child: Text(
+                                                      "뭔가 떠라",
+                                                    ),
+                                                  )
+                                              );
+                                            })
+                                        );
+                                      }
+                                  )
                           ),
-
-                          ListTile(
-                            title: Text(
-                              "4.2.화생방 대비물자 사용요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-
-                          ListTile(
-                            title: Text(
-                              "4.3.부상자 응급조치 요령",
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                                fontSize: 12,
-                              ),
-                            ),
-                            textColor: Colors.black,
-                            onTap: () {},
-                          )
                         ],
-                      )
+                      ),
 
+                      ExpansionTile( // 생활안전
+                        title: Text(
+                          "생활안전행동요령",
+                          style: TextStyle(
+                            fontFamily: 'Leferi',
+                            fontSize: 14,
+                          ),
+                        ),
+                        backgroundColor: Colors.grey[200],
+                        collapsedBackgroundColor: Color(0xff6157de),
+                        collapsedTextColor: Colors.white,
+                        textColor: Colors.black,
+                        iconColor: Colors.black,
+                        collapsedIconColor: Colors.white,
 
+                        children: <Widget>[
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 16,
+                              itemBuilder: (context, index) =>
+                                  ListTile(
+                                      title: Text(
+                                        LifeList[index],
+                                        style: TextStyle(
+                                          fontFamily: 'Leferi',
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      textColor: Colors.black,
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) {
+                                              return SafeArea(
+                                                  child: Container(
+                                                    child: Text(
+                                                      "뭔가 떠라",
+                                                    ),
+                                                  )
+                                              );
+                                            })
+                                        );
+                                      }
+                                  )
+                          ),
+                        ],
+                      ),
 
+                      ExpansionTile( // 비상대비
+                        title: Text(
+                          "비상대비행동요령",
+                          style: TextStyle(
+                            fontFamily: 'Leferi',
+                            fontSize: 14,
+                          ),
+                        ),
+                        backgroundColor: Colors.grey[200],
+                        collapsedBackgroundColor: Color(0xff6157de),
+                        collapsedTextColor: Colors.white,
+                        textColor: Colors.black,
+                        iconColor: Colors.black,
+                        collapsedIconColor: Colors.white,
+
+                        children: <Widget>[
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 3,
+                              itemBuilder: (context, index) =>
+                                  ListTile(
+                                      title: Text(
+                                        EmergencyList[index],
+                                        style: TextStyle(
+                                          fontFamily: 'Leferi',
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      textColor: Colors.black,
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) {
+                                              return SafeArea(
+                                                  child: Container(
+                                                    child: Text(
+                                                      "뭔가 떠라",
+                                                    ),
+                                                  )
+                                              );
+                                            })
+                                        );
+                                      }
+                                  )
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -321,62 +286,61 @@ class _ActionGuideState extends State<ActionGuide> {
               ),
 
               //화면 우측 분할부(내용)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "메뉴1.1 value",
-                        style: TextStyle(
-                          fontFamily: 'Leferi',
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        height: 15,
-                      ),
-                      Text(
-                        "상황별 행동지침(국민재난안전포털 웹크롤링)",
-                        style: TextStyle(
-                          fontFamily: 'Leferi',
-                          fontSize: 12,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                flex: 3,
+              StreamBuilder(
+                stream: showGuide(),
+                builder: (context, snapshot) {
+                  return Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: context.read<GuideDataProvider>().title.length,
+                        itemBuilder: (context, index) =>
+                            ExpansionTile(
+                              title: Text(context.read<GuideDataProvider>().title.elementAt(index).toString()),
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: context.read<GuideDataProvider>().subTitle.elementAt(index).length,
+                                          itemBuilder: (ctx, idx) => ListTile(
+                                            title: Text(context.read<GuideDataProvider>().subTitle.elementAt(index).elementAt(idx).toString(),
+                                              style: TextStyle(fontFamily: 'Leferi', fontSize: 15),
+                                            ),
+                                            onTap: () {
+                                              showDialog(
+                                                  useRootNavigator: false,
+                                                  context: ctx,
+                                                  builder: (builder) {
+                                                    return AlertDialog(
+                                                      scrollable: true,
+                                                      content: Column(
+                                                        children: <Widget>[
+                                                          Text(context.read<GuideDataProvider>().statement.elementAt(index).elementAt(idx).toString()),
+                                                        ],
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(ctx).pop();
+                                                            },
+                                                            child: Text("OK"))
+                                                      ],
+                                                    );
+                                                  });
+                                            },
+                                          )
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                    ),
+                    flex: 3,
+                  );
+                }
               ),
-
-              /*
-                                    ListView(
-                    children: <Widget>[
-                      ExpansionTile(
-                        title: Text('정보1'),
-                        children: <Widget>[
-                          ListTile(
-                            title: Text('정보1.1'),
-                            onTap: () {},
-                          ),
-                          ListTile(
-                            title: Text('정보1.2'),
-                            onTap: () {},
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  ListView(
-                    children: <Widget>[
-
-                    ],
-                  )
-
-                   */
             ],
           ),
         ),
@@ -385,3 +349,44 @@ class _ActionGuideState extends State<ActionGuide> {
   }
 }
 
+/*
+* <div class="section01">
+                    <div class="tabarea">
+                        <div class="tabmenu01 on">
+                           <div class="detail">
+                              <h3 class="title_02">홍수 예·경보 시 국민행동요령</h3>
+*
+* 자연재난
+* 02, 13, 18, 04, 05, 06, 19, 08, 07, 12, 09, 16, 10, 20, 11
+*
+* */
+
+/**
+ * child: Padding(
+    padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+    Text(
+    snapshot.data.toString(),
+    style: TextStyle(
+    fontFamily: 'Leferi',
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    Container(
+    height: 15,
+    ),
+    Text(
+    statement[0].toString(),
+    style: TextStyle(
+    fontFamily: 'Leferi',
+    fontSize: 12,
+    ),
+    )
+    ],
+    ),
+    )
+ */

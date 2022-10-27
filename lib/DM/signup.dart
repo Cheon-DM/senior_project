@@ -299,39 +299,12 @@ class _signupState extends State<signup> {
                 'userName' : userName,
                 'email' : userEmail,
                 'uid': newUser.user!.uid
+
               });
 
               _locateProvider.locateMe();
             }
-            /*final newUser =
-            await _authentication.createUserWithEmailAndPassword(
-                email: userEmail, password: userPassword);
 
-
-            ////////////////////////////////////////////////////////////////////////////////
-
-            late LocateProvider _locateProvider = Provider.of<LocateProvider>(context,listen: false);
-
-
-            await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
-                .set({
-              'userName' : userName,
-              'email' : userEmail,
-              'uid': newUser.user!.uid
-            });
-
-            _locateProvider.locateMe();*/
-
-           /* await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
-                .collection('FriendAdmin').doc('1234').set({
-                'send': 1
-            });
-
-            await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
-                .collection('FriendList');*/
-
-
-            ///////////////////////////////////////////////////////////////////////////////////
 
 
             if (newUser.user == null) {
