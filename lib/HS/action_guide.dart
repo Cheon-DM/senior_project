@@ -97,6 +97,7 @@ class _ActionGuideState extends State<ActionGuide> {
 
                         children: <Widget>[
                           ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: 15,
                               itemBuilder: (context, index) =>
@@ -120,19 +121,6 @@ class _ActionGuideState extends State<ActionGuide> {
                                         subTitle = context.read<GuideDataProvider>().subTitle;
                                         statement = context.read<GuideDataProvider>().statement;
                                       });
-                                      print(guideNumber);
-                                      print(title);
-                                      // Navigator.push(context,
-                                      //     MaterialPageRoute(builder: (context) {
-                                      //       return SafeArea(
-                                      //           child: Container(
-                                      //             child: Text(
-                                      //               index.toString(),
-                                      //             ),
-                                      //           )
-                                      //       );
-                                      //     })
-                                      // );
                                     }
                                   )
                           ),
@@ -156,6 +144,7 @@ class _ActionGuideState extends State<ActionGuide> {
 
                         children: <Widget>[
                           ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: 23,
                               itemBuilder: (context, index) =>
@@ -169,17 +158,16 @@ class _ActionGuideState extends State<ActionGuide> {
                                       ),
                                       textColor: Colors.black,
                                       onTap: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) {
-                                              return SafeArea(
-                                                  child: Container(
-                                                    child: Text(
-                                                      "뭔가 떠라",
-                                                    ),
-                                                  )
-                                              );
-                                            })
-                                        );
+                                        guideDataProvider.getSocialGuide(index);
+                                        setState(() {
+                                          guideNumber = index;
+                                          title.clear();
+                                          subTitle.clear();
+                                          statement.clear();
+                                          title = context.read<GuideDataProvider>().title;
+                                          subTitle = context.read<GuideDataProvider>().subTitle;
+                                          statement = context.read<GuideDataProvider>().statement;
+                                        });
                                       }
                                   )
                           ),
@@ -203,6 +191,7 @@ class _ActionGuideState extends State<ActionGuide> {
 
                         children: <Widget>[
                           ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: 16,
                               itemBuilder: (context, index) =>
@@ -216,17 +205,16 @@ class _ActionGuideState extends State<ActionGuide> {
                                       ),
                                       textColor: Colors.black,
                                       onTap: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) {
-                                              return SafeArea(
-                                                  child: Container(
-                                                    child: Text(
-                                                      "뭔가 떠라",
-                                                    ),
-                                                  )
-                                              );
-                                            })
-                                        );
+                                        guideDataProvider.getLifeGuide(index);
+                                        setState(() {
+                                          guideNumber = index;
+                                          title.clear();
+                                          subTitle.clear();
+                                          statement.clear();
+                                          title = context.read<GuideDataProvider>().title;
+                                          subTitle = context.read<GuideDataProvider>().subTitle;
+                                          statement = context.read<GuideDataProvider>().statement;
+                                        });
                                       }
                                   )
                           ),
@@ -263,17 +251,16 @@ class _ActionGuideState extends State<ActionGuide> {
                                       ),
                                       textColor: Colors.black,
                                       onTap: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) {
-                                              return SafeArea(
-                                                  child: Container(
-                                                    child: Text(
-                                                      "뭔가 떠라",
-                                                    ),
-                                                  )
-                                              );
-                                            })
-                                        );
+                                        guideDataProvider.getEmergencyGuide(index);
+                                        setState(() {
+                                          guideNumber = index;
+                                          title.clear();
+                                          subTitle.clear();
+                                          statement.clear();
+                                          title = context.read<GuideDataProvider>().title;
+                                          subTitle = context.read<GuideDataProvider>().subTitle;
+                                          statement = context.read<GuideDataProvider>().statement;
+                                        });
                                       }
                                   )
                           ),

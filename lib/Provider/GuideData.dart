@@ -45,8 +45,8 @@ class Guide {
 }
 
 class GuideDataProvider extends ChangeNotifier{
-  List<String> title = []; // head = title1 모음
-  List<List<String>> subTitle = [];
+  List<String> title = []; // title1 모음
+  List<List<String>> subTitle = []; // 소제목
   List<List<List<String>>> statement = []; // 행동요령
 
   Set<String> hSet = Set();
@@ -71,6 +71,42 @@ class GuideDataProvider extends ChangeNotifier{
     }
     title = hSet.toList();
 
+    // 소제목 + 가이드라인
+    for (var i in title){
+      List<List<String>> statTmp = [];
+      List<String> subTmp= [];
+      for (var j in guideList.guide!){
+        if(i == j.title1){
+          subTmp.add(j.title2!);
+          statTmp.add(j.maintext!);
+        }
+      }
+      subTitle.add(subTmp);
+      statement.add(statTmp);
+    }
+  }
+
+  getSocialGuide(int index) async {
+    List<String> SocialList = ['200', '201', '202', '203', '204', '205', '206', '207', '208', '209', '210',
+      '211', '212', '213', '214', '215', '216', '217', '218', '219', '220', '221', '222'];
+    String SocialString = SocialList[index];
+    String jsonString = await rootBundle.loadString('assets/guide/guide2.json');
+    final jsonResponse = json.decode(jsonString);
+    GuideList guideList = GuideList.fromJson(jsonResponse);
+
+    // reset
+    title.clear();
+    subTitle.clear();
+    statement.clear();
+    hSet.clear();
+
+    // 제목 분류
+    for (var value in guideList.guide!) {
+      if (value.index == SocialString) {
+        hSet.add(value.title1!);
+      }
+    }
+    title = hSet.toList();
 
     // 소제목 + 가이드라인
     for (var i in title){
@@ -85,61 +121,78 @@ class GuideDataProvider extends ChangeNotifier{
       subTitle.add(subTmp);
       statement.add(statTmp);
     }
-    print("-- guide provider --");
-    print(subTitle);
-    print("--------------------");
-    //print(statement);
   }
 
-  getNational(int number) async {
-    // 자연재난 (safety_cate=01001~01015)
-    // List<String> NationalList = ['01001', '01002', '01003', '01004', '01005', '01006', '01007', '01008', '01009', '01010', '01011', '01012', '01013', '01014', '01015'];
-    // String url = 'http://openapi.safekorea.go.kr/openapi/service/behaviorconductKnowHow/naturaldisaster/list?safety_cate=';
-    // final String safety_cate = NationalList[number];
-    // final String serviceKey = '&serviceKey=yoSJ384pthej3NXwL5MttpP8%2FNOoNFAov7nWzBppOC7CGW%2F%2FuuVjkeqUuU2z8agn4TkZWDYXqbDYUL7DWu8pFg%3D%3D';
-    // url = url + safety_cate + serviceKey;
-    // final response = await http.get(Uri.parse(url));
-    //
-    // var utfBody = utf8.decode(response.bodyBytes);
-    // var body = XmlDocument.parse(utfBody);
-    //
-    // var num = body.findAllElements('safetyCateNm3');
-    // Set<String> numList = Set();
-    // num.forEach((element) {
-    //   numList.add(element.text);
-    // });
-    // step = numList.length;
-    // subHead.clear();
-    // subHead = numList.toList();
-    // final wantData = body.findAllElements('item');
-    //
-    // statement.clear();
-    // for (var i  = 0; i < subHead.length; i++) {
-    //   wantData.forEach((element) {
-    //     if (subHead[i] == element.getElement('safetyCateNm3')?.text){
-    //       if (element.getElement('actRmks')?.text == null) {
-    //
-    //       }
-    //       else {
-    //         print(element.getElement('actRmks')!.text);
-    //         statement[i].add(element.getElement('actRmks')!.text);
-    //       }
-    //     }
-    //   });
-    // }
-    //Future.delayed(Duration(seconds: 1));
+  getLifeGuide(int index) async {
+    List<String> LifeList = ['300', '301', '302', '303', '304', '305', '306', '307', '308', '309', '310', '311', '312', '313', '314', '315'];
+    String LifeString = LifeList[index];
+    String jsonString = await rootBundle.loadString('assets/guide/guide3.json');
+    final jsonResponse = json.decode(jsonString);
+    GuideList guideList = GuideList.fromJson(jsonResponse);
+
+    // reset
+    title.clear();
+    subTitle.clear();
+    statement.clear();
+    hSet.clear();
+
+    // 제목 분류
+    for (var value in guideList.guide!) {
+      if (value.index == LifeString) {
+        hSet.add(value.title1!);
+      }
+    }
+    title = hSet.toList();
+
+    // 소제목 + 가이드라인
+    for (var i in title){
+      List<List<String>> statTmp = [];
+      List<String> subTmp= [];
+      for (var j in guideList.guide!){
+        if(i == j.title1){
+          subTmp.add(j.title2!);
+          statTmp.add(j.maintext!);
+        }
+      }
+      subTitle.add(subTmp);
+      statement.add(statTmp);
+    }
   }
 
-  getSocialGuideLine(){
+  getEmergencyGuide(int index) async {
+    List<String> EmergencyList = ['400', '401', '402'];
+    String EmergencyString = EmergencyList[index];
+    String jsonString = await rootBundle.loadString('assets/guide/guide4.json');
+    final jsonResponse = json.decode(jsonString);
+    GuideList guideList = GuideList.fromJson(jsonResponse);
 
-  }
+    // reset
+    title.clear();
+    subTitle.clear();
+    statement.clear();
+    hSet.clear();
 
-  getLifeGuideLine(){
+    // 제목 분류
+    for (var value in guideList.guide!) {
+      if (value.index == EmergencyString) {
+        hSet.add(value.title1!);
+      }
+    }
+    title = hSet.toList();
 
-  }
-
-  getEmergencyGuideLine(){
-
+    // 소제목 + 가이드라인
+    for (var i in title){
+      List<List<String>> statTmp = [];
+      List<String> subTmp= [];
+      for (var j in guideList.guide!){
+        if(i == j.title1){
+          subTmp.add(j.title2!);
+          statTmp.add(j.maintext!);
+        }
+      }
+      subTitle.add(subTmp);
+      statement.add(statTmp);
+    }
   }
 }
 
