@@ -161,56 +161,65 @@ class _AddFriendState extends State<AddFriend> {
                             ),
                             alignment: Alignment.centerLeft,
                           ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              //Navigator.pop(context);
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(content: Text('친구요청되었습니다.')));
 
-                              final user =FirebaseAuth.instance.currentUser;
+                          alignment: Alignment.centerLeft,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            //Navigator.pop(context);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text('친구요청되었습니다.')));
 
-                              var cUserName='';
-                              double cUserLat=0;
-                              double cUserLng=0;
-                              final cUser=FirebaseFirestore.instance.collection('user').doc(user!.uid);
-                              await cUser.get().then(
-                                  (value){
-                                    cUserName = value['userName'];
-                                    cUserLat=value['my_lat'];
-                                    cUserLng=value['my_lng'];
-                                  }
-                              );
+                            final user =FirebaseAuth.instance.currentUser;
 
-
-
-                              await FirebaseFirestore.instance.collection('user').doc(user!.uid)
-                                  .collection('FriendAdmin').doc('${snapshot.data!.docs[index]['uid']}').set({
-                                'me': 1
-                              }); //사용자가 친구요청을 보냄 => me: 1이됨 (이것은 나중에 친구거절을 눌렀을시 0이됨) 근데 얘가 왜필요한지 의문...
-                              //쓸모없으면 나중에 지우기
-
-                              await FirebaseFirestore.instance.collection('user').doc('${snapshot.data!.docs[index]['uid']}')
-                                  .collection('FriendAdmin').doc(user!.uid).set({
-                                'otheruser': 1,
-                                'email': user.email,
-                                'name':cUserName,
-                                'uid': user.uid,
-                                'friend_lat': cUserLat,
-                                'friend_lng': cUserLng,
-                              }); // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
+                            var cUserName='';
+                            double cUserLat=0;
+                            double cUserLng=0;
+                            final cUser=FirebaseFirestore.instance.collection('user').doc(user!.uid);
+                            await cUser.get().then(
+                                (value){
+                                  cUserName = value['userName'];
+                                  cUserLat=value['my_lat'];
+                                  cUserLng=value['my_lng'];
+                                }
+                            );
 
 
 
+                            await FirebaseFirestore.instance.collection('user').doc(user!.uid)
+                                .collection('FriendAdmin').doc('${snapshot.data!.docs[index]['uid']}').set({
+                              'me': 1
+                            }); //사용자가 친구요청을 보냄 => me: 1이됨 (이것은 나중에 친구거절을 눌렀을시 0이됨) 근데 얘가 왜필요한지 의문...
+                            //쓸모없으면 나중에 지우기
 
-                              /*await FirebaseFirestore.instance.collection('user').doc(user!.uid)
-                                  .collection('FriendList');*/
+                            var userPhoto;
+                            await cUser.get().then(
+                                    (value){
+                                  userPhoto = value['userPhotoUrl'];
+                                }
+                            );
+                            await FirebaseFirestore.instance.collection('user').doc('${snapshot.data!.docs[index]['uid']}')
+                                .collection('FriendAdmin').doc(user!.uid).set({
+                              'otheruser': 1,
+                              'email': user.email,
+                              'name':cUserName,
+                              'uid': user.uid,
+                              'friend_lat': cUserLat,
+                              'friend_lng': cUserLng,
+                              'userPhotoUrl' : userPhoto
+                            }); // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
 
-                            },
-                            child: Text(
-                              '친구요청',
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
-                              ),
+
+
+
+                            /*await FirebaseFirestore.instance.collection('user').doc(user!.uid)
+                                .collection('FriendList');*/
+
+                          },
+                          child: Text(
+                            '친구요청',
+                            style: TextStyle(
+                              fontFamily: 'Leferi',
                             ),
                           ),
 
@@ -363,10 +372,20 @@ class _FindFriendState extends State<FindFriend> {
                                 final user =FirebaseAuth.instance.currentUser;
 
                                 var cUserName='';
+                                var cUserLat='';
+                                var cUserLng='';
                                 final cUser=FirebaseFirestore.instance.collection('user').doc(user!.uid);
                                 await cUser.get().then(
                                         (value){
                                       cUserName = value['userName'];
+                                      cUserLat=value['my_lat'];
+                                      cUserLng=value['my_lng'];
+                                    }
+                                );
+                                var userPhoto;
+                                await cUser.get().then(
+                                        (value){
+                                      userPhoto = value['userPhotoUrl'];
                                     }
                                 );
 
@@ -383,7 +402,10 @@ class _FindFriendState extends State<FindFriend> {
                                   'otheruser': 1,
                                   'email': user.email,
                                   'name':cUserName,
-                                  'uid': user.uid
+                                  'uid': user.uid,
+                                  'friend_lat': cUserLat,
+                                  'friend_lng': cUserLng,
+                                  'userPhotoUrl' : userPhoto
                                 }); // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
 
 
@@ -413,131 +435,4 @@ class _FindFriendState extends State<FindFriend> {
         });
   }
 }
-
-
-
-
-
-/*
-class Tlqkf extends StatefulWidget {
-  @override
-  _TlqkfState createState() => _TlqkfState();
-}
-
-class _TlqkfState extends State<Tlqkf> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: searchPageHeader(),
-      body: futureSearchResults == null ? displayNoSearchResult() :
-      displayUsersFoundScreen(),
-    );
-  }
-
-  String searchText='';
-
-  TextEditingController searchController = TextEditingController();
-
-  late Stream<QuerySnapshot<Map<String, dynamic>>> futureSearchResults;
-
-  emptyTextFormField() {
-    searchController.clear();
-  }
-
-  controlSearching(str) {
-    print(str);
-    searchText =str;
-    Stream<QuerySnapshot<Map<String, dynamic>>> allUser = FirebaseFirestore.instance.collection(
-        "user")
-        .where("email", isEqualTo: str).snapshots();
-    setState(() {
-      futureSearchResults = allUser;
-    });
-  }
-
-  AppBar searchPageHeader() {
-    return AppBar(
-      backgroundColor: Colors.black,
-      title: TextFormField(
-        controller: searchController,
-        decoration: InputDecoration(
-          hintText: 'Search here...',
-          filled: true,
-          prefixIcon: Icon(Icons.person_pin),
-          suffixIcon: IconButton(icon: Icon(Icons.clear, color: Colors.white,),
-            onPressed: emptyTextFormField,),
-
-        ),
-        style: TextStyle(
-            color: Colors.white
-        ),
-        onFieldSubmitted: controlSearching,
-
-
-      ),
-    );
-  }
-
-  displayUsersFoundScreen() {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection(
-            "user")
-            .where("email", isEqualTo: searchText).snapshots(),
-        builder: (context, snapshot) {
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          }
-
-          final messages = snapshot.data!.docs;
-          List<Text> messageWidget =[];
-
-
-            final messageText = messages[0]['email'];
-            final messageSender = messages[0]['userName'];
-            print(messageSender);
-            print(messageText);
-
-          return dmdkr();
-
-        });
-  }
-
-  Widget dmdkr(){
-
-    return Expanded(
-      child: Text('hello')
-    );
-
-  }
-
-
-}
-
-class UserResult extends StatelessWidget{
-  final User eachUser;
-  UserResult(this.eachUser);
-
-  @override
-  Widget build(BuildContext context){
-    return Padding(
-      padding: EdgeInsets.all(3),
-    );
-  }
-
-}
-
-
-displayNoSearchResult() {
-
-}
-*/
-
-
-
-
-
-/////리스트에 넣어보자!!!!
-
 

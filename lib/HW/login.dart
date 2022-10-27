@@ -32,38 +32,13 @@ class _loginState extends State<login> {
   }
 
   Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-    // Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
-
-
     );
 
-   /* final AuthResult authResult = await _authentication.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
-
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
-
-    currentUser = await _authentication.currentUser();
-    assert(user.uid == currentUser.uid);
-
-    setState(() {
-      userEmail = user.email;
-      //url = user.photoUrl;
-      userName = user.displayName;
-    });
-*/
-    //return '구글 로그인 성공: $user';
-
-    // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
@@ -146,7 +121,10 @@ class _loginState extends State<login> {
                 obscureText: true,
               ),
               SizedBox(height: 20),
-              ElevatedButton(onPressed:signInWithGoogle,
+              ElevatedButton(onPressed:() async{
+                await signInWithGoogle;
+
+                },
                   child: Text("Google Login")),
               SizedBox(height: 20),
               Text(
@@ -226,6 +204,9 @@ class _loginState extends State<login> {
         ),
       ),
     );
+  }
+  saveGoogleUserInfo() async{
+    final GoogleSignInAccount gCurrentUser; //여기서부터!!!!!!!!
   }
 }
 

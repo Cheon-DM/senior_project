@@ -19,7 +19,6 @@ void _sendName() async {
       .collection("user").doc(user!.uid).collection('FriendAdmin')
       .where('otheruser', isEqualTo: 1)
       .get();
-  //name = userData.data()!['userName'];
   print(userData);
 }
 
@@ -122,7 +121,7 @@ class Menu extends StatelessWidget {
                 onTap: () {
 
 
-                  _sendName();
+                  //_sendName(); 이거 왜 넣은거지??
 
                   //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('나중에 다른페이지로 넘어갑니다')));
                   Navigator.push(context,
@@ -307,36 +306,6 @@ class _FreindListState extends State<FreindList> {
         });
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-  /*final _fireStore = FirebaseFirestore.instance;
-  Future<void> getData() async {
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _fireStore.collection('user').doc(user!.uid)
-        .collection('FriendAdmin').get();
-
-    // Get data from docs and convert map to List
-   // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
-    //for a specific field
-
-    print('나와라ㅏ와라');
-    print(allData);
-
-    for(var s in allData){
-      print(s);
-      await FirebaseFirestore.instance.collection('user').doc(s)
-          .collection('FriendAdmin').doc(user!.uid).update({
-        'friend_lat': 37.483409,
-        'friend_lng': 126.970844,
-      });
-      print('왜 안되지.....');
-    }
-
-
-  }*/
-    //////////////////////////////////////////////////////////////////////////
-
 
    Future<List> getUserLocation(friendLat, friendLng) async {
     var kakaoGeoUrl = Uri.parse('https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$friendLng&y=$friendLat&input_coord=WGS84');
@@ -452,10 +421,15 @@ class _FreindListState extends State<FreindList> {
               backgroundColor: Colors.grey[200],
 
 
-              leading: Icon(
+              leading: snapshot.data!.docs[index]['userPhotoUrl'] == null?
+              Image.asset('assets/neoguleman.jpeg',
+                fit: BoxFit.contain,
+                height: 200,)
+                  :Image.network(snapshot.data!.docs[index]['userPhotoUrl'],fit: BoxFit.cover),
+              /*Icon(
                 Icons.account_circle,
                 size: 40,
-              ),
+              ),*/
               title: Text(
                 snapshot.data!.docs[index]['name'],
               ),
