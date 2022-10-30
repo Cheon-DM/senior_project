@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:senior_project/HW/addFriend.dart';
-import 'package:senior_project/HW/requestedFriend.dart';
-import 'package:get/get.dart';
+import 'package:senior_project/friendsManage/add_friend.dart';
+import 'package:senior_project/friendsManage/requested_friend.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:xml2json/xml2json.dart';
-import '../HS/myPage.dart';
+import '../info/myPage.dart';
 
 var name='';
 final user = FirebaseAuth.instance.currentUser;
@@ -174,11 +172,8 @@ class FreindList extends StatefulWidget {
 }
 
 class _FreindListState extends State<FreindList> {
+
   @override
-
-
-
-
   void showProfile(context, name, email) {
     showDialog(
         context: context,
@@ -390,10 +385,7 @@ class _FreindListState extends State<FreindList> {
                   },
                   future: getUserLocation(friendLat, friendLng)),
                 )
-
-
               );
-
          }
     );}
 
@@ -422,7 +414,7 @@ class _FreindListState extends State<FreindList> {
 
 
               leading: snapshot.data!.docs[index]['userPhotoUrl'] == null?
-              Image.asset('assets/neoguleman.jpeg',
+              Image.asset('assets/images/neoguleman.jpeg',
                 fit: BoxFit.contain,
                 height: 200,)
                   :Image.network(snapshot.data!.docs[index]['userPhotoUrl'],fit: BoxFit.cover),

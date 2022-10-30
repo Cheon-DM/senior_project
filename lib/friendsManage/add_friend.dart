@@ -1,19 +1,7 @@
-
-
-import 'dart:math';
-import 'package:senior_project/DM/findShelter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:senior_project/HS/myPage.dart';
-import 'package:get/get.dart';
-
-import 'friendlist.dart';
-
-
-
 
 class FindUser{
   late final String findname;
@@ -22,7 +10,7 @@ class FindUser{
   FindUser({
     this.findingemail='',
     this.findname=''
-});
+  });
 
 }
 
@@ -101,14 +89,8 @@ class _AddFriendState extends State<AddFriend> {
             ),
           );
         }
-
     );
-
-
   }
-
-
-
 
   displayNoSearchResultScreen(){
     final Orientation orientation = MediaQuery.of(context).orientation;
@@ -123,8 +105,6 @@ class _AddFriendState extends State<AddFriend> {
       ),
     );
   }
-
-
 
   _buildbody(BuildContext context, String str) {
     return StreamBuilder<QuerySnapshot>(
@@ -161,9 +141,6 @@ class _AddFriendState extends State<AddFriend> {
                             ),
                             alignment: Alignment.centerLeft,
                           ),
-
-                          alignment: Alignment.centerLeft,
-                        ),
                         ElevatedButton(
                           onPressed: () async {
                             //Navigator.pop(context);
@@ -209,9 +186,6 @@ class _AddFriendState extends State<AddFriend> {
                               'userPhotoUrl' : userPhoto
                             }); // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
 
-
-
-
                             /*await FirebaseFirestore.instance.collection('user').doc(user!.uid)
                                 .collection('FriendList');*/
 
@@ -222,7 +196,7 @@ class _AddFriendState extends State<AddFriend> {
                               fontFamily: 'Leferi',
                             ),
                           ),
-
+                        )
                         ],
                       ),
                       padding: EdgeInsets.all(15),
@@ -237,7 +211,6 @@ class _AddFriendState extends State<AddFriend> {
   }
 
   /////////////////////////////////////////////////////////////
-
 
 String getEmail = "";
 
