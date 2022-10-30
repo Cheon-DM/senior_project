@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/HS/mainpage.dart';
-import '../HW/friendlist.dart';
-import '../HW/login.dart';
-import '../Provider/LocateData.dart';
+import 'package:senior_project/mainpage.dart';
+import '../friendsManage/friendlist.dart';
+import '../login/login.dart';
+import '../provider/LocateData.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -88,7 +88,7 @@ class _MyPageState extends State<MyPage> {
                 children: [
                   userPhoto == null
                       ? Image.asset(
-                          'assets/neoguleman.jpeg',
+                          'assets/images/neoguleman.jpeg',
                           fit: BoxFit.contain,
                           height: 200,
                         )
