@@ -1,11 +1,7 @@
-//import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:senior_project/DM/signup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:senior_project/HW/login.dart';
-import 'package:get/get.dart';
+import 'package:senior_project/login/login.dart';
 
 class signup_complete extends StatefulWidget {
   final String received;
@@ -15,11 +11,9 @@ class signup_complete extends StatefulWidget {
 }
 
 class _signup_completeState extends State<signup_complete> {
-  //late final String userName;
   var name = '';
   final user = FirebaseAuth.instance.currentUser;
-  //DocumentSnapshot documentSnapshot =await userRe
-  //final userData=FirebaseFirestore.instance.collection('user').doc('$code');
+
   void _sendName() async {
     final user = FirebaseAuth.instance.currentUser;
     final userData = await FirebaseFirestore.instance
@@ -29,7 +23,6 @@ class _signup_completeState extends State<signup_complete> {
     name = userData.data()!['userName'];
     print(name);
   }
-  //FirebaseAuth auth = FirebaseAuth.instance;
 
   Scaffold showComplete(userName) {
     return Scaffold(
