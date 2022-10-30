@@ -11,6 +11,7 @@ class LocateProvider extends ChangeNotifier{
   double _my_lng = 0;
   double _lat = 0;
   double _lng = 0;
+
   var _friend_lat = [];
   var _friend_lng = [];
   var _friend_name = [];
@@ -69,10 +70,6 @@ class LocateProvider extends ChangeNotifier{
     double tmp2 = position.longitude;
 
     if (_my_lat != tmp1 || _my_lng != tmp2){
-      print("change location");
-      print(position.latitude);
-      print(position.longitude);
-
       _my_lat = position.latitude;
       _my_lng = position.longitude;
 
@@ -86,19 +83,14 @@ class LocateProvider extends ChangeNotifier{
 
       final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
 
-      print(allData);
-
       for(var s in allData){
-        print(s);
         await FirebaseFirestore.instance.collection('user').doc(s)
             .collection('FriendAdmin').doc(user!.uid).update({
           'friend_lat': tmp1,
           'friend_lng': tmp2,
         });
-
       }
     }
-
     notifyListeners();
   }
 
@@ -109,11 +101,5 @@ class LocateProvider extends ChangeNotifier{
     _friend_lat = querySnapshot.docs.map((doc) => doc.get('friend_lat')).toList();
     _friend_lng = querySnapshot.docs.map((doc) => doc.get('friend_lng')).toList();
     _friend_name = querySnapshot.docs.map((doc) => jsonEncode(doc.get('name').toString())).toList();
-    print("여기가 궁금:");
-    print(_friend_lng);
-    print(_friend_lat);
-    print(_friend_name);
-    print(_friend_name.runtimeType);
-    print("여기까지가 궁금");
-}
+  }
 }
