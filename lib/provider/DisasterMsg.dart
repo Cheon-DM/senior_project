@@ -78,7 +78,6 @@ class DisasterModel {
 
     final List<Map<String, dynamic>> map = await db.query('disasterTable', where: 'No = ?', whereArgs: [No]);
 
-    //print(map.first['No'] as int);
     return map.isNotEmpty ? map.first['No'] as int : 0;
   }
 
@@ -144,13 +143,11 @@ class DisasterMsgProvider extends ChangeNotifier {
 
   Future<List<Disaster>> selectArea(int BigArea) async {
     var list = await _model.SelectArea(BigArea);
-    print('success');
     return list;
   }
 
   Future<List<Disaster>> select() async {
     var list = await _model.SelectAll();
-    print(list);
     return list;
   }
 
@@ -193,9 +190,6 @@ class DisasterMsgProvider extends ChangeNotifier {
     var initbody = json.encode(initbodyData);
     final initResponse = await http.post(Uri.parse(url), headers: headers, body: initbody);
     final int statusCode = initResponse.statusCode;
-    print("--- 상태 코드 ---");
-    print(statusCode);
-    print("--- ------- ---");
     var rtnPageCnt = jsonDecode(initResponse.body)['rtnResult']['pageSize'];
 
     for (int i = 1; i <= rtnPageCnt; i++) {
@@ -273,7 +267,6 @@ class DisasterMsgProvider extends ChangeNotifier {
 
         int preReader = await _model.Read(MD101_SN);
         if (preReader == 0){
-          print("insert -ing");
           await _model.Insert(Disaster(
               No: MD101_SN,
               DisID: DSSTR_SE_ID,
@@ -284,7 +277,6 @@ class DisasterMsgProvider extends ChangeNotifier {
           ));
         }
         else {
-          //print("already");
         }
       }
     }
