@@ -122,7 +122,6 @@ class _aroundShelterState extends State<aroundShelter> {
 
     Timer(Duration(seconds: 10), () {
       _isLoading = false;
-      print(_isLoading); // 지도 뜨게 함.
     });
   }
 
@@ -373,9 +372,6 @@ class _aroundShelterState extends State<aroundShelter> {
   Future<void> _openKakaoMapScreen(BuildContext context) async {
     KakaoMapUtil util = KakaoMapUtil();
 
-    // String url = await util.getResolvedLink(
-    //     util.getKakaoMapURL(37.402056, 127.108212, name: 'Kakao 본사'));
-
     /// This is short form of the above comment
     String url =
     await util.getMapScreenURL(min_lat, min_lng, name: min_spot);
@@ -384,8 +380,8 @@ class _aroundShelterState extends State<aroundShelter> {
     print('url : $url');
 
     Navigator.push(
-        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1)));
-
+        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1))
+    );
   }
 }
 
