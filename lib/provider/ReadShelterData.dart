@@ -24,7 +24,6 @@ class ShelterProvider extends ChangeNotifier {
 
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table]!.rows) {
-       // print(row[9]);
         List<dynamic> tmp = [];
         tmp.add(row[8]!.props.first); // 경도
         tmp.add(row[9]!.props.first); // 위도

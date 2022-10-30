@@ -61,7 +61,7 @@ class _aroundShelterState extends State<aroundShelter> {
 
     _locateProvider.friendLocation(); //친구위치
     _locateProvider.locateMe(); // 내 위치
-    _shelterProvider.readShelterdata();
+    _shelterProvider.readShelterdata(); // 파일 읽기
     Map<int, List<dynamic>> mp = context.read<ShelterProvider>().mp; // 대피소 저장 리스트
 
     int a = 0; // 1km list
