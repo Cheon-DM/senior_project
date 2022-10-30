@@ -2,21 +2,17 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:excel/excel.dart';
 
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/Provider/DisasterMsg.dart';
-import 'package:senior_project/Provider/ReadShelterData.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
 import 'package:flutter/material.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../HS/mainpage.dart';
-import '../Provider/LocateData.dart';
+import '../mainpage.dart';
+import '../provider/ReadShelterData.dart';
+import '../provider/LocateData.dart';
 import 'kakaomap_screen.dart';
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
@@ -390,59 +386,6 @@ class _aroundShelterState extends State<aroundShelter> {
     Navigator.push(
         context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1)));
 
-  }
-/////////////////////////////////////////////////////////////
-  Widget _testingCustomScript(
-      {required Size size, required BuildContext context}) {
-    return KakaoMapView(
-        width: size.width,
-        height: 400,
-        kakaoMapKey: kakaoMapKey,
-        showMapTypeControl: true,
-        showZoomControl: true,
-        lat: context.read<LocateProvider>().my_lat,
-        lng: context.read<LocateProvider>().my_lng,
-        customScript: '''
-    var markers = [];
-    console.log('..');
-       
-    let data = $around1['0']; // 리스트 값 가져오기
-    let obj = JSON.parse(data); // 객체
-    let result = JSON.stringify(data); // 문자열
-    
-    // var leng = $around1.length;
-
-    console.log(data);
-    console.log(obj['0']);
-    console.log(result);
-    
-    function addMarker(position) {
-    
-      var marker = new kakao.maps.Marker({position: position});
-
-      marker.setMap(map);
-    
-      markers.push(marker);
-    }
-    
-    for(let i = 0 ; i < 3 ; i++){
-      
-      addMarker(new kakao.maps.LatLng(result[i][0], result[i][1]));
-      //console.log('lat: ', + result[i][0]);
-      //console.log('lng: ', + result[i][1]);
-
-    }
-    
-		  const zoomControl = new kakao.maps.ZoomControl();
-      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-   
-      const mapTypeControl = new kakao.maps.MapTypeControl();
-      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-              ''',
-        onTapMarker: (message) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(message.message)));
-        });
   }
 }
 

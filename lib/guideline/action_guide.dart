@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/Provider/GuideData.dart';
+import 'package:senior_project/provider/GuideData.dart';
 
-import 'mainpage.dart';
+import '../mainpage.dart';
 
 class ActionGuide extends StatefulWidget {
   @override
@@ -335,45 +335,3 @@ class _ActionGuideState extends State<ActionGuide> {
     );
   }
 }
-
-/*
-* <div class="section01">
-                    <div class="tabarea">
-                        <div class="tabmenu01 on">
-                           <div class="detail">
-                              <h3 class="title_02">홍수 예·경보 시 국민행동요령</h3>
-*
-* 자연재난
-* 02, 13, 18, 04, 05, 06, 19, 08, 07, 12, 09, 16, 10, 20, 11
-*
-* */
-
-/**
- * child: Padding(
-    padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-    Text(
-    snapshot.data.toString(),
-    style: TextStyle(
-    fontFamily: 'Leferi',
-    fontSize: 17,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    Container(
-    height: 15,
-    ),
-    Text(
-    statement[0].toString(),
-    style: TextStyle(
-    fontFamily: 'Leferi',
-    fontSize: 12,
-    ),
-    )
-    ],
-    ),
-    )
- */

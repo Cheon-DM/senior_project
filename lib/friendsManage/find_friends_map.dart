@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'package:location/location.dart';
-import 'package:senior_project/DM//kakaomap_screen.dart';
+import 'package:senior_project/shelter/kakaomap_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../HS/mainpage.dart';
-
+import '../mainpage.dart';
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
 

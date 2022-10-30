@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/HS/mainpage.dart';
-import 'package:senior_project/Provider/DisasterMsg.dart';
+import 'package:senior_project/mainpage.dart';
+import 'package:senior_project/provider/DisasterMsg.dart';
 
 class ShowDisasterMsg extends StatelessWidget {
 

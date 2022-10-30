@@ -27,7 +27,7 @@ class _LandingPageState extends State<LandingPage>{
           child: FractionallySizedBox(
             widthFactor: 0.35,
             heightFactor: 0.35,
-            child: Image.asset('assets/logo_white.png'),
+            child: Image.asset('assets/images/logo_white.png'),
           ),
     ),
     );

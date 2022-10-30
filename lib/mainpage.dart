@@ -3,13 +3,11 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../DM/disaster.dart';
-import '../DM/findShelter.dart';
-import '../DM/map.dart';
-import '../HW/checkState.dart';
-import 'action_guide.dart';
-import 'action_guide2.dart';
-import 'action_guide3.dart';
+import 'disasterMsg/show_disaster_msg.dart';
+import 'shelter/find_shelter_map.dart';
+import 'friendsManage/find_friends_map.dart';
+import 'info/checkState.dart';
+import 'guideline/action_guide.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -31,7 +29,7 @@ class _MainPageState extends State<MainPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset(
-                      'assets/logo_white.png',
+                      'assets/images/logo_white.png',
                       fit: BoxFit.contain,
                       height: 20,
                     ),

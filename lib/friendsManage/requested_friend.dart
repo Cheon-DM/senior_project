@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../HS/myPage.dart';
+import '../info/myPage.dart';
 
 class Requested extends StatelessWidget {
   @override

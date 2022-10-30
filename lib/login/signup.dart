@@ -1,16 +1,11 @@
-import 'dart:ffi';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/DM/signup_complete.dart';
+import 'package:senior_project/login/signup_complete.dart';
 
-import '../HW/login.dart';
-import '../Provider/LocateData.dart';
+import 'login.dart';
+import '../provider/LocateData.dart';
 
 class signup extends StatefulWidget {
   @override
@@ -18,16 +13,16 @@ class signup extends StatefulWidget {
 }
 
 class _signupState extends State<signup> {
-  //late LocateProvider _locateProvider = Provider.of<LocateProvider>(context, listen: false);
+
   final _formkey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
   final user = FirebaseAuth.instance.currentUser;
-
 
   String userName = '';
   String userEmail = '';
   String userPassword = '';
   String checkPassword='';
+
   var ch=0;
 
   void _tryValidation() {
@@ -74,9 +69,6 @@ class _signupState extends State<signup> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(height: 50),
-
-
-
                 //사용자 이름 박스
                 TextFormField(
                   cursorColor: const Color(0xff6157DE),
@@ -172,8 +164,6 @@ class _signupState extends State<signup> {
                   ),
                 ),
                 Container(height: 10),
-
-
 
                 //비밀번호 박스
                 TextFormField(
@@ -312,18 +302,12 @@ class _signupState extends State<signup> {
               }));
               //_locateProvider.locateMe();
             }
-            else{ScaffoldMessenger.of(context)
+            else{
+              ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('제대로된 입력 필요')));
-
-
             }
-
-
-
-
-
-
           },
+
           child: Container(
             padding: EdgeInsets.only(top: 9),
             height: 50,
