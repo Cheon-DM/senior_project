@@ -88,19 +88,17 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/mainpage_background.png
-    - assets/logo.png
-    - assets/logo_gradient.png
-    - assets/logo_square.png
-    - assets/logo_white.png
-    - assets/logo_square_white.png
-    - assets/shelterlist.xlsx
-    - assets/neoguleman.jpeg
+    - assets/images/mainpage_background.png
+    - assets/images/logo.png
+    - assets/images/logo_gradient.png
+    - assets/images/logo_square.png
+    - assets/images/logo_white.png
+    - assets/images/logo_square_white.png
+    - assets/images/neoguleman.jpeg
     - assets/EQ_Shelter.xlsx
-    - assets/test.xlsx
     - assets/Nationwide_shelter.xlsx
-    - assets/marker_red.png
-    - assets/marker_blue.png
+    - assets/images/marker_red.png
+    - assets/images/marker_blue.png
     - assets/guide/guide1.json
     - assets/guide/guide2.json
     - assets/guide/guide3.json
