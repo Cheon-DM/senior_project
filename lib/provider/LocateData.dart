@@ -9,6 +9,7 @@ class LocateProvider extends ChangeNotifier {
   double _my_lng = 0;
   double _lat = 0;
   double _lng = 0;
+
   var _friend_lat = [];
   var _friend_lng = [];
   var _friend_name = [];
@@ -68,11 +69,8 @@ class LocateProvider extends ChangeNotifier {
     double tmp1 = position.latitude;
     double tmp2 = position.longitude;
 
-    if (_my_lat != tmp1 || _my_lng != tmp2) {
-      print("change location");
-      print(position.latitude);
-      print(position.longitude);
 
+    if (_my_lat != tmp1 || _my_lng != tmp2){
       _my_lat = position.latitude;
       _my_lng = position.longitude;
 
@@ -82,33 +80,25 @@ class LocateProvider extends ChangeNotifier {
 
       final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
 
-      print(allData);
-
-      for (var s in allData) {
-        print(s);
-        await ref.doc(s).collection('FriendAdmin').doc(user!.uid).update({
+      for(var s in allData){
+        await ref.doc(s)
+            .collection('FriendAdmin').doc(user!.uid).update({
           'friend_lat': tmp1,
           'friend_lng': tmp2,
         });
       }
     }
-
     notifyListeners();
   }
 
-  friendLocation() async {
-    QuerySnapshot querySnapshot = await ref
-        .doc(user!.uid)
-        .collection('FriendAdmin')
-        .where('friend', isEqualTo: 1)
-        .get();
 
-    _friend_lat =
-        querySnapshot.docs.map((doc) => doc.get('friend_lat')).toList();
-    _friend_lng =
-        querySnapshot.docs.map((doc) => doc.get('friend_lng')).toList();
-    _friend_name = querySnapshot.docs
-        .map((doc) => jsonEncode(doc.get('name').toString()))
-        .toList();
+  friendLocation() async{
+    QuerySnapshot querySnapshot = await ref.doc(user!.uid)
+        .collection('FriendAdmin').where('friend', isEqualTo: 1).get();
+
+    _friend_lat = querySnapshot.docs.map((doc) => doc.get('friend_lat')).toList();
+    _friend_lng = querySnapshot.docs.map((doc) => doc.get('friend_lng')).toList();
+    _friend_name = querySnapshot.docs.map((doc) => jsonEncode(doc.get('name').toString())).toList();
   }
 }
+

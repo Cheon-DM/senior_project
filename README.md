@@ -1,19 +1,52 @@
-# senior_project
+# 프로젝트 이름
+<p align="center">
+    <br>
+    민방위대피시설 안내 어플리케이션 '여기로가'
+    <br>
+</p>
 
-A new Flutter project.
+## 프로젝트 소개
 
-## Getting Started
+<p align="justify">
+프로젝트 개요/동기
+</p>
 
-This project is a starting point for a Flutter application.
+<p align="center">
+애플리케이션 ‘여기로 가’는 자연, 사회 및 비상 재난 발생 시 사용자 위치에 따른 최적 대피시설 안내를 목적으로 한다. 부가적으로 재난별 행동 요령을 제공함으로써 사용자들이 재난 상황에 신속하게 대응할 수 있도록 한다. 또한 친구 사용자 간 위치공유 기능을 지원하여 위급상황에서 상호 위치를 공유할 수 있도록 지원한다.
+</p>
 
-A few resources to get you started if this is your first Flutter project:
+<br>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## 기술 스택
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+| Dart | JavaScript |  Flutter   |
+| :--: | :--------: | :--------: |
+|![js] |   ![ts]    | ![flutter] |
 
-# new sentense is here
-# 최종 구현 후 마크다운 할 예정
+<br>
+
+## 구현 기능
+
+### 기능 1
+
+### 기능 2
+
+### 기능 3
+
+### 기능 4
+
+<br>
+
+## 배운 점 & 아쉬운 점
+
+<p align="justify">
+
+</p>
+
+<br>
+
+## 라이센스
+
+MIT &copy; [NoHack](mailto:lbjp114@gmail.com)
+
+<!-- Stack Icon Refernces -->

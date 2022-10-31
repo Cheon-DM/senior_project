@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/provider/GuideData.dart';
 
 import '../mainpage.dart';
+import '../provider/GuideData.dart';
 
 class ActionGuide extends StatefulWidget {
   @override
@@ -26,7 +26,6 @@ class _ActionGuideState extends State<ActionGuide> {
   List<String> title = ["title"]; // head = title1 모음
   List<List<String>> subTitle = [["subTitle"]];
   List<List<List<String>>> statement = [[["test"]]];
-  // Stream<int> get _getGuideNumber => guideNumber;
 
   Stream<int> showGuide() async*{
     yield guideNumber;
@@ -38,10 +37,8 @@ class _ActionGuideState extends State<ActionGuide> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'action-guide',
-
       home: Scaffold(
         resizeToAvoidBottomInset : false,
-
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
           elevation: 0,
