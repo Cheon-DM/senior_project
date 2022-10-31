@@ -12,8 +12,7 @@ class Requested extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        resizeToAvoidBottomInset : false,
-
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
           elevation: 5,
@@ -39,27 +38,6 @@ class Requested extends StatelessWidget {
         ),
         body: Column(
           children: <Widget>[
-            /*
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              color: const Color(0xff6157DE),
-              width: size.width,
-              height: 50,
-              child: SizedBox.expand(
-                child: Text(
-                  "친구 관리",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Leferi',
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-             */
-
             Row(
               children: <Widget>[
                 GestureDetector(
@@ -119,11 +97,6 @@ class Requested extends StatelessWidget {
   }
 }
 
-
-
-final user =FirebaseAuth.instance.currentUser;
-
-
 class FreindList extends StatefulWidget {
   @override
   _FreindListState createState() => _FreindListState();
@@ -131,81 +104,79 @@ class FreindList extends StatefulWidget {
 
 class _FreindListState extends State<FreindList> {
   @override
-
-  final user =FirebaseAuth.instance.currentUser;
+  final user = FirebaseAuth.instance.currentUser;
+  final ref = FirebaseFirestore.instance.collection("user");
 
   Widget build(BuildContext context) {
-
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection("user").doc(user!.uid).collection('FriendAdmin')
-          .where('otheruser', isEqualTo: 1)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
-        return Scaffold(
-            body: ListView.separated(
-              itemCount:snapshot.data!.docs.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
+        stream: ref
+            .doc(user!.uid)
+            .collection('FriendAdmin')
+            .where('otheruser', isEqualTo: 1)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          return Scaffold(
+              body: ListView.separated(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
                   iconColor: Colors.grey,
                   textColor: Colors.black,
-
                   leading: Icon(
                     Icons.account_circle,
                     size: 40,
                   ),
                   title: Text(
-                     snapshot.data!.docs[index]['name'],
-
+                    snapshot.data!.docs[index]['name'],
                   ),
                   subtitle: Text(snapshot.data!.docs[index]['email']),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ElevatedButton(
-                        onPressed: ()async{
+                        onPressed: () async {
+                          //print('${snapshot.data!.docs[index]['email']}');
 
-                          print('${snapshot.data!.docs[index]['email']}');
-
-                          var cUserName='';
-                          double cUserLat=0;
-                          double cUserLng=0;
+                          var currentUserName = '';
+                          double currentUserLat = 0;
+                          double currentUserLng = 0;
                           var userPhoto;
-                          final cUser=FirebaseFirestore.instance.collection('user').doc(user!.uid);
-                          await cUser.get().then(
-                                  (value){
-                                    cUserName = value['userName'];
-                                    cUserLat=value['my_lat'];
-                                    cUserLng=value['my_lng'];
-                                    userPhoto = value['userPhotoUrl'];
-                              }
-                          );
-
-
-
-                          await FirebaseFirestore.instance.collection('user').doc(user!.uid)
-                              .collection('FriendAdmin').doc('${snapshot.data!.docs[index]['uid']}').update({
-                            'otheruser': 0,
-                            'friend' : 1
+                          final cUser = FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(user!.uid);
+                          await cUser.get().then((value) {
+                            currentUserName = value['userName'];
+                            currentUserLat = value['my_lat'];
+                            currentUserLng = value['my_lng'];
+                            userPhoto = value['userPhotoUrl'];
                           });
 
-                          await FirebaseFirestore.instance.collection('user').doc('${snapshot.data!.docs[index]['uid']}')
-                              .collection('FriendAdmin').doc(user!.uid).update({
+                          await ref
+                              .doc(user!.uid)
+                              .collection('FriendAdmin')
+                              .doc('${snapshot.data!.docs[index]['uid']}')
+                              .update({'otheruser': 0, 'friend': 1});
+
+                          await ref
+                              .doc('${snapshot.data!.docs[index]['uid']}')
+                              .collection('FriendAdmin')
+                              .doc(user!.uid)
+                              .update({
                             //'otheruser': 1,
-                            'friend' : 1,
+                            'friend': 1,
                             'email': user!.email,
-                            'name':cUserName,
+                            'name': currentUserName,
                             'uid': user!.uid,
-                            'friend_lat': cUserLat,
-                            'friend_lng': cUserLng,
-                            'userPhotoUrl' : userPhoto
+                            'friend_lat': currentUserLat,
+                            'friend_lng': currentUserLng,
+                            'userPhotoUrl': userPhoto
                           });
 
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text('친구 요청 수락.')));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('친구 요청 수락.')));
                         },
                         child: Text(
                           '수락',
@@ -218,14 +189,19 @@ class _FreindListState extends State<FreindList> {
                         width: 10,
                       ),
                       ElevatedButton(
-                        onPressed: () async{
-
-                          await FirebaseFirestore.instance.collection('user').doc('${snapshot.data!.docs[index]['uid']}')
-                              .collection('FriendAdmin').doc(user!.uid).delete();
-                          await FirebaseFirestore.instance.collection('user').doc(user!.uid)
-                              .collection('FriendAdmin').doc('${snapshot.data!.docs[index]['uid']}').delete();
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text('친구 요청 거절.')));
+                        onPressed: () async {
+                          await ref
+                              .doc('${snapshot.data!.docs[index]['uid']}')
+                              .collection('FriendAdmin')
+                              .doc(user!.uid)
+                              .delete();
+                          await ref
+                              .doc(user!.uid)
+                              .collection('FriendAdmin')
+                              .doc('${snapshot.data!.docs[index]['uid']}')
+                              .delete();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('친구 요청 거절.')));
                         },
                         child: Text(
                           '거절',
@@ -235,17 +211,15 @@ class _FreindListState extends State<FreindList> {
                         ),
                       )
                     ],
-                  )
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider(
-                  height: 0,
-                  color: Colors.grey,
-                );
-              },
-            ));
-      }
-    );
+                  ));
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider(
+                height: 0,
+                color: Colors.grey,
+              );
+            },
+          ));
+        });
   }
 }

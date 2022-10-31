@@ -32,12 +32,12 @@ num calculate(double lat1, double lat2, double lng1, double lng2){
   return dis;
 }
 
-class aroundShelter extends StatefulWidget {
+class AroundShelter extends StatefulWidget {
   @override
-  State<aroundShelter> createState() => _aroundShelterState();
+  State<AroundShelter> createState() => _AroundShelterState();
 }
 
-class _aroundShelterState extends State<aroundShelter> {
+class _AroundShelterState extends State<AroundShelter> {
   late WebViewController _mapController;
   late LocateProvider _locateProvider = Provider.of<LocateProvider>(context, listen: false);
   late ShelterProvider _shelterProvider = Provider.of<ShelterProvider>(context);

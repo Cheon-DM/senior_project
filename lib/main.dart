@@ -11,8 +11,8 @@ import 'provider/ReadShelterData.dart';
 
 void main() async {
 
-  WidgetsFlutterBinding.ensureInitialized();
-   await Firebase.initializeApp();
+  //WidgetsFlutterBinding.ensureInitialized();
+   //await Firebase.initializeApp();
   authFirebase();
   runApp(
       MultiProvider(

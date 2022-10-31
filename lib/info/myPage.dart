@@ -18,14 +18,14 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   XFile? _pickImage;
-  final _authentication = FirebaseAuth.instance;
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final auth = FirebaseAuth.instance; //원래 _authentication
+  //FirebaseAuth auth = FirebaseAuth.instance;
   late LocateProvider _locateProvider =
       Provider.of<LocateProvider>(context, listen: false);
-  final _user = FirebaseAuth.instance.currentUser;
+  final user = FirebaseAuth.instance.currentUser;
+  final ref = FirebaseFirestore.instance.collection('user');
   var userPhoto = "";
   String photourl = "";
-  var d000 = "";
 
   void initState() {
     super.initState();
@@ -34,9 +34,9 @@ class _MyPageState extends State<MyPage> {
 
   void _prepare() async {
     var ref1 =
-        await FirebaseStorage.instance.ref().child("profile/${_user?.uid}");
+        await FirebaseStorage.instance.ref().child("profile/${user!.uid}");
     await ref1.getDownloadURL().then((loc) => setState(() => photourl = loc));
-    final cUser = FirebaseFirestore.instance.collection('user').doc(_user!.uid);
+    final cUser = ref.doc(user!.uid);
     await cUser.get().then((value) {
       userPhoto = value['userPhotoUrl'];
     });
@@ -45,10 +45,7 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("user")
-            .where('uid', isEqualTo: user!.uid)
-            .snapshots(),
+        stream: ref.where('uid', isEqualTo: user!.uid).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
@@ -102,7 +99,8 @@ class _MyPageState extends State<MyPage> {
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       children: <Widget>[
-                        Text(auth.currentUser!.displayName.toString(),
+                        Text(user!.displayName.toString(),
+                            //autj.currentuser=> user로 바꿈
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20))
                       ],
@@ -115,7 +113,8 @@ class _MyPageState extends State<MyPage> {
                     alignment: Alignment.center,
                     child: Column(
                       children: <Widget>[
-                        Text(auth.currentUser!.email.toString())
+                        Text(user!.email.toString())
+                        //autj.currentuser=> user로 바꿈
                       ],
                     ),
                   ),
@@ -167,8 +166,10 @@ class _MyPageState extends State<MyPage> {
                                               color:
                                                   Colors.white.withOpacity(0.0),
                                             ),
-                                            backgroundColor: Colors.deepPurple.withOpacity(0.0),
-                                            shadowColor: Colors.deepPurple.withOpacity(0.0),
+                                            backgroundColor: Colors.deepPurple
+                                                .withOpacity(0.0),
+                                            shadowColor: Colors.deepPurple
+                                                .withOpacity(0.0),
                                           ),
                                           onPressed: () async {
                                             _getPhoto();
@@ -178,7 +179,8 @@ class _MyPageState extends State<MyPage> {
                                             color: Colors.black,
                                             size: 50,
                                           ),
-                                          label: Text("사진 불러오기",
+                                          label: Text(
+                                            "사진 불러오기",
                                             style: TextStyle(
                                               color: Colors.black,
                                             ),
@@ -188,30 +190,33 @@ class _MyPageState extends State<MyPage> {
                                       ),
                                       Container(
                                         child: ElevatedButton.icon(
-                                            style: OutlinedButton.styleFrom(
-                                              side: BorderSide(
-                                                width: 0.0,
-                                                color: Colors.black
-                                                    .withOpacity(0.0),
-                                              ),
-                                                backgroundColor: Colors.deepPurple.withOpacity(0.0),
-                                                shadowColor: Colors.deepPurple.withOpacity(0.0),
+                                          style: OutlinedButton.styleFrom(
+                                            side: BorderSide(
+                                              width: 0.0,
+                                              color:
+                                                  Colors.black.withOpacity(0.0),
                                             ),
-                                            onPressed: () async {
-                                              _getBasicImage();
-                                            },
-                                            icon: Icon(
-                                              Icons.co_present_outlined,
-                                              color: Colors.black,
-                                            size: 50,),
-                                          label: Text(
-                                              "기본 이미지로 변경",
-                                          style: TextStyle(
-                                            color: Colors.black,
+                                            backgroundColor: Colors.deepPurple
+                                                .withOpacity(0.0),
+                                            shadowColor: Colors.deepPurple
+                                                .withOpacity(0.0),
                                           ),
+                                          onPressed: () async {
+                                            _getBasicImage();
+                                          },
+                                          icon: Icon(
+                                            Icons.co_present_outlined,
+                                            color: Colors.black,
+                                            size: 50,
+                                          ),
+                                          label: Text(
+                                            "기본 이미지로 변경",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
                                             textAlign: TextAlign.center,
                                           ),
-                                            ),
+                                        ),
                                       ),
                                     ],
                                   );
@@ -317,9 +322,9 @@ class _MyPageState extends State<MyPage> {
             bottomNavigationBar: BottomAppBar(
               child: GestureDetector(
                 onTap: () {
-                  _authentication.signOut();
+                  auth.signOut();
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return (login());
+                    return (LogIn());
                   }));
                 },
                 child: Container(
@@ -354,12 +359,12 @@ class _MyPageState extends State<MyPage> {
     final storageRef = FirebaseStorage.instance;
     TaskSnapshot task = (await storageRef
         .ref()
-        .child("profile/${_user?.uid}")
+        .child("profile/${user!.uid}")
         .putFile(File(_pickImage!.path))) as TaskSnapshot;
 
     if (task != null) {
       var downloadURL = await task.ref.getDownloadURL();
-      var doc = FirebaseFirestore.instance.collection('user').doc(_user?.uid);
+      var doc = ref.doc(user!.uid);
       doc.update({'userPhotoUrl': downloadURL});
     }
     Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -368,10 +373,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   _getBasicImage() async {
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(_user?.uid)
-        .update({'userPhotoUrl': null});
+    ref.doc(user!.uid).update({'userPhotoUrl': null});
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return MyPage();
     }));

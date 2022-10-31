@@ -3,23 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:senior_project/login/login.dart';
 
-class signup_complete extends StatefulWidget {
+class SignUpComplete extends StatefulWidget {
   final String received;
-  const signup_complete(this.received);
+  const SignUpComplete(this.received);
   @override
-  _signup_completeState createState() => _signup_completeState();
+  _SignUpCompleteState createState() => _SignUpCompleteState();
 }
 
-class _signup_completeState extends State<signup_complete> {
+class _SignUpCompleteState extends State<SignUpComplete> {
   var name = '';
   final user = FirebaseAuth.instance.currentUser;
+  final ref = FirebaseFirestore.instance.collection('user');
 
   void _sendName() async {
-    final user = FirebaseAuth.instance.currentUser;
-    final userData = await FirebaseFirestore.instance
-        .collection('user')
-        .doc(user!.uid)
-        .get();
+    final userData = await ref.doc(user!.uid).get();
     name = userData.data()!['userName'];
     print(name);
   }
@@ -106,7 +103,7 @@ class _signup_completeState extends State<signup_complete> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return login();
+                      return LogIn();
                     }));
                   },
                   child: Text(

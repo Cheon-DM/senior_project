@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                            return checkState();
+                            return CheckState();
                           }));
                     },
                     icon: Icon(
@@ -110,7 +110,7 @@ class _MainPageState extends State<MainPage> {
                                 ),
                                 onPressed: () {
                                   Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) => aroundShelter()
+                                      MaterialPageRoute(builder: (context) => AroundShelter()
                                       ));
                                 },
                               ),
