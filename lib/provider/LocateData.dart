@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-class LocateProvider extends ChangeNotifier{
-
+class LocateProvider extends ChangeNotifier {
   double _my_lat = 0;
   double _my_lng = 0;
   double _lat = 0;
@@ -22,43 +20,45 @@ class LocateProvider extends ChangeNotifier{
   bool haspermission = false;
 
   double get my_lat => _my_lat;
+
   double get my_lng => _my_lng;
+
   double get lat => _lat;
+
   double get lng => _lng;
+
   List get friend_lat => _friend_lat;
+
   List get friend_lng => _friend_lng;
+
   List get friend_name => _friend_name;
 
-  final user =FirebaseAuth.instance.currentUser;
+  final user = FirebaseAuth.instance.currentUser;
   final ref = FirebaseFirestore.instance.collection('user');
 
   locateMe() async {
     _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if(_serviceEnabled){
+    if (_serviceEnabled) {
       _permissionGranted = await Geolocator.checkPermission();
 
       if (_permissionGranted == LocationPermission.denied) {
         _permissionGranted = await Geolocator.requestPermission();
         if (_permissionGranted == LocationPermission.denied) {
           print('Location permissions are denied');
-        }
-        else if(_permissionGranted == LocationPermission.deniedForever){
+        } else if (_permissionGranted == LocationPermission.deniedForever) {
           print("'Location permissions are permanently denied");
-        }
-        else{
+        } else {
           haspermission = true;
         }
-      }
-      else{
+      } else {
         haspermission = true;
       }
 
-      if(haspermission){
+      if (haspermission) {
         notifyListeners();
         getLocation();
       }
-    }
-    else{
+    } else {
       print("GPS Service is not enabled, turn on GPS location");
     }
   }
@@ -69,22 +69,19 @@ class LocateProvider extends ChangeNotifier{
     double tmp1 = position.latitude;
     double tmp2 = position.longitude;
 
+
     if (_my_lat != tmp1 || _my_lng != tmp2){
       _my_lat = position.latitude;
       _my_lng = position.longitude;
 
-      await ref.doc(user!.uid)
-          .update({
-        'my_lat': _my_lat,
-        'my_lng': _my_lng
-      });
-      QuerySnapshot querySnapshot = await ref.doc(user!.uid)
-          .collection('FriendAdmin').get();
+      await ref.doc(user!.uid).update({'my_lat': _my_lat, 'my_lng': _my_lng});
+      QuerySnapshot querySnapshot =
+          await ref.doc(user!.uid).collection('FriendAdmin').get();
 
       final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
 
       for(var s in allData){
-        await FirebaseFirestore.instance.collection('user').doc(s)
+        await ref.doc(s)
             .collection('FriendAdmin').doc(user!.uid).update({
           'friend_lat': tmp1,
           'friend_lng': tmp2,
@@ -93,6 +90,7 @@ class LocateProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
+
 
   friendLocation() async{
     QuerySnapshot querySnapshot = await ref.doc(user!.uid)
@@ -103,3 +101,4 @@ class LocateProvider extends ChangeNotifier{
     _friend_name = querySnapshot.docs.map((doc) => jsonEncode(doc.get('name').toString())).toList();
   }
 }
+

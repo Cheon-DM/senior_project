@@ -7,23 +7,23 @@ import 'package:senior_project/login/signup_complete.dart';
 import 'login.dart';
 import '../provider/LocateData.dart';
 
-class signup extends StatefulWidget {
+class SignUp extends StatefulWidget {
   @override
-  _signupState createState() => _signupState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _signupState extends State<signup> {
-
+class _SignUpState extends State<SignUp> {
   final _formkey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
   final user = FirebaseAuth.instance.currentUser;
+  final ref = FirebaseFirestore.instance.collection('user');
+
+  var ch = 0;
 
   String userName = '';
   String userEmail = '';
   String userPassword = '';
-  String checkPassword='';
-
-  var ch=0;
+  String checkPassword = '';
 
   void _tryValidation() {
     final isValid = _formkey.currentState!.validate();
@@ -51,7 +51,7 @@ class _signupState extends State<signup> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return login();
+              return LogIn();
             }));
           },
           icon: Icon(
@@ -89,7 +89,6 @@ class _signupState extends State<signup> {
                   },
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-
                     icon: Icon(Icons.accessibility),
                     labelText: "사용자 이름",
                     labelStyle: TextStyle(
@@ -214,28 +213,23 @@ class _signupState extends State<signup> {
                 ),
                 Container(height: 10),
 
-
-
                 //비밀번호 확인 박스
                 TextFormField(
                   cursorColor: const Color(0xff6157DE),
-
                   obscureText: true,
                   key: ValueKey(4),
                   //비밀번호 확인 키: 4
                   validator: (value) {
                     checkPassword != value;
                     if (value != userPassword) {
-                      ch=1;
+                      ch = 1;
                       return '비밀번호가 일치하지 않습니다';
-
                     } else if (value!.isEmpty) {
                       return '비밀번호를 입력해주세요';
+                    } else {
+                      ch = 0;
+                      return null;
                     }
-                    else{
-                      ch=0;return null;
-                    }
-
                   },
 
                   keyboardType: TextInputType.text,
@@ -276,38 +270,29 @@ class _signupState extends State<signup> {
           onPressed: () async {
             _tryValidation();
             var newUser;
-            if(ch==0) {
-              newUser =
-              await _authentication.createUserWithEmailAndPassword(
+            if (ch == 0) {
+              newUser = await _authentication.createUserWithEmailAndPassword(
                   email: userEmail, password: userPassword);
+              late LocateProvider _locateProvider =
+                  Provider.of<LocateProvider>(context, listen: false);
 
-
-              ////////////////////////////////////////////////////////////////////////////////
-
-              late LocateProvider _locateProvider = Provider.of<LocateProvider>(context,listen: false);
-
-              _locateProvider.locateMe();
-              await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
-                  .set({
-                'userName' : userName,
-                'email' : userEmail,
+              await ref.doc(newUser.user!.uid).set({
+                'userName': userName,
+                'email': userEmail,
                 'uid': newUser.user!.uid,
                 'userPhotoUrl': null,
-                'my_lat': context.read<LocateProvider>().my_lat,
-                'my_lng': context.read<LocateProvider>().my_lng
-
+                'my_lat': 0,
+                'my_lng': 0
               });
+              _locateProvider.locateMe();
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return signup_complete(userName);
+                return SignUpComplete(userName);
               }));
-              //_locateProvider.locateMe();
-            }
-            else{
+            } else {
               ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('제대로된 입력 필요')));
+                  .showSnackBar(SnackBar(content: Text('입력이 잘못되었습니다.')));
             }
           },
-
           child: Container(
             padding: EdgeInsets.only(top: 9),
             height: 50,
@@ -337,4 +322,3 @@ class _signupState extends State<signup> {
     );
   }
 }
-
