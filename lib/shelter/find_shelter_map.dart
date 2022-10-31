@@ -192,7 +192,6 @@ class _AroundShelterState extends State<AroundShelter> {
                             },
                             zoomLevel: 2,
                             customScript: '''
-
     var markers = [];
     var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
     var friendImageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
@@ -241,19 +240,29 @@ class _AroundShelterState extends State<AroundShelter> {
         infowindow.open(map, marker);
       });
     }
-    var imageSize = new kakao.maps.Size(200, 100);
+    var imageSize = new kakao.maps.Size(30, 40);
     var imageOptions = {  
                 spriteOrigin: new kakao.maps.Point(0, 0),    
-                spriteSize: new kakao.maps.Size(20, 50)  
+                spriteSize: new kakao.maps.Size(30, 40)  
             };
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
-    
     var friendMarkerImage = createMarkerImage(friendImageURL, imageSize, imageOptions);
+    
+    var customStyle = document.createElement("style");
+    document.head.appendChild(customStyle);
+    
+    customStyle.sheet.insertRule(".customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}", 0);
+    customStyle.sheet.insertRule(".customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}");
+    customStyle.sheet.insertRule(".customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}");
+    customStyle.sheet.insertRule(".customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}");
+    customStyle.sheet.insertRule(".customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');}");
+    
     
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
       var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage, clickable: true});
+      var iwContent = '<div class="customoverlay">' + '<span class="title">' + jsonObjSpot[i] + '</span>' + '</div>';
       addMarker(marker, markerImage);
-      clickMarker(marker, jsonObjSpot[i], true);
+      clickMarker(marker, iwContent, true);
     }
     for(let i = 0 ; i < flat.length ; i++){    
     var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(flat[i], flng[i]), image: friendMarkerImage, clickable: true});
