@@ -26,6 +26,7 @@ class _MyPageState extends State<MyPage> {
   final ref = FirebaseFirestore.instance.collection('user');
   var userPhoto = "";
   String photourl = "";
+  var usernameee="";
 
   void initState() {
     super.initState();
@@ -39,7 +40,11 @@ class _MyPageState extends State<MyPage> {
     final cUser = ref.doc(user!.uid);
     await cUser.get().then((value) {
       userPhoto = value['userPhotoUrl'];
+      usernameee = value['userName'];
     });
+    print('하하ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ');
+    print(userPhoto);
+    print(usernameee);
   }
 
   @override
@@ -99,7 +104,7 @@ class _MyPageState extends State<MyPage> {
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       children: <Widget>[
-                        Text(user!.displayName.toString(),
+                        Text("읭",
                             //autj.currentuser=> user로 바꿈
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20))

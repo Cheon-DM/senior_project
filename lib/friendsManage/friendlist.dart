@@ -1,20 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:senior_project/friendsManage/add_friend.dart';
-import 'package:senior_project/friendsManage/requested_friend.dart';
+import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:senior_project/friendsManage/requested_friend.dart';
+import 'package:xml2json/xml2json.dart';
 import '../info/myPage.dart';
+import 'add_friend.dart';
 
+var name = '';
+final user = FirebaseAuth.instance.currentUser;
+
+void _sendName() async {
+  final userData = await FirebaseFirestore.instance
+      .collection("user")
+      .doc(user!.uid)
+      .collection('FriendAdmin')
+      .where('otheruser', isEqualTo: 1)
+      .get();
+  //name = userData.data()!['userName'];
+  print(userData);
+}
 
 class Menu extends StatelessWidget {
-  const Menu({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -43,6 +55,26 @@ class Menu extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
+          /*
+          Container(
+            padding: EdgeInsets.only(top: 10),
+            color: const Color(0xff6157DE),
+            width: size.width,
+            height: 50,
+            child: SizedBox.expand(
+              child: Text(
+                "친구 관리",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Leferi',
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+           */
           Row(
             children: <Widget>[
               Container(
@@ -82,6 +114,10 @@ class Menu extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
+                  _sendName();
+                  //_sendName(); 이거 왜 넣은거지??
+
+                  //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('나중에 다른페이지로 넘어갑니다')));
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Requested()));
                 },
@@ -91,7 +127,7 @@ class Menu extends StatelessWidget {
           Expanded(
             child: Stack(
               children: [
-                FriendList(),
+                FreindList(),
                 Align(
                   alignment: Alignment.bottomCenter,
                 ),
@@ -126,14 +162,12 @@ class Menu extends StatelessWidget {
   }
 }
 
-class FriendList extends StatefulWidget {
+class FreindList extends StatefulWidget {
   @override
-  _FriendListState createState() => _FriendListState();
+  _FreindListState createState() => _FreindListState();
 }
 
-class _FriendListState extends State<FriendList> {
-  final user = FirebaseAuth.instance.currentUser;
-  final ref = FirebaseFirestore.instance.collection('user');
+class _FreindListState extends State<FreindList> {
   @override
   void showProfile(context, name, email) {
     showDialog(
@@ -220,21 +254,22 @@ class _FriendListState extends State<FriendList> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        await ref
+                        await FirebaseFirestore.instance
+                            .collection('user')
                             .doc(uid)
                             .collection('FriendAdmin')
                             .doc(user!.uid)
                             .update({
                           'friend': 0,
                         });
-                        await ref
+                        await FirebaseFirestore.instance
+                            .collection('user')
                             .doc(user!.uid)
                             .collection('FriendAdmin')
                             .doc(uid)
                             .update({
                           'friend': 0,
                         });
-
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text('삭제되었습니다.')));
@@ -268,23 +303,42 @@ class _FriendListState extends State<FriendList> {
         });
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  /*final _fireStore = FirebaseFirestore.instance;
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _fireStore.collection('user').doc(user!.uid)
+        .collection('FriendAdmin').get();
+    // Get data from docs and convert map to List
+   // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
+    //for a specific field
+    print('나와라ㅏ와라');
+    print(allData);
+    for(var s in allData){
+      print(s);
+      await FirebaseFirestore.instance.collection('user').doc(s)
+          .collection('FriendAdmin').doc(user!.uid).update({
+        'friend_lat': 37.483409,
+        'friend_lng': 126.970844,
+      });
+      print('왜 안되지.....');
+    }
+  }*/
+  //////////////////////////////////////////////////////////////////////////
+
   Future<List> getUserLocation(friendLat, friendLng) async {
     var kakaoGeoUrl = Uri.parse(
         'https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$friendLng&y=$friendLat&input_coord=WGS84');
     var kakaoGeo = await http.get(kakaoGeoUrl,
         headers: {"Authorization": "KakaoAK c4238e0ca7c5003d25786b53e52b1062"});
-
     String addr = kakaoGeo.body;
     var addrData = jsonDecode(addr);
-
     print(addrData['documents'][0]['address']['address_name']);
     //print(addrData['documents'][1]['road_address']['address_name']);
-
     var address = addrData['documents'][0]['address']['address_name'];
     //var roadAddress = addrData['documents'][1]['road_address']['address_name'];
-
     List<String> friendAdd = [address];
-
     return friendAdd;
   }
 
@@ -348,10 +402,10 @@ class _FriendListState extends State<FriendList> {
         });
   }
 
-  @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: ref
+        stream: FirebaseFirestore.instance
+            .collection("user")
             .doc(user!.uid)
             .collection('FriendAdmin')
             .where('friend', isEqualTo: 1)
@@ -374,7 +428,7 @@ class _FriendListState extends State<FriendList> {
 
                 leading: snapshot.data!.docs[index]['userPhotoUrl'] == null
                     ? Image.asset(
-                        'assets/images/neoguleman.jpeg',
+                        'assets/neoguleman.jpeg',
                         fit: BoxFit.contain,
                         height: 200,
                       )
@@ -383,6 +437,7 @@ class _FriendListState extends State<FriendList> {
                 /*Icon(
                 Icons.account_circle,
                 size: 40,
+              ),
               ),*/
                 title: Text(
                   snapshot.data!.docs[index]['name'],
@@ -403,7 +458,6 @@ class _FriendListState extends State<FriendList> {
                     child: ListTile(
                       //contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
                       tileColor: Colors.white,
-
                       title: ElevatedButton(
                         onPressed: () async {
                           print('확인하기');
@@ -424,7 +478,6 @@ class _FriendListState extends State<FriendList> {
                           ),
                         ),
                       ),
-
                       subtitle: TextFormField(
                         decoration: InputDecoration(
                             prefixText: '메모',
