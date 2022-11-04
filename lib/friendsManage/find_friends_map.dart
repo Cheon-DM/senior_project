@@ -144,6 +144,15 @@ class _FindFriendLocation extends State<FindFriendLocation> {
       addFriendMarker(marker, friendMarkerImage);
       clickMarker(marker, fname[i], true);
     }
+    var customStyle = document.createElement("style");
+    document.head.appendChild(customStyle);
+    
+    customStyle.sheet.insertRule(".customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}", 0);
+    customStyle.sheet.insertRule(".customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}");
+    customStyle.sheet.insertRule(".customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}");
+    customStyle.sheet.insertRule(".customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}");
+    customStyle.sheet.insertRule(".customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');}");
+    
 
 		  const zoomControl = new kakao.maps.ZoomControl();
       map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
