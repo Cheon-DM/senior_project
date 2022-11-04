@@ -1,41 +1,47 @@
+import 'dart:core';
 import 'dart:async';
-import 'package:location/location.dart';
-import 'package:senior_project/shelter/kakaomap_screen.dart';
+
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../mainpage.dart';
+import '../provider/LocateData.dart';
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
 
-class KakaoMapTest extends StatefulWidget {
+class FindFriendLocation extends StatefulWidget {
   @override
-  State<KakaoMapTest> createState() => _KakaoMapTestState();
+  State<FindFriendLocation> createState() => _FindFriendLocation();
 }
 
-class _KakaoMapTestState extends State<KakaoMapTest> {
+class _FindFriendLocation extends State<FindFriendLocation> {
   late WebViewController _mapController;
-  late double _lat;
-  late double _lng;
-  Location location = new Location();
-  late Position position;
-  bool _serviceEnabled = false;
-  late LocationPermission _permissionGranted;
-  bool haspermission = false;
-  bool _isLoading = true;
+  late LocateProvider locateProvider = Provider.of<LocateProvider>(context, listen: false);
+  bool isLoading = true; // 로딩중
 
   @override
   void initState(){
     super.initState();
-    Timer(Duration(seconds: 2), () {
+    locateProvider.locateMe();
+    locateProvider.friendLocation(); //친구위치
+
+    Timer(Duration(seconds: 10), () {
+      isLoading = false;
       setState(() {
-        _isLoading = false;
-        print(_isLoading);
+
       });
     });
-    _locateMe();
+  }
+
+  Stream<dynamic> locate() async* {
+     Timer(Duration(seconds: 30), () {
+       locateProvider.locateMe();
+       locateProvider.friendLocation();
+       print("streaming");
+     });
   }
 
   @override
@@ -43,81 +49,24 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
     super.dispose();
   }
 
-  _locateMe() async {
-    _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if(_serviceEnabled){
-      _permissionGranted = await Geolocator.checkPermission();
-
-      if (_permissionGranted == LocationPermission.denied) {
-        _permissionGranted = await Geolocator.requestPermission();
-        if (_permissionGranted == LocationPermission.denied) {
-          print('Location permissions are denied');
-        }
-        else if(_permissionGranted == LocationPermission.deniedForever){
-          print("'Location permissions are permanently denied");
-        }
-        else{
-          haspermission = true;
-        }
-      }
-      else{
-        haspermission = true;
-      }
-
-      if(haspermission){
-        setState(() {
-          //refresh the UI
-        });
-
-        getLocation();
-      }
-    }
-    else{
-      print("GPS Service is not enabled, turn on GPS location");
-    }
-
-    setState(() {
-      //refresh the UI
-    });
-  }
-
-  getLocation() async {
-    position = await Geolocator.getCurrentPosition();
-    print(position.longitude);
-    print(position.latitude);
-
-    _lng = position.longitude;
-    _lat = position.latitude;
-
-    setState(() {
-      //refresh UI
-    });
-  }
-
-  Stream<Future<dynamic>> locate() async* {
-    _locateMe();
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset : false,
-
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 5,
         title: Text(
-          "내 주변 대피소",
+          "친구 위치 찾기",
           style: TextStyle(
             fontFamily: 'Leferi',
             color: Colors.white,
-            fontSize: 15,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return MainPage();
@@ -133,59 +82,89 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           StreamBuilder(
-            stream: locate(),
-            builder: (context, snapshot) {
-              if (_isLoading){
-                // print(_isLoading);
-                return const CircularProgressIndicator();
-              }
-              else {
-                // print(_isLoading);
-                return KakaoMapView(
-                    width: size.width,
-                    height: 400,
-                    kakaoMapKey: kakaoMapKey,
-                    lat: 37.4980044,
-                    lng: 127.0277062,
-                    markerImageURL: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
-                    customOverlayStyle: '''
-                    <div id="mapwrap"> 
-    <!-- 지도가 표시될 div -->
-    <div id="map" style="width:100%;height:350px;"></div>
-    <!-- 지도 위에 표시될 마커 카테고리 -->
-    <div class="category">
-        <ul>
-            <li id="coffeeMenu" onclick="changeMarker('coffee')">
-                <span class="ico_comm ico_coffee"></span>
-                커피숍
-            </li>
-            <li id="storeMenu" onclick="changeMarker('store')">
-                <span class="ico_comm ico_store"></span>
-                편의점
-            </li>
-            <li id="carparkMenu" onclick="changeMarker('carpark')">
-                <span class="ico_comm ico_carpark"></span>
-                주차장
-            </li>
-        </ul>
-    </div>
-</div>
-                    ''',
+                    stream: locate(),
+                    builder: (context, snapshot) {
+                      if (isLoading){
+                        print("_isLoading = true");
+                        return const CircularProgressIndicator();
+                      }
+                      else {
+                        print("_isLoading = false");
+                        return KakaoMapView(
+                            width: size.width,
+                            height: 600,
+                            kakaoMapKey: kakaoMapKey,
+                            showMapTypeControl: true,
+                            showZoomControl: true,
+                            lat: context.read<LocateProvider>().my_lat,
+                            lng: context.read<LocateProvider>().my_lng,
+                            mapController: (controller) {
+                              _mapController = controller;
+                            },
+                            zoomLevel: 2,
+                            customScript: '''
+    var markers = [];
+    var friendImageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+    
+    var flat = ${locateProvider.friend_lat};
+    var flng = ${locateProvider.friend_lng};
+    var fname = ${locateProvider.friend_name};
+    console.log(fname);
 
-                    onTapMarker: (message) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(message.message)));
-                    });
-                }
-              }
-          ),
+    function addFriendMarker(marker, image) {
+      marker.setMap(map);
+      markers.push(marker);
+    }
+
+    function createMarkerImage(src, size, options) {
+      var markerImage = new kakao.maps.MarkerImage(src, size, options);
+      return markerImage;            
+    }
+    
+    function clickMarker(marker, iwContent, iwRemoveable) {
+      var infowindow = new kakao.maps.InfoWindow({
+        content : iwContent,
+        removable : iwRemoveable
+      });
+      
+      kakao.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+      });
+    }
+    var imageSize = new kakao.maps.Size(30, 40);
+    var imageOptions = {  
+        spriteOrigin: new kakao.maps.Point(0, 0),    
+        spriteSize: new kakao.maps.Size(30, 40)  
+    };
+            
+    var friendMarkerImage = createMarkerImage(friendImageURL, imageSize, imageOptions);
+    
+    for(let i = 0 ; i < flat.length ; i++){    
+      var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(flat[i], flng[i]), image: friendMarkerImage, clickable: true});
+      addFriendMarker(marker, friendMarkerImage);
+      clickMarker(marker, fname[i], true);
+    }
+
+		  const zoomControl = new kakao.maps.ZoomControl();
+      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+      const mapTypeControl = new kakao.maps.MapTypeControl();
+      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+              ''',
+                            onTapMarker: (message) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(content: Text(message.message)));
+                            });
+                      }
+                    }
+                ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
                 onTap: () {
                   _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() - 1, {animate: true})');
+                      'map.setLevel(map.getLevel() + 1, {animate: true})');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.red,
@@ -198,10 +177,10 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() + 1, {animate: true})');
+                      'map.setLevel(map.getLevel() - 1, {animate: true})');
                 },
                 child: CircleAvatar(
-                  backgroundColor: const Color(0xff6157DE),
+                  backgroundColor: Colors.blue,
                   child: const Icon(
                     Icons.add,
                     color: Colors.white,
@@ -214,17 +193,7 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
-                onTap: () {
-                  _mapController.runJavascript('''
-      addMarker(new kakao.maps.LatLng($_lat + 0.0003, ${_lng} + 0.0003));
-      
-      function addMarker(position) {
-        let testMarker = new kakao.maps.Marker({position: position});
-
-        testMarker.setMap(map);
-      }
-                      ''');
-                },
+                onTap: () {},
                 child: CircleAvatar(
                   backgroundColor: Colors.amber,
                   child: const Icon(
@@ -235,7 +204,8 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
               ),
               InkWell(
                 onTap: () async {
-                  await _mapController.reload();
+                  locateProvider.locateMe();
+                  await _mapController.clearCache();
                   debugPrint('[refresh] done');
                 },
                 child: CircleAvatar(
@@ -249,42 +219,12 @@ class _KakaoMapTestState extends State<KakaoMapTest> {
             ],
           ),
           ElevatedButton(
-              child: Text(
-                  'Kakao map screen',
-                style: TextStyle(
-                  fontFamily: 'Leferi',
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color(0xff6157DE))
-              ),
-              onPressed: () async {
-                await _openKakaoMapScreen(context);
-              },
-
-          ),
+              child: Text('Kakao map screen'),
+              onPressed: () {
+              })
         ],
       ),
     );
   }
-
-  Future<void> _openKakaoMapScreen(BuildContext context) async {
-    KakaoMapUtil util = KakaoMapUtil();
-
-    // String url = await util.getResolvedLink(
-    //     util.getKakaoMapURL(37.402056, 127.108212, name: 'Kakao 본사'));
-
-    /// This is short form of the above comment
-    String url =
-    await util.getMapScreenURL(37.402056, 127.108212, name: 'Kakao 본사');
-
-    debugPrint('url : $url');
-
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: url)));
-  }
-
 }
+

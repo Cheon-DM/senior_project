@@ -60,10 +60,9 @@ class _MyPageState extends State<MyPage> {
     return FutureBuilder(
       future:myFuture,
       builder: (context, snapshot) {
-        if(_isloading){
-          return CircularProgressIndicator();
-        }
-
+        // if(_isloading){
+        //   return CircularProgressIndicator();
+        // }
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(

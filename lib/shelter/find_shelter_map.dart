@@ -193,15 +193,9 @@ class _AroundShelterState extends State<AroundShelter> {
                             zoomLevel: 2,
                             customScript: '''
     var markers = [];
-    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
-    var friendImageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
-    
+    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';    
     var objAround1 = ${jsonAround1};
-    var flat = ${_locateProvider.friend_lat};
-    var flng = ${_locateProvider.friend_lng};console.log("박혜원");
-    var fname = ${_locateProvider.friend_name};
-    
-    
+        
     var jsonObjKey = [];
     var jsonObjSpot = []; //jsonObj value 'spot' 담을 배열
     var jsonObjLat = []; //jsonObj value 'lat' 담을 배열
@@ -212,14 +206,7 @@ class _AroundShelterState extends State<AroundShelter> {
       jsonObjLng.push(objAround1[i][Object.keys(objAround1[i])[2]]); // lng만 담음
     };   
 
-    function addMarker(marker, image) {
-      // var marker = new kakao.maps.Marker({position: position, image: image, clickable: true});
-      marker.setMap(map);
-      markers.push(marker);
-    }
-    
-    function addFriendMarker(marker, image) {
-      //var marker = new kakao.maps.Marker({position: position, image: image});
+    function addMarker(marker) {
       marker.setMap(map);
       markers.push(marker);
     }
@@ -230,7 +217,6 @@ class _AroundShelterState extends State<AroundShelter> {
     }
     
     function clickMarker(marker, iwContent, iwRemoveable) {
-      // var marker = new kakao.maps.Marker({position: position, clickable: true});
       var infowindow = new kakao.maps.InfoWindow({
         content : iwContent,
         removable : iwRemoveable
@@ -246,7 +232,6 @@ class _AroundShelterState extends State<AroundShelter> {
                 spriteSize: new kakao.maps.Size(30, 40)  
             };
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
-    var friendMarkerImage = createMarkerImage(friendImageURL, imageSize, imageOptions);
     
     var customStyle = document.createElement("style");
     document.head.appendChild(customStyle);
@@ -261,20 +246,15 @@ class _AroundShelterState extends State<AroundShelter> {
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
       var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage, clickable: true});
       var iwContent = '<div class="customoverlay">' + '<span class="title">' + jsonObjSpot[i] + '</span>' + '</div>';
-      addMarker(marker, markerImage);
+      addMarker(marker);
       clickMarker(marker, iwContent, true);
     }
-    for(let i = 0 ; i < flat.length ; i++){    
-    var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(flat[i], flng[i]), image: friendMarkerImage, clickable: true});
-      addMarker(marker, friendMarkerImage);
-      clickMarker(marker, fname[i], true);
-    }
+  
+    const zoomControl = new kakao.maps.ZoomControl();
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-		  const zoomControl = new kakao.maps.ZoomControl();
-      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-      const mapTypeControl = new kakao.maps.MapTypeControl();
-      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+    const mapTypeControl = new kakao.maps.MapTypeControl();
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
               ''',
                             onTapMarker: (message) {
                               ScaffoldMessenger.of(context)
