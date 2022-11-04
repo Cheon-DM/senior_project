@@ -62,9 +62,9 @@ class _MyPageState extends State<MyPage> {
     return StreamBuilder(
       stream:myStream,
       builder: (context, snapshot) {
-        // if(_isloading){
-        //   return CircularProgressIndicator();
-        // }
+         if(_isloading){
+           return CircularProgressIndicator();
+         }
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(

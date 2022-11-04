@@ -17,7 +17,7 @@ class _AddFriendState extends State<AddFriend> {
     searchTextEditingController.clear();
   }*/ //사용 안함.. 나중에 한번에 지우고 싶을때 사용하기
 
-  /*controlSearching(str) {
+  controlSearching(str) {
     Future<QuerySnapshot> allUsers =
         ref.where('email', isGreaterThanOrEqualTo: str).get();
     setState(() {
@@ -57,7 +57,7 @@ class _AddFriendState extends State<AddFriend> {
             ),
           );
         });
-  }*/
+  }
 
   displayNoSearchResultScreen() {
     final Orientation orientation = MediaQuery.of(context).orientation;
@@ -73,7 +73,7 @@ class _AddFriendState extends State<AddFriend> {
     );
   }
 
-  /*_buildbody(BuildContext context, String str) {
+  _buildbody(BuildContext context, String str) {
     final user = FirebaseAuth.instance.currentUser;
     return StreamBuilder<QuerySnapshot>(
         stream: ref.where("email", isEqualTo: str).snapshots(),
@@ -107,7 +107,7 @@ class _AddFriendState extends State<AddFriend> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              //Navigator.pop(context);
+                              Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('친구요청되었습니다.')));
 
@@ -166,7 +166,7 @@ class _AddFriendState extends State<AddFriend> {
             ),
           ));
         });
-  }*/
+  }
 
   String getEmail = "";
 
@@ -209,7 +209,7 @@ class _AddFriendState extends State<AddFriend> {
                   suffixIcon: IconButton(
                     icon: Icon(Icons.search, color: Colors.grey[700]),
                     onPressed: () {
-                      //_buildbody(context, getEmail);
+                      _buildbody(context, getEmail);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return FindFriend(getEmail);
@@ -284,13 +284,13 @@ class _FindFriendState extends State<FindFriend> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            //Navigator.pop(context);
+                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('친구요청되었습니다.')));
 
                             var currentUserName = '';
-                            var currentUserLat = '';
-                            var currentUserLng = '';
+                            double currentUserLat = 0;
+                            double currentUserLng = 0;
                             final currentUser = ref.doc(user!.uid);
                             await currentUser.get().then((value) {
                               currentUserName = value['userName'];
