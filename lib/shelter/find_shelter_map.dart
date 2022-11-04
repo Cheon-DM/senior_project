@@ -58,8 +58,6 @@ class _AroundShelterState extends State<AroundShelter> {
     num min_dis = 100000;
 
     var min_index = 0;
-
-    _locateProvider.friendLocation(); //친구위치
     _locateProvider.locateMe(); // 내 위치
     _shelterProvider.readShelterdata(); // 파일 읽기
     Map<int, List<dynamic>> mp = context.read<ShelterProvider>().mp; // 대피소 저장 리스트
@@ -181,7 +179,7 @@ class _AroundShelterState extends State<AroundShelter> {
                       else {
                         return KakaoMapView(
                             width: size.width,
-                            height: 600,
+                            height: 500,
                             kakaoMapKey: kakaoMapKey,
                             showMapTypeControl: true,
                             showZoomControl: true,
@@ -193,7 +191,7 @@ class _AroundShelterState extends State<AroundShelter> {
                             zoomLevel: 2,
                             customScript: '''
     var markers = [];
-    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';    
+    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
     var objAround1 = ${jsonAround1};
         
     var jsonObjKey = [];
