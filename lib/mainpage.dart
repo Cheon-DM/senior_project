@@ -38,6 +38,7 @@ class _MainPageState extends State<MainPage> {
                 actions: <Widget>[
                   IconButton(
                     onPressed: () {
+
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                             return CheckState();
