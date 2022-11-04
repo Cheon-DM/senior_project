@@ -255,7 +255,7 @@ class _MainPageState extends State<MainPage> {
                             onPressed: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                    return KakaoMapTest();
+                                    return FindFriendLocation();
                                   }));
                             },
                             child: Row(
