@@ -21,7 +21,7 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  late Future myFuture;
+  late Stream myStream;
   XFile? _pickImage;
   final auth = FirebaseAuth.instance; //원래 _authentication
   //FirebaseAuth auth = FirebaseAuth.instance;
@@ -36,19 +36,21 @@ class _MyPageState extends State<MyPage> {
 
   void initState() {
     super.initState();
-    myFuture = _prepare();
+    myStream = _prepare();
     //_prepare();
   }
 
-  Future<void> _prepare() async {
-    var ref1 =
-        await FirebaseStorage.instance.ref().child("profile/${user!.uid}");
-    await ref1.getDownloadURL().then((loc) => setState(() => photourl = loc));
+  Stream<void> _prepare() async* {
     final cUser = ref.doc(user!.uid);
     await cUser.get().then((value) {
       userPhoto = value['userPhotoUrl'];
       usernameee = value['userName'];
     });
+    if(userPhoto!=""){
+      var ref1 =
+      await FirebaseStorage.instance.ref().child("profile/${user!.uid}");
+      await ref1.getDownloadURL().then((loc) => setState(() => photourl = loc));
+    }
     print('하하ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ');
     print(userPhoto);
     print(usernameee);
@@ -57,8 +59,8 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future:myFuture,
+    return StreamBuilder(
+      stream:myStream,
       builder: (context, snapshot) {
         // if(_isloading){
         //   return CircularProgressIndicator();
@@ -95,7 +97,7 @@ class _MyPageState extends State<MyPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                userPhoto == null
+                userPhoto == ""
                     ? Image.asset(
                         'assets/images/neoguleman.jpeg',
                         fit: BoxFit.contain,
@@ -360,13 +362,11 @@ class _MyPageState extends State<MyPage> {
     TaskSnapshot task = (await storageRef
         .ref()
         .child("profile/${user!.uid}")
-        .putFile(File(_pickImage!.path))) as TaskSnapshot;
+        .putFile(File(_pickImage!.path)));
 
-    if (task != null) {
-      downloadURL = await task.ref.getDownloadURL();
-      var doc = ref.doc(user!.uid);
-      doc.update({'userPhotoUrl': downloadURL});
-    }
+    downloadURL = await task.ref.getDownloadURL();
+    var doc = ref.doc(user!.uid);
+    doc.update({'userPhotoUrl': downloadURL});
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return MyPage();
@@ -374,7 +374,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   _getBasicImage() async {
-    ref.doc(user!.uid).update({'userPhotoUrl': null});
+    ref.doc(user!.uid).update({'userPhotoUrl': "0"});
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return MyPage();
     }));
