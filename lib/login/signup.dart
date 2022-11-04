@@ -280,7 +280,7 @@ class _SignUpState extends State<SignUp> {
                 'userName': userName,
                 'email': userEmail,
                 'uid': newUser.user!.uid,
-                'userPhotoUrl': null,
+                'userPhotoUrl': "",
                 'my_lat': 0,
                 'my_lng': 0
               });
