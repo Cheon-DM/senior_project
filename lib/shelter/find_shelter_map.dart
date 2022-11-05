@@ -179,7 +179,7 @@ class _AroundShelterState extends State<AroundShelter> {
                       else {
                         return KakaoMapView(
                             width: size.width,
-                            height: 500,
+                            height: size.height / 2,
                             kakaoMapKey: kakaoMapKey,
                             showMapTypeControl: true,
                             showZoomControl: true,
@@ -188,10 +188,10 @@ class _AroundShelterState extends State<AroundShelter> {
                             mapController: (controller) {
                               _mapController = controller;
                             },
-                            zoomLevel: 2,
+                            zoomLevel: 3,
                             customScript: '''
     var markers = [];
-    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
+    var imageURL = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites.png';
     var objAround1 = ${jsonAround1};
         
     var jsonObjKey = [];
@@ -224,26 +224,27 @@ class _AroundShelterState extends State<AroundShelter> {
         infowindow.open(map, marker);
       });
     }
-    var imageSize = new kakao.maps.Size(30, 40);
+    
+    
+    var imageSize = new kakao.maps.Size(35, 45);
     var imageOptions = {  
-                spriteOrigin: new kakao.maps.Point(0, 0),    
-                spriteSize: new kakao.maps.Size(30, 40)  
-            };
+                spriteOrigin: new kakao.maps.Point(0, 127),
+                spriteSize: new kakao.maps.Size(50, 533)  
+    };
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
     
     var customStyle = document.createElement("style");
-    document.head.appendChild(customStyle);
-    
-    customStyle.sheet.insertRule(".customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}", 0);
-    customStyle.sheet.insertRule(".customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}");
-    customStyle.sheet.insertRule(".customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}");
-    customStyle.sheet.insertRule(".customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}");
-    customStyle.sheet.insertRule(".customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');}");
+    document.head.appendChild(customStyle);    
+    customStyle.sheet.insertRule(".info {display: block;background: #50627F;color: #fff;text-align: center;height: 54px;line-height:22px;border-radius:4px;padding:0px 10px;}", 0);        
     
     
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
-      var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage, clickable: true});
-      var iwContent = '<div class="customoverlay">' + '<span class="title">' + jsonObjSpot[i] + '</span>' + '</div>';
+      var position = new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]);
+      var marker = new kakao.maps.Marker({position: position, image: markerImage, clickable: true});
+      var content = '<span class="info">' + jsonObjSpot[i] + '</span>';
+      
+      var iwContent = '<div class="info">' + jsonObjSpot[i] + 
+      '<br><a href="https://map.kakao.com/link/map/대피소,' + String(jsonObjLat[i]) + ',' + String(jsonObjLng[i]) + '\" style="color:blue" target="_blank">길찾기</a></div>';
       addMarker(marker);
       clickMarker(marker, iwContent, true);
     }
@@ -300,7 +301,6 @@ class _AroundShelterState extends State<AroundShelter> {
               InkWell(
                 onTap: () {
                   _mapController.runJavascript('''
-    var imageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
     var objAround1 = ${jsonAround2};
     
@@ -313,11 +313,19 @@ class _AroundShelterState extends State<AroundShelter> {
       jsonObjLat.push(objAround1[i][Object.keys(objAround1[i])[1]]); // lat만 담음      
       jsonObjLng.push(objAround1[i][Object.keys(objAround1[i])[2]]); // lng만 담음
     };
-
+    
+    var imageSize1 = new kakao.maps.Size(35, 45);
+    var imageOptions1 = {  
+                spriteOrigin: new kakao.maps.Point(0, 325),
+                spriteSize: new kakao.maps.Size(50, 533)  
+    };
+    var markerImage1 = createMarkerImage(imageURL, imageSize1, imageOptions1);
+    
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
-      var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage, clickable: true});
-      addMarker(marker, markerImage);
-      clickMarker(marker, jsonObjSpot[i], true);
+      var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage1, clickable: true});
+      var content = '<span class="info">' + jsonObjSpot[i] + '</span>';
+      addMarker(marker);
+      clickMarker(marker, content, true);
     }
               ''');
                 },
@@ -347,7 +355,14 @@ class _AroundShelterState extends State<AroundShelter> {
             ],
           ),
           ElevatedButton(
-              child: Text('Kakao map screen'),
+              child: Text('가장 가까운 대피소 길 안내'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff6157DE),
+                textStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                )
+              ),
               onPressed: () async {
                 await _openKakaoMapScreen(context);
               })
@@ -362,7 +377,8 @@ class _AroundShelterState extends State<AroundShelter> {
     /// This is short form of the above comment
     String url =
     await util.getMapScreenURL(min_lat, min_lng, name: min_spot);
-    String testURL1 = "https://map.kakao.com/link/to/" + min_spot + "," + min_lat.toString() + "," + min_lng.toString() + "/from/내 위치," + context.read<LocateProvider>().my_lat.toString() + "," + context.read<LocateProvider>().my_lng.toString() ;
+    String testURL1 = "https://map.kakao.com/link/to/" + min_spot + "," + min_lat.toString() + "," +
+        min_lng.toString() + "/from/내 위치," + context.read<LocateProvider>().my_lat.toString() + "," + context.read<LocateProvider>().my_lng.toString();
 
     print('url : $url');
 
