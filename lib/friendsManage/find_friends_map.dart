@@ -92,7 +92,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                         print("_isLoading = false");
                         return KakaoMapView(
                             width: size.width,
-                            height: 600,
+                            height: size.height / 2,
                             kakaoMapKey: kakaoMapKey,
                             showMapTypeControl: true,
                             showZoomControl: true,
@@ -104,7 +104,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                             zoomLevel: 2,
                             customScript: '''
     var markers = [];
-    var friendImageURL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+    var friendImageURL = 'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png';
     
     var flat = ${locateProvider.friend_lat};
     var flng = ${locateProvider.friend_lng};
@@ -131,28 +131,41 @@ class _FindFriendLocation extends State<FindFriendLocation> {
         infowindow.open(map, marker);
       });
     }
-    var imageSize = new kakao.maps.Size(30, 40);
-    var imageOptions = {  
-        spriteOrigin: new kakao.maps.Point(0, 0),    
-        spriteSize: new kakao.maps.Size(30, 40)  
-    };
-            
-    var friendMarkerImage = createMarkerImage(friendImageURL, imageSize, imageOptions);
     
-    for(let i = 0 ; i < flat.length ; i++){    
-      var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(flat[i], flng[i]), image: friendMarkerImage, clickable: true});
-      addFriendMarker(marker, friendMarkerImage);
-      clickMarker(marker, fname[i], true);
-    }
     var customStyle = document.createElement("style");
-    document.head.appendChild(customStyle);
+    document.head.appendChild(customStyle);    
+    customStyle.sheet.insertRule(".info {display: block;background: #50627F;color: #fff;text-align: center;height: 50px;line-height:22px;border-radius:4px;padding:0px 10px;}", 0);        
     
-    customStyle.sheet.insertRule(".customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}", 0);
-    customStyle.sheet.insertRule(".customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}");
-    customStyle.sheet.insertRule(".customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}");
-    customStyle.sheet.insertRule(".customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}");
-    customStyle.sheet.insertRule(".customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');}");
     
+    for(let i = 0 ; i < flat.length ; i++){
+      var imageSize = new kakao.maps.Size(35, 45);
+      var imageOptions = {  
+          spriteOrigin: new kakao.maps.Point(0, 0 + i * 50),    
+          spriteSize: new kakao.maps.Size(644, 946)  
+      };
+    
+      var friendMarkerImage = createMarkerImage(friendImageURL, imageSize, imageOptions);
+      var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(flat[i], flng[i]), image: friendMarkerImage, clickable: true});
+      var iwContent = '<span class="info">' + fname[i] + '</span>';
+      var content = '<div style="padding:5px;">' + fname[i] + '<br><a href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>';
+
+      addFriendMarker(marker, friendMarkerImage);
+      clickMarker(marker, content, true);
+    }
+    
+    var info = document.querySelectorAll('.info');
+    console.log(info);
+    info.forEach(function(e) {
+        var w = e.offsetWidth + 10;
+        var ml = w/2;
+        e.parentElement.style.top = "82px";
+        e.parentElement.style.left = "50%";
+        e.parentElement.style.marginLeft = -ml+"px";
+        e.parentElement.style.width = w+"px";
+        e.parentElement.previousSibling.style.display = "none";
+        e.parentElement.parentElement.style.border = "0px";
+        e.parentElement.parentElement.style.background = "#65c9be";
+    });
 
 		  const zoomControl = new kakao.maps.ZoomControl();
       map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);

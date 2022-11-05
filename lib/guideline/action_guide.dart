@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../mainpage.dart';
@@ -297,10 +298,15 @@ class _ActionGuideState extends State<ActionGuide> {
                                                   context: ctx,
                                                   builder: (builder) {
                                                     return AlertDialog(
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(4)
+                                                      ),
                                                       scrollable: true,
                                                       content: Column(
                                                         children: <Widget>[
-                                                          Text(context.read<GuideDataProvider>().statement.elementAt(index).elementAt(idx).toString()),
+                                                          Text(context.read<GuideDataProvider>().statement.elementAt(index).elementAt(idx).toString(),
+                                                              style: TextStyle(fontFamily: 'Leferi', fontSize: 17)
+                                                          )
                                                         ],
                                                       ),
                                                       actions: [
@@ -308,7 +314,7 @@ class _ActionGuideState extends State<ActionGuide> {
                                                             onPressed: () {
                                                               Navigator.of(ctx).pop();
                                                             },
-                                                            child: Text("OK"))
+                                                            child: Text("확인"))
                                                       ],
                                                     );
                                                   });
