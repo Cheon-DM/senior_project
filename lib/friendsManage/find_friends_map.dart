@@ -133,9 +133,10 @@ class _FindFriendLocation extends State<FindFriendLocation> {
     }
     
     var customStyle = document.createElement("style");
-    document.head.appendChild(customStyle);    
-    customStyle.sheet.insertRule(".info {display: block;background: #50627F;color: #fff;text-align: center;height: 50px;line-height:22px;border-radius:4px;padding:0px 10px;}", 0);        
-    
+    document.head.appendChild(customStyle);
+    customStyle.sheet.insertRule(".fname {text-align : center; width: 100px;box-shadow: 3px 4px 0px 0px #1564ad;	background-color:transparent;	border-radius:6px;	border:1px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:sans-serif;	font-size:16px;	padding:16px 30px;	text-decoration:none;	text-shadow:0px 1px 0px #528ecc;}");
+    customStyle.sheet.insertRule(".fname:hover {background-color:transparent;}");
+    customStyle.sheet.insertRule(".fname:active {position:relative;}");
     
     for(let i = 0 ; i < flat.length ; i++){
       var imageSize = new kakao.maps.Size(35, 45);
@@ -146,11 +147,10 @@ class _FindFriendLocation extends State<FindFriendLocation> {
     
       var friendMarkerImage = createMarkerImage(friendImageURL, imageSize, imageOptions);
       var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(flat[i], flng[i]), image: friendMarkerImage, clickable: true});
-      var iwContent = '<span class="info">' + fname[i] + '</span>';
-      var content = '<div style="padding:5px;">' + fname[i] + '<br><a href="https://map.kakao.com/link/map/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>';
-
+      var iwContent = '<div class="fname">' + fname[i] + '</div>';
+      
       addFriendMarker(marker, friendMarkerImage);
-      clickMarker(marker, content, true);
+      clickMarker(marker, iwContent, true);
     }
     
     var info = document.querySelectorAll('.info');
