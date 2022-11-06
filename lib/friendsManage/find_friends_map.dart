@@ -190,6 +190,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.red,
+                  radius: 40,
                   child: const Icon(
                     Icons.remove,
                     color: Colors.white,
@@ -203,6 +204,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.blue,
+                  radius: 40,
                   child: const Icon(
                     Icons.add,
                     color: Colors.white,
@@ -218,6 +220,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                 onTap: () {},
                 child: CircleAvatar(
                   backgroundColor: Colors.amber,
+                  radius: 40,
                   child: const Icon(
                     Icons.pin_drop,
                     color: Colors.white,
@@ -232,6 +235,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.green,
+                  radius: 40,
                   child: const Icon(
                     Icons.refresh,
                     color: Colors.white,
@@ -239,11 +243,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                 ),
               )
             ],
-          ),
-          ElevatedButton(
-              child: Text('Kakao map screen'),
-              onPressed: () {
-              })
+          )
         ],
       ),
     );

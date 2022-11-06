@@ -274,6 +274,7 @@ class _AroundShelterState extends State<AroundShelter> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.red,
+                  radius: 40,
                   child: const Icon(
                     Icons.remove,
                     color: Colors.white,
@@ -287,6 +288,7 @@ class _AroundShelterState extends State<AroundShelter> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.blue,
+                  radius: 40,
                   child: const Icon(
                     Icons.add,
                     color: Colors.white,
@@ -336,6 +338,7 @@ class _AroundShelterState extends State<AroundShelter> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.amber,
+                  radius: 40,
                   child: const Icon(
                     Icons.pin_drop,
                     color: Colors.white,
@@ -344,13 +347,12 @@ class _AroundShelterState extends State<AroundShelter> {
               ),
               InkWell(
                 onTap: () async {
-
                   _locateProvider.locateMe();
                   await _mapController.clearCache();
-                  debugPrint('[refresh] done');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.green,
+                  radius: 40,
                   child: const Icon(
                     Icons.refresh,
                     color: Colors.white,
@@ -359,8 +361,9 @@ class _AroundShelterState extends State<AroundShelter> {
               )
             ],
           ),
-          ElevatedButton(
-              child: Text('가장 가까운 대피소 길 안내'),
+          ElevatedButton.icon(
+              icon: const Icon(Icons.directions_run),
+              label: Text('가장 가까운 대피소 길 안내'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff6157DE),
                 textStyle: TextStyle(
