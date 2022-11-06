@@ -234,14 +234,14 @@ class _AroundShelterState extends State<AroundShelter> {
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
     
     var customStyle = document.createElement("style");
-    document.head.appendChild(customStyle);    
-    customStyle.sheet.insertRule(".info {display: block;background: #50627F;color: #fff;text-align: center;height: 54px;line-height:22px;border-radius:4px;padding:0px 10px;}", 0);        
-    
+    document.head.appendChild(customStyle);
+    customStyle.sheet.insertRule(".info {height: 80px; width: 140px; box-shadow: 3px 4px 0px 0px #1564ad;	background-color:transparent;	border-radius:6px;	border:1px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:sans-serif;	font-size:16px;	padding:16px 30px;	text-decoration:none;	text-shadow:0px 1px 0px #528ecc;}");
+    customStyle.sheet.insertRule(".info:hover {background-color:transparent;}");
+    customStyle.sheet.insertRule(".info:active {position:relative;	top:1px;}");
     
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
       var position = new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]);
       var marker = new kakao.maps.Marker({position: position, image: markerImage, clickable: true});
-      var content = '<span class="info">' + jsonObjSpot[i] + '</span>';
       
       var iwContent = '<div class="info">' + jsonObjSpot[i] + 
       '<br><a href="https://map.kakao.com/link/map/대피소,' + String(jsonObjLat[i]) + ',' + String(jsonObjLng[i]) + '\" style="color:blue" target="_blank">길찾기</a></div>';
@@ -274,6 +274,7 @@ class _AroundShelterState extends State<AroundShelter> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.red,
+                  radius: 40,
                   child: const Icon(
                     Icons.remove,
                     color: Colors.white,
@@ -287,6 +288,7 @@ class _AroundShelterState extends State<AroundShelter> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.blue,
+                  radius: 40,
                   child: const Icon(
                     Icons.add,
                     color: Colors.white,
@@ -321,9 +323,14 @@ class _AroundShelterState extends State<AroundShelter> {
     };
     var markerImage1 = createMarkerImage(imageURL, imageSize1, imageOptions1);
     
+    customStyle.sheet.insertRule(".difinfo {height: 80px; width: 140px; box-shadow: 3px 4px 0px 0px #2b7816;	background-color:transparent;	border-radius:6px;	border:1px solid #1a8a25;	display:inline-block;	cursor:pointer;	color:#397848;	font-family:sans-serif;	font-size:16px;	padding:16px 30px;	text-decoration:none;	text-shadow:0px 1px 0px #2f6627;}");
+    customStyle.sheet.insertRule(".difinfo:hover {background-color:transparent;}");
+    customStyle.sheet.insertRule(".difinfo:active {position:relative;	top:1px;}");    
+    
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
       var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]), image: markerImage1, clickable: true});
-      var content = '<span class="info">' + jsonObjSpot[i] + '</span>';
+      var content = '<div class="difinfo">' + jsonObjSpot[i] + 
+      '<br><a href="https://map.kakao.com/link/map/대피소,' + String(jsonObjLat[i]) + ',' + String(jsonObjLng[i]) + '\" style="color:blue" target="_blank">길찾기</a></div>';
       addMarker(marker);
       clickMarker(marker, content, true);
     }
@@ -331,6 +338,7 @@ class _AroundShelterState extends State<AroundShelter> {
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.amber,
+                  radius: 40,
                   child: const Icon(
                     Icons.pin_drop,
                     color: Colors.white,
@@ -339,13 +347,12 @@ class _AroundShelterState extends State<AroundShelter> {
               ),
               InkWell(
                 onTap: () async {
-
                   _locateProvider.locateMe();
                   await _mapController.clearCache();
-                  debugPrint('[refresh] done');
                 },
                 child: CircleAvatar(
                   backgroundColor: Colors.green,
+                  radius: 40,
                   child: const Icon(
                     Icons.refresh,
                     color: Colors.white,
@@ -354,8 +361,9 @@ class _AroundShelterState extends State<AroundShelter> {
               )
             ],
           ),
-          ElevatedButton(
-              child: Text('가장 가까운 대피소 길 안내'),
+          ElevatedButton.icon(
+              icon: const Icon(Icons.directions_run),
+              label: Text('가장 가까운 대피소 길 안내'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff6157DE),
                 textStyle: TextStyle(
