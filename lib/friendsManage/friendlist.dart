@@ -168,6 +168,12 @@ class FreindList extends StatefulWidget {
 }
 
 class _FreindListState extends State<FreindList> {
+  String memo="";
+  final user = FirebaseAuth.instance.currentUser;
+  final ref = FirebaseFirestore.instance.collection('user');
+
+  final _formkey = GlobalKey<FormState>();
+
   @override
   void showProfile(context, name, email) {
     showDialog(
@@ -426,9 +432,9 @@ class _FreindListState extends State<FreindList> {
                 collapsedBackgroundColor: Colors.white,
                 backgroundColor: Colors.grey[200],
 
-                leading: snapshot.data!.docs[index]['userPhotoUrl'] == null
+                leading: snapshot.data!.docs[index]['userPhotoUrl'] == ""
                     ? Image.asset(
-                        'assets/neoguleman.jpeg',
+                        'assets/images/neoguleman.jpeg',
                         fit: BoxFit.contain,
                         height: 200,
                       )
@@ -469,7 +475,7 @@ class _FreindListState extends State<FreindList> {
                               snapshot.data!.docs[index]['friend_lat'],
                               snapshot.data!.docs[index]['friend_lng']);
                         },
-                        child: Text(
+                        child: const Text(
                           '친구위치 확인하기',
                           style: TextStyle(
                             fontFamily: 'Leferi',
@@ -478,12 +484,25 @@ class _FreindListState extends State<FreindList> {
                           ),
                         ),
                       ),
-                      subtitle: TextFormField(
-                        decoration: InputDecoration(
-                            prefixText: '메모',
-                            hintText: 'memo',
-                            border: OutlineInputBorder()),
-                      ),
+                      /*subtitle: Form(
+                        key: _formkey,
+                        child: TextFormField(
+                          onChanged: (text){
+                            setState(() {
+                              memo = text;
+                              ref.doc(user!.uid)
+                                  .collection('FriendAdmin')
+                                  .doc('${snapshot.data!.docs[index]['uid']}')
+                                  .update({
+                                'memo': memo
+                              });
+                            });
+                          },
+                          decoration: const InputDecoration(
+                              hintText: 'memo',
+                              border: OutlineInputBorder()),
+                        ),
+                      ),*/
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

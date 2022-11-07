@@ -374,7 +374,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   _getBasicImage() async {
-    ref.doc(user!.uid).update({'userPhotoUrl': "0"});
+    ref.doc(user!.uid).update({'userPhotoUrl': ""});
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return MyPage();
     }));

@@ -8,55 +8,33 @@ class AddFriend extends StatefulWidget {
 }
 
 class _AddFriendState extends State<AddFriend> {
-  TextEditingController searchTextEditingController = TextEditingController();
-  Future<QuerySnapshot>? futureSearchResults;
 
   final ref = FirebaseFirestore.instance.collection('user');
+  final user = FirebaseAuth.instance.currentUser;
 
-  /*emptyTextFormField() {
-    searchTextEditingController.clear();
-  }*/ //사용 안함.. 나중에 한번에 지우고 싶을때 사용하기
+  TextEditingController searchTextEditingController = TextEditingController();
+  Future<QuerySnapshot>? futureSearchResult;
 
-  controlSearching(str) {
-    Future<QuerySnapshot> allUsers =
-        ref.where('email', isGreaterThanOrEqualTo: str).get();
+  static double checkDouble(dynamic value) {
+    if (value is String) {
+      return double.parse(value);
+    } else {
+      return value;
+    }
+  }
+
+  controlSearch(str){
+    print(str);
+    Future<QuerySnapshot> searchUser = ref.where("email", isEqualTo: str).get();
     setState(() {
-      futureSearchResults = allUsers;
+      if(str!=user!.email) {
+        futureSearchResult = searchUser;
+      }
+      else{
+        futureSearchResult =null;
+      }
     });
-    return StreamBuilder<QuerySnapshot>(
-        stream: ref.where("email", isEqualTo: str).snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          }
-          return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (ctx, index) => Container(
-                padding: EdgeInsets.only(left: 15, right: 15, top: 15),
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          ' ${snapshot.data!.docs[index]['email']}',
-                          style: TextStyle(
-                              fontFamily: 'Leferi',
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        alignment: Alignment.centerLeft,
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.all(15),
-                ),
-                color: Colors.grey[200],
-              ),
-            ),
-          );
-        });
+
   }
 
   displayNoSearchResultScreen() {
@@ -66,109 +44,121 @@ class _AddFriendState extends State<AddFriend> {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            Text("search users"),
+            Icon(Icons.group, color: Colors.grey, size: 150),
+            Text("검색 결과 없다는 화면을 만들고싶은데....혜서니가 만들어 주겟징....ㅜㅜㅜ"),
           ],
         ),
       ),
     );
   }
 
-  _buildbody(BuildContext context, String str) {
-    final user = FirebaseAuth.instance.currentUser;
-    return StreamBuilder<QuerySnapshot>(
-        stream: ref.where("email", isEqualTo: str).snapshots(),
+  displayUserFound(){
+    return FutureBuilder<QuerySnapshot>(
+        future:  futureSearchResult,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (!snapshot.hasData){
             return CircularProgressIndicator();
           }
-          // print(snapshot.data!.docs.length);
           return Scaffold(
-              body: SafeArea(
-            child: Stack(
-              children: <Widget>[
-                ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (ctx, index) => Container(
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 15),
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            color: Colors.red,
-                            child: Text(
-                              ' ${snapshot.data!.docs[index]['email']}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Leferi',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
+              body: Stack(
+                children: <Widget>[
+                  ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (ctx, index) => Container(
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 15),
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              color: Colors.red,
+                              child: Text(
+                                ' ${snapshot.data!.docs[index]['email']}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Leferi',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              alignment: Alignment.centerLeft,
                             ),
-                            alignment: Alignment.centerLeft,
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('친구요청되었습니다.')));
 
-                              var cUserName = '';
-                              double cUserLat = 0;
-                              double cUserLng = 0;
-                              final cUser = ref.doc(user!.uid);
-                              await cUser.get().then((value) {
-                                cUserName = value['userName'];
-                                cUserLat = value['my_lat'];
-                                cUserLng = value['my_lng'];
-                              });
+                            ElevatedButton(
+                              onPressed: () async {
+                                var isAlreadyFriend = (await ref.doc(user!.uid)
+                                    .collection('FriendAdmin')
+                                    .doc(snapshot.data!.docs[index]['uid']).get());
+                                if(!isAlreadyFriend.exists){
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('친구요청되었습니다.')));
+                                  var currentUserName = '';
+                                  double ulat=0;
+                                  double ulng=0;
+                                  double currentUserLat = 0;
+                                  double currentUserLng = 0;
+                                  final currentUser = ref.doc(user!.uid);
+                                  await currentUser.get().then((value) {
+                                    currentUserName = value['userName'];
+                                    ulat = value['my_lat'];
+                                    ulng = value['my_lng'];
+                                  });
+                                  currentUserLat=checkDouble(ulat);
+                                  currentUserLng=checkDouble(ulng);
+                                  print("여기가 문제?? 2");
+                                  var userPhoto;
+                                  await currentUser.get().then((value) {
+                                    userPhoto = value['userPhotoUrl'];
+                                  });
 
-                              await ref
-                                  .doc(user!.uid)
-                                  .collection('FriendAdmin')
-                                  .doc('${snapshot.data!.docs[index]['uid']}')
-                                  .set({
-                                'me': 1
-                              }); //사용자가 친구요청을 보냄 => me: 1이됨 (이것은 나중에 친구거절을 눌렀을시 0이됨) 근데 얘가 왜필요한지 의문...
-                              //쓸모없으면 나중에 지우기
+                                  await ref
+                                      .doc(user!.uid)
+                                      .collection('FriendAdmin')
+                                      .doc('${snapshot.data!.docs[index]['uid']}')
+                                      .set({
+                                    'me': 1
+                                  }); //사용자가 친구요청을 보냄 => me: 1이됨 (이것은 나중에 친구거절을 눌렀을시 0이됨) 근데 얘가 왜필요한지 의문...
+                                  //쓸모없으면 나중에 지우기
 
-                              var userPhoto;
-                              await cUser.get().then((value) {
-                                userPhoto = value['userPhotoUrl'];
-                              });
-                              await ref
-                                  .doc('${snapshot.data!.docs[index]['uid']}')
-                                  .collection('FriendAdmin')
-                                  .doc(user!.uid)
-                                  .set({
-                                'otheruser': 1,
-                                'email': user.email,
-                                'name': cUserName,
-                                'uid': user.uid,
-                                'friend_lat': cUserLat,
-                                'friend_lng': cUserLng,
-                                'userPhotoUrl': userPhoto
-                              }); // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
-                            },
-                            child: Text(
-                              '친구요청',
-                              style: TextStyle(
-                                fontFamily: 'Leferi',
+                                  await ref
+                                      .doc('${snapshot.data!.docs[index]['uid']}')
+                                      .collection('FriendAdmin')
+                                      .doc(user!.uid)
+                                      .set({
+                                    'otheruser': 1,
+                                    'email': user!.email,
+                                    'name': currentUserName,
+                                    'uid': user!.uid,
+                                    'friend_lat': currentUserLat,
+                                    'friend_lng': currentUserLng,
+                                    'userPhotoUrl': userPhoto
+                                  });
+                                  print("여기가 문제인가ㅜㅜㅜ");// 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
+                                }
+                                else{
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('이미 친구이거나 요청되었습니다.')));
+                                }
+                                },
+
+                              child: Text(
+                                '친구요청',
+                                style: TextStyle(
+                                  fontFamily: 'Leferi',
+                                ),
                               ),
                             ),
-                          )
-                        ],
+                          ],
+                        ),
+                        padding: EdgeInsets.all(15),
                       ),
-                      padding: EdgeInsets.all(15),
+                      color: Colors.grey[200],
                     ),
-                    color: Colors.grey[200],
                   ),
-                ),
-              ],
-            ),
-          ));
+                ],
+              ));
         });
   }
 
-  String getEmail = "";
 
   @override
   Widget build(BuildContext context) {
@@ -181,19 +171,7 @@ class _AddFriendState extends State<AddFriend> {
             Padding(
               padding: EdgeInsets.all(10),
               child: TextFormField(
-                //controller: searchTextEditingController,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return '이메일 입력안됨';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  getEmail = value!;
-                },
-                onChanged: (value) {
-                  getEmail = value!;
-                },
+                controller: searchTextEditingController,
                 decoration: InputDecoration(
                   hintText: 'Search',
                   hintStyle: TextStyle(
@@ -207,33 +185,29 @@ class _AddFriendState extends State<AddFriend> {
                   prefixIcon:
                       Icon(Icons.person_pin, color: Colors.grey[700], size: 20),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.search, color: Colors.grey[700]),
+                    icon: Icon(Icons.clear, color: Colors.grey[700]),
                     onPressed: () {
-                      _buildbody(context, getEmail);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return FindFriend(getEmail);
-                      }));
-                      //FindFriend(getEmail);
+                      searchTextEditingController.clear();
                     },
-
-                    //emptyTheTextFormField,
                   ),
                 ),
-                //onFieldSubmitted: controlSearching,
+                textInputAction: TextInputAction.search,
+                onFieldSubmitted: controlSearch,
               ),
+
             ),
           ],
         ),
       ),
-      body: futureSearchResults == null
+      body: futureSearchResult == null
           ? displayNoSearchResultScreen()
-          : FindFriend(getEmail),
-    );
+          : displayUserFound());
+
   }
+
 }
 
-//////새로운 위젯
+//////새로운 위젯... 전에 쓰던거 일단 남겨둠
 
 class FindFriend extends StatefulWidget {
   final String received;
@@ -248,6 +222,15 @@ class FindFriend extends StatefulWidget {
 class _FindFriendState extends State<FindFriend> {
   final ref = FirebaseFirestore.instance.collection('user');
   final user = FirebaseAuth.instance.currentUser;
+
+  static double checkDouble(dynamic value) {
+    if (value is String) {
+      return double.parse(value);
+    } else {
+      return value;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -287,16 +270,21 @@ class _FindFriendState extends State<FindFriend> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('친구요청되었습니다.')));
-
+                            print("여기가 문제?? 1 ");
                             var currentUserName = '';
+                            double ulat=0;
+                            double ulng=0;
                             double currentUserLat = 0;
                             double currentUserLng = 0;
                             final currentUser = ref.doc(user!.uid);
                             await currentUser.get().then((value) {
                               currentUserName = value['userName'];
-                              currentUserLat = value['my_lat'];
-                              currentUserLng = value['my_lng'];
+                              ulat = value['my_lat'];
+                              ulng = value['my_lng'];
                             });
+                            currentUserLat=checkDouble(ulat);
+                            currentUserLng=checkDouble(ulng);
+                            print("여기가 문제?? 2");
                             var userPhoto;
                             await currentUser.get().then((value) {
                               userPhoto = value['userPhotoUrl'];
@@ -323,7 +311,8 @@ class _FindFriendState extends State<FindFriend> {
                               'friend_lat': currentUserLat,
                               'friend_lng': currentUserLng,
                               'userPhotoUrl': userPhoto
-                            }); // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
+                            });
+                            print("여기가 문제인가ㅜㅜㅜ");// 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
                           },
                           child: Text(
                             '친구요청',
@@ -343,4 +332,5 @@ class _FindFriendState extends State<FindFriend> {
           ));
         });
   }
+
 }
