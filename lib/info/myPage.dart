@@ -12,7 +12,6 @@ import '../provider/LocateData.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:senior_project/info/checkState.dart';
 
 
 class MyPage extends StatefulWidget {
@@ -37,7 +36,6 @@ class _MyPageState extends State<MyPage> {
   void initState() {
     super.initState();
     myStream = _prepare();
-    //_prepare();
   }
 
   Stream<void> _prepare() async* {
@@ -51,9 +49,6 @@ class _MyPageState extends State<MyPage> {
       await FirebaseStorage.instance.ref().child("profile/${user!.uid}");
       await ref1.getDownloadURL().then((loc) => setState(() => photourl = loc));
     }
-    print('하하ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ');
-    print(userPhoto);
-    print(usernameee);
     _isloading=false;
   }
 
@@ -81,9 +76,7 @@ class _MyPageState extends State<MyPage> {
             ),
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return MainPage();
-                }));
+                Navigator.of(context, rootNavigator: true).pop();
               },
               icon: Icon(
                 Icons.arrow_back,
@@ -295,10 +288,7 @@ class _MyPageState extends State<MyPage> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return MainPage();
-                          }));
+                          Navigator.of(context, rootNavigator: true).pop();
                         },
                         child: Text(
                           "메인페이지",
