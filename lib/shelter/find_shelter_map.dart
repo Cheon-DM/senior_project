@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../mainpage.dart';
 import '../provider/ReadShelterData.dart';
 import '../provider/LocateData.dart';
 import 'kakaomap_screen.dart';
@@ -153,10 +152,7 @@ class _AroundShelterState extends State<AroundShelter> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return MainPage();
-                }));
+            Navigator.of(context, rootNavigator: true).pop();
           },
           icon: Icon(
             Icons.arrow_back,
@@ -174,7 +170,29 @@ class _AroundShelterState extends State<AroundShelter> {
                     stream: locate(),
                     builder: (context, snapshot) {
                       if (_isLoading){
-                        return const CircularProgressIndicator();
+                        // return const CircularProgressIndicator();
+                        return Expanded(
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 50.0),
+                                ),
+                                Container(
+                                  width: 500.0,
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.pink,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 30.0),
+                                ),
+                                Text(
+                                  "Calculating.....",
+                                  style: TextStyle(color: Color(0xff6157DE), fontSize: 18.0, fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            )
+                        );
                       }
                       else {
                         return KakaoMapView(
@@ -373,7 +391,8 @@ class _AroundShelterState extends State<AroundShelter> {
               ),
               onPressed: () async {
                 await _openKakaoMapScreen(context);
-              })
+              }
+              )
         ],
       ),
     );
