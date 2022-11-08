@@ -366,6 +366,9 @@ class _AroundShelterState extends State<AroundShelter> {
               InkWell(
                 onTap: () async {
                   _locateProvider.locateMe();
+                  setState(() {
+
+                  });
                   await _mapController.clearCache();
                 },
                 child: CircleAvatar(
