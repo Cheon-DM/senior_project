@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../mainpage.dart';
 import '../provider/GuideData.dart';
 
 class ActionGuide extends StatefulWidget {
@@ -35,6 +33,11 @@ class _ActionGuideState extends State<ActionGuide> {
   late GuideDataProvider guideDataProvider = Provider.of<GuideDataProvider>(context, listen: false);
 
   @override
+  void dispose(){
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'action-guide',
@@ -54,10 +57,7 @@ class _ActionGuideState extends State<ActionGuide> {
           ),
           leading: IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                    return MainPage();
-                  }));
+              Navigator.of(context, rootNavigator: true).pop();
             },
             icon: Icon(
               Icons.arrow_back,

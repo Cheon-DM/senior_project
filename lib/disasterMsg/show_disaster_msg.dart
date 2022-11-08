@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../mainpage.dart';
 import '../provider/DisasterMsg.dart';
 
 class ShowDisasterMsg extends StatelessWidget {
@@ -40,6 +39,11 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
   }
 
   @override
+  void dispose(){
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -57,9 +61,7 @@ class _ShowDisasterListState extends State<ShowDisasterList>{
           ),
           leading: IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return MainPage();
-              }));
+              Navigator.of(context, rootNavigator: true).pop();
             },
             icon: Icon(
               Icons.arrow_back,
