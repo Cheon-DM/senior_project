@@ -207,7 +207,9 @@ class _FindFriendLocation extends State<FindFriendLocation> {
               InkWell(
                 onTap: () async {
                   locateProvider.locateMe();
+                  setState(() {
 
+                  });
                   await _mapController.clearCache();
                   debugPrint('[refresh] done');
                 },
