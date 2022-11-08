@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../mainpage.dart';
 import '../provider/GuideData.dart';
 
 class ActionGuide extends StatefulWidget {
