@@ -31,7 +31,6 @@ class _FindFriendLocation extends State<FindFriendLocation> {
     Timer(Duration(seconds: 10), () {
       isLoading = false;
       setState(() {
-
       });
     });
   }
@@ -40,7 +39,6 @@ class _FindFriendLocation extends State<FindFriendLocation> {
      Timer(Duration(seconds: 30), () {
        locateProvider.locateMe();
        locateProvider.friendLocation();
-       print("streaming");
      });
   }
 
@@ -67,10 +65,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return MainPage();
-                }));
+            Navigator.of(context, rootNavigator: true).pop();
           },
           icon: Icon(
             Icons.arrow_back,
