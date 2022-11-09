@@ -57,6 +57,7 @@ class LocateProvider extends ChangeNotifier {
       if (haspermission) {
         notifyListeners();
         getLocation();
+        friendLocation();
       }
     } else {
       print("GPS Service is not enabled, turn on GPS location");
@@ -70,6 +71,9 @@ class LocateProvider extends ChangeNotifier {
     double tmp2 = position.longitude;
 
 
+
+    if (_my_lat != tmp1 || _my_lng != tmp2){
+
       _my_lat = position.latitude;
       _my_lng = position.longitude;
 
@@ -78,8 +82,6 @@ class LocateProvider extends ChangeNotifier {
           await ref.doc(user!.uid).collection('FriendAdmin').where('friend', isEqualTo: 1).get();
 
       final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
-      print("친구들 나타내기!");
-      print(allData);
 
       for(var s in allData){
         await ref.doc(s)
@@ -88,6 +90,7 @@ class LocateProvider extends ChangeNotifier {
           'friend_lng': tmp2,
         });
       }
+    }
     notifyListeners();
   }
 

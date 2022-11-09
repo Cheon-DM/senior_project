@@ -10,6 +10,8 @@ import 'info/checkState.dart';
 import 'guideline/action_guide.dart';
 
 class MainPage extends StatefulWidget {
+  static String routeName = "/";
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -154,24 +156,10 @@ class _MainPageState extends State<MainPage> {
                                 begin: Alignment.topCenter,
                                 end : Alignment.bottomCenter
                             ),
-
-                            /*
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(245, 245, 250, 1.0),
-                                blurRadius: 20,
-                                spreadRadius: 10,
-                                offset: Offset(0, 20),
-                              ),
-                            ]
-                            */
                           ),
                         ),
-
-
                       ],
                     ),
-
 
                     //행동지침
                     Container(

@@ -1,27 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:senior_project/friendsManage/requested_friend.dart';
-import 'package:xml2json/xml2json.dart';
-import '../info/myPage.dart';
 import 'add_friend.dart';
 
 var name = '';
 final user = FirebaseAuth.instance.currentUser;
-
-void _sendName() async {
-  final userData = await FirebaseFirestore.instance
-      .collection("user")
-      .doc(user!.uid)
-      .collection('FriendAdmin')
-      .where('otheruser', isEqualTo: 1)
-      .get();
-  //name = userData.data()!['userName'];
-  print(userData);
-}
 
 class Menu extends StatelessWidget {
   @override
@@ -43,9 +29,7 @@ class Menu extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return MyPage();
-            }));
+            Navigator.of(context, rootNavigator: true).pop();
           },
           icon: Icon(
             Icons.arrow_back,
@@ -55,26 +39,6 @@ class Menu extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          /*
-          Container(
-            padding: EdgeInsets.only(top: 10),
-            color: const Color(0xff6157DE),
-            width: size.width,
-            height: 50,
-            child: SizedBox.expand(
-              child: Text(
-                "친구 관리",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Leferi',
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-           */
           Row(
             children: <Widget>[
               Container(
@@ -114,10 +78,8 @@ class Menu extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  _sendName();
-                  //_sendName(); 이거 왜 넣은거지??
-
-                  //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('나중에 다른페이지로 넘어갑니다')));
+                  //_sendName() 함수 삭제
+                  Navigator.of(context, rootNavigator: true).pop();
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Requested()));
                 },
@@ -171,8 +133,6 @@ class _FreindListState extends State<FreindList> {
   String memo="";
   final user = FirebaseAuth.instance.currentUser;
   final ref = FirebaseFirestore.instance.collection('user');
-
-  final _formkey = GlobalKey<FormState>();
 
   @override
   void showProfile(context, name, email) {
@@ -309,30 +269,6 @@ class _FreindListState extends State<FreindList> {
         });
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  /*final _fireStore = FirebaseFirestore.instance;
-  Future<void> getData() async {
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await _fireStore.collection('user').doc(user!.uid)
-        .collection('FriendAdmin').get();
-    // Get data from docs and convert map to List
-   // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
-    //for a specific field
-    print('나와라ㅏ와라');
-    print(allData);
-    for(var s in allData){
-      print(s);
-      await FirebaseFirestore.instance.collection('user').doc(s)
-          .collection('FriendAdmin').doc(user!.uid).update({
-        'friend_lat': 37.483409,
-        'friend_lng': 126.970844,
-      });
-      print('왜 안되지.....');
-    }
-  }*/
-  //////////////////////////////////////////////////////////////////////////
-
   Future<List> getUserLocation(friendLat, friendLng) async {
     var kakaoGeoUrl = Uri.parse(
         'https://dapi.kakao.com/v2/local/geo/coord2address.json?x=$friendLng&y=$friendLat&input_coord=WGS84');
@@ -340,10 +276,7 @@ class _FreindListState extends State<FreindList> {
         headers: {"Authorization": "KakaoAK c4238e0ca7c5003d25786b53e52b1062"});
     String addr = kakaoGeo.body;
     var addrData = jsonDecode(addr);
-    print(addrData['documents'][0]['address']['address_name']);
-    //print(addrData['documents'][1]['road_address']['address_name']);
     var address = addrData['documents'][0]['address']['address_name'];
-    //var roadAddress = addrData['documents'][1]['road_address']['address_name'];
     List<String> friendAdd = [address];
     return friendAdd;
   }
@@ -371,7 +304,6 @@ class _FreindListState extends State<FreindList> {
                         SizedBox(height: 30),
                         Text(
                           name + '님의 위치\n\n' + '지번주소: ' + ll[0] + '\n',
-                          //+'도로명주소: ' +ll[1],
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
@@ -449,26 +381,13 @@ class _FreindListState extends State<FreindList> {
                   snapshot.data!.docs[index]['name'],
                 ),
                 subtitle: Text(snapshot.data!.docs[index]['email']),
-                //backgroundColor: Colors.amber,
                 children: <Widget>[
-                  /*
-                Divider(
-                  height: 3,
-                  color: Colors.white,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                 */
                   Padding(
                     padding: const EdgeInsets.only(left: 40),
                     child: ListTile(
-                      //contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
                       tileColor: Colors.white,
                       title: ElevatedButton(
                         onPressed: () async {
-                          print('확인하기');
-                          //getData();
-                          print(snapshot.data!.docs[index]['friend_lat']);
                           showFriendLocation(
                               context,
                               snapshot.data!.docs[index]['name'],
@@ -484,25 +403,6 @@ class _FreindListState extends State<FreindList> {
                           ),
                         ),
                       ),
-                      /*subtitle: Form(
-                        key: _formkey,
-                        child: TextFormField(
-                          onChanged: (text){
-                            setState(() {
-                              memo = text;
-                              ref.doc(user!.uid)
-                                  .collection('FriendAdmin')
-                                  .doc('${snapshot.data!.docs[index]['uid']}')
-                                  .update({
-                                'memo': memo
-                              });
-                            });
-                          },
-                          decoration: const InputDecoration(
-                              hintText: 'memo',
-                              border: OutlineInputBorder()),
-                        ),
-                      ),*/
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

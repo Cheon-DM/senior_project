@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../info/myPage.dart';
+import 'friendlist.dart';
 
 class Requested extends StatelessWidget {
   @override
@@ -27,8 +26,7 @@ class Requested extends StatelessWidget {
           ),
           leading: IconButton(
             onPressed: () {
-              // Get.to(MainPage());
-              Get.offAll(() => MyPage());
+              Navigator.of(context, rootNavigator: true).pop();
             },
             icon: Icon(
               Icons.arrow_back,
@@ -60,7 +58,9 @@ class Requested extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.of(context, rootNavigator: true).pop();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Menu()));
                     }),
                 Container(
                   padding: EdgeInsets.only(top: 13),
@@ -138,8 +138,6 @@ class _FreindListState extends State<FreindList> {
                     children: <Widget>[
                       ElevatedButton(
                         onPressed: () async {
-                          //print('${snapshot.data!.docs[index]['email']}');
-
                           var currentUserName = '';
                           double currentUserLat = 0;
                           double currentUserLng = 0;
@@ -165,7 +163,6 @@ class _FreindListState extends State<FreindList> {
                               .collection('FriendAdmin')
                               .doc(user!.uid)
                               .update({
-                            //'otheruser': 1,
                             'friend': 1,
                             'email': user!.email,
                             'name': currentUserName,

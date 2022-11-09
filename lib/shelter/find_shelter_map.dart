@@ -396,11 +396,7 @@ class _AroundShelterState extends State<AroundShelter> {
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     onPressed: () async {
                       await _openKakaoMapScreen(context);
-                    })
-              ],
-            ),
-          ),
-
+                    })8
         ],
       ),
     );
@@ -422,9 +418,8 @@ class _AroundShelterState extends State<AroundShelter> {
         "," +
         context.read<LocateProvider>().my_lng.toString();
 
-    print('url : $url');
-
-    Navigator.push(context,
-        MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1)));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1))
+    );
   }
 }
