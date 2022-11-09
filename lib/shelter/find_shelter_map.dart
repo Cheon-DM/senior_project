@@ -387,6 +387,7 @@ class _AroundShelterState extends State<AroundShelter> {
               label: Text('가장 가까운 대피소 길 안내'),
               style: ElevatedButton.styleFrom(
                 //backgroundColor: const Color(0xff6157DE),
+                primary: const Color(0xff6157DE),
                 textStyle: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold
