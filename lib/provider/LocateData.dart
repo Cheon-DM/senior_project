@@ -71,7 +71,9 @@ class LocateProvider extends ChangeNotifier {
     double tmp2 = position.longitude;
 
 
+
     if (_my_lat != tmp1 || _my_lng != tmp2){
+
       _my_lat = position.latitude;
       _my_lng = position.longitude;
 
