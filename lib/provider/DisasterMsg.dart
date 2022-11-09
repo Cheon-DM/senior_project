@@ -189,7 +189,6 @@ class DisasterMsgProvider extends ChangeNotifier {
 
     var initbody = json.encode(initbodyData);
     final initResponse = await http.post(Uri.parse(url), headers: headers, body: initbody);
-    final int statusCode = initResponse.statusCode;
     var rtnPageCnt = jsonDecode(initResponse.body)['rtnResult']['pageSize'];
 
     for (int i = 1; i <= rtnPageCnt; i++) {
@@ -262,7 +261,6 @@ class DisasterMsgProvider extends ChangeNotifier {
           LOC = 16;
         else if (RCV_AREA_ID >= 251) LOC = 17;
 
-        var RCV_AREA_NM = bodyDecode[j]["RCV_AREA_NM"];
         var MSG_CN = bodyDecode[j]["MSG_CN"];
 
         int preReader = await _model.Read(MD101_SN);

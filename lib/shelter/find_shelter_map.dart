@@ -386,7 +386,7 @@ class _AroundShelterState extends State<AroundShelter> {
               icon: const Icon(Icons.directions_run),
               label: Text('가장 가까운 대피소 길 안내'),
               style: ElevatedButton.styleFrom(
-                //backgroundColor: const Color(0xff6157DE),
+                backgroundColor: const Color(0xff6157DE),
                 primary: const Color(0xff6157DE),
                 textStyle: TextStyle(
                   fontSize: 20,
@@ -410,8 +410,6 @@ class _AroundShelterState extends State<AroundShelter> {
     await util.getMapScreenURL(min_lat, min_lng, name: min_spot);
     String testURL1 = "https://map.kakao.com/link/to/" + min_spot + "," + min_lat.toString() + "," +
         min_lng.toString() + "/from/내 위치," + context.read<LocateProvider>().my_lat.toString() + "," + context.read<LocateProvider>().my_lng.toString();
-
-    print('url : $url');
 
     Navigator.push(
         context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1))

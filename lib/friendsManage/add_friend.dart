@@ -24,7 +24,6 @@ class _AddFriendState extends State<AddFriend> {
   }
 
   controlSearch(str){
-    print(str);
     Future<QuerySnapshot> searchUser = ref.where("email", isEqualTo: str).get();
     setState(() {
       if(str!=user!.email) {
@@ -38,7 +37,6 @@ class _AddFriendState extends State<AddFriend> {
   }
 
   displayNoSearchResultScreen() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
       child: Center(
         child: ListView(
@@ -104,7 +102,6 @@ class _AddFriendState extends State<AddFriend> {
                                   });
                                   currentUserLat=checkDouble(ulat);
                                   currentUserLng=checkDouble(ulng);
-                                  print("여기가 문제?? 2");
                                   var userPhoto;
                                   await currentUser.get().then((value) {
                                     userPhoto = value['userPhotoUrl'];
@@ -118,7 +115,6 @@ class _AddFriendState extends State<AddFriend> {
                                     'me': 1,
                                     'friend':0
                                   }); //사용자가 친구요청을 보냄 => me: 1이됨 (이것은 나중에 친구거절을 눌렀을시 0이됨) 근데 얘가 왜필요한지 의문...
-                                  //쓸모없으면 나중에 지우기
 
                                   await ref
                                       .doc('${snapshot.data!.docs[index]['uid']}')
@@ -134,7 +130,7 @@ class _AddFriendState extends State<AddFriend> {
                                     'friend_lng': currentUserLng,
                                     'userPhotoUrl': userPhoto
                                   });
-                                  print("여기가 문제인가ㅜㅜㅜ");// 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
+                                  // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
                                 }
                                 else{
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -160,7 +156,6 @@ class _AddFriendState extends State<AddFriend> {
               ));
         });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +211,6 @@ class FindFriend extends StatefulWidget {
 
   const FindFriend(this.received);
 
-  // print(widget.received);
   @override
   _FindFriendState createState() => _FindFriendState();
 }
@@ -242,9 +236,6 @@ class _FindFriendState extends State<FindFriend> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }
-          print(widget.received);
-          print("으아아아아아아아아아아아아아아아아아아아아아dkdk악");
-          print(snapshot.data!.docs.length);
           return Scaffold(
               body: Stack(
             children: <Widget>[
@@ -272,7 +263,7 @@ class _FindFriendState extends State<FindFriend> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('친구요청되었습니다.')));
-                            print("여기가 문제?? 1 ");
+
                             var currentUserName = '';
                             double ulat=0;
                             double ulng=0;
@@ -286,7 +277,7 @@ class _FindFriendState extends State<FindFriend> {
                             });
                             currentUserLat=checkDouble(ulat);
                             currentUserLng=checkDouble(ulng);
-                            print("여기가 문제?? 2");
+
                             var userPhoto;
                             await currentUser.get().then((value) {
                               userPhoto = value['userPhotoUrl'];
@@ -299,7 +290,6 @@ class _FindFriendState extends State<FindFriend> {
                                 .set({
                               'me': 1
                             }); //사용자가 친구요청을 보냄 => me: 1이됨 (이것은 나중에 친구거절을 눌렀을시 0이됨) 근데 얘가 왜필요한지 의문...
-                            //쓸모없으면 나중에 지우기
 
                             await ref
                                 .doc('${snapshot.data!.docs[index]['uid']}')
@@ -314,7 +304,7 @@ class _FindFriendState extends State<FindFriend> {
                               'friend_lng': currentUserLng,
                               'userPhotoUrl': userPhoto
                             });
-                            print("여기가 문제인가ㅜㅜㅜ");// 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
+                            // 친구요청을 받음 => otheruser: 1이됨 친구요청 리스트에 이걸로 목록 나타냄
                           },
                           child: Text(
                             '친구요청',
@@ -334,5 +324,4 @@ class _FindFriendState extends State<FindFriend> {
           ));
         });
   }
-
 }

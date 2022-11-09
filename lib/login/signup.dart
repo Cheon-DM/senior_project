@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_project/login/signup_complete.dart';
 
-import 'login.dart';
 import '../provider/LocateData.dart';
 
 class SignUp extends StatefulWidget {
+
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -50,9 +50,7 @@ class _SignUpState extends State<SignUp> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return LogIn();
-            }));
+            Navigator.pop(context);
           },
           icon: Icon(
             Icons.arrow_back,

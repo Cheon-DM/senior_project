@@ -23,7 +23,6 @@ class _MyPageState extends State<MyPage> {
   late Stream myStream;
   XFile? _pickImage;
   final auth = FirebaseAuth.instance; //원래 _authentication
-  //FirebaseAuth auth = FirebaseAuth.instance;
   late LocateProvider _locateProvider =
       Provider.of<LocateProvider>(context, listen: false);
   final user = FirebaseAuth.instance.currentUser;
@@ -148,8 +147,6 @@ class _MyPageState extends State<MyPage> {
                           ),
                         ),
                         onPressed: () {
-                          print("여기가 이름이 제대로 뜨는지 확인");
-                          print(usernameee);
                           _locateProvider.locateMe();
                           showModalBottomSheet<void>(
                               context: context,
@@ -313,6 +310,7 @@ class _MyPageState extends State<MyPage> {
             child: GestureDetector(
               onTap: () {
                 auth.signOut();
+                Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return (LogIn());
                 }));
@@ -358,6 +356,8 @@ class _MyPageState extends State<MyPage> {
     var doc = ref.doc(user!.uid);
     doc.update({'userPhotoUrl': downloadURL});
 
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+        builder: (context) => MainPage()), (route) => false,);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return MyPage();
     }));

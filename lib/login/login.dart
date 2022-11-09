@@ -1,16 +1,14 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/login/GoogeSignUp.dart';
-import 'package:senior_project/mainpage.dart';
 import '../provider/LocateData.dart';
 import 'signup.dart';
 import '../info/myPage.dart';
 
 class LogIn extends StatefulWidget {
+  static String routeName = "/login";
+
   const LogIn({Key? key}) : super(key: key);
 
   @override
@@ -34,34 +32,34 @@ class _LogInState extends State<LogIn> {
       _formkey.currentState!.save();
     }
   }
-
-  Future<UserCredential> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    DocumentSnapshot documentSnapshot =
-        await ref.doc(googleUser!.id).get();
-    if (!documentSnapshot.exists) {
-      final userName = await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => GoogleSignUp()));
-      ref.doc(googleUser!.id).set({
-        'userName': userName,
-        'email': userEmail,
-        'uid': googleUser!.id,
-        'userPhotoUrl': null,
-        'my_lat': 0,
-        'my_lng': 0
-      });
-      documentSnapshot = await ref.doc(googleUser.id).get();
-    }
-
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
+  //
+  // Future<UserCredential> signInWithGoogle() async {
+  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //   final GoogleSignInAuthentication? googleAuth =
+  //       await googleUser?.authentication;
+  //   final credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth?.accessToken,
+  //     idToken: googleAuth?.idToken,
+  //   );
+  //
+  //   DocumentSnapshot documentSnapshot =
+  //       await ref.doc(googleUser!.id).get();
+  //   if (!documentSnapshot.exists) {
+  //     final userName = await Navigator.push(
+  //         context, MaterialPageRoute(builder: (context) => GoogleSignUp()));
+  //     ref.doc(googleUser!.id).set({
+  //       'userName': userName,
+  //       'email': userEmail,
+  //       'uid': googleUser!.id,
+  //       'userPhotoUrl': null,
+  //       'my_lat': 0,
+  //       'my_lng': 0
+  //     });
+  //     documentSnapshot = await ref.doc(googleUser.id).get();
+  //   }
+  //
+  //   return await FirebaseAuth.instance.signInWithCredential(credential);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +81,7 @@ class _LogInState extends State<LogIn> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return MainPage();
-            }));
+            Navigator.of(context, rootNavigator: true).pop();
           },
           icon: Icon(
             Icons.arrow_back,
@@ -139,13 +135,7 @@ class _LogInState extends State<LogIn> {
                     border: OutlineInputBorder()),
                 obscureText: true,
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                  onPressed: () async {
-                    await signInWithGoogle;
-                  },
-                  child: Text("Google Login")),
-              SizedBox(height: 20),
+              SizedBox(height: 40),
               Text(
                 '아직 회원이 아니신가요?',
                 style: TextStyle(
@@ -190,10 +180,11 @@ class _LogInState extends State<LogIn> {
                     .showSnackBar(SnackBar(content: Text('제대로된 입력 필요')));
               }
 
+              Navigator.pop(context);
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return MyPage();
               }));
-              //Get.offAll(() => MyPage());
+
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text('로그인 완료.')));
             } catch (e) {
