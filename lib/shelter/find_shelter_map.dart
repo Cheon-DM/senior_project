@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:math';
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vector_math/vector_math.dart' hide Colors;
@@ -16,16 +17,17 @@ import 'kakaomap_screen.dart';
 
 const String kakaoMapKey = '9e9e53f5a50038a1fdb31333c3afc1d2';
 
-num calculate(double lat1, double lat2, double lng1, double lng2){
+num calculate(double lat1, double lat2, double lng1, double lng2) {
   double dis;
   final R = 6371;
 
-  final deltaLat = radians((lat1-lat2).abs());
-  final deltaLng = radians((lng1-lng2).abs());
+  final deltaLat = radians((lat1 - lat2).abs());
+  final deltaLng = radians((lng1 - lng2).abs());
 
-  final sinDeltaLat = sin(deltaLat/2);
-  final sinDeltaLng = sin(deltaLng/2);
-  final squareRoot = sqrt(sinDeltaLat * sinDeltaLat + cos(radians(lat1)) * cos(radians(lat2)) * sinDeltaLng * sinDeltaLng);
+  final sinDeltaLat = sin(deltaLat / 2);
+  final sinDeltaLng = sin(deltaLng / 2);
+  final squareRoot = sqrt(sinDeltaLat * sinDeltaLat +
+      cos(radians(lat1)) * cos(radians(lat2)) * sinDeltaLng * sinDeltaLng);
 
   dis = 2 * R * asin(squareRoot);
   return dis;
@@ -38,7 +40,8 @@ class AroundShelter extends StatefulWidget {
 
 class _AroundShelterState extends State<AroundShelter> {
   late WebViewController _mapController;
-  late LocateProvider _locateProvider = Provider.of<LocateProvider>(context, listen: false);
+  late LocateProvider _locateProvider =
+      Provider.of<LocateProvider>(context, listen: false);
   late ShelterProvider _shelterProvider = Provider.of<ShelterProvider>(context);
   bool _isLoading = true; // 로딩중
 
@@ -53,26 +56,28 @@ class _AroundShelterState extends State<AroundShelter> {
   Future<void> readExcelFile() async {
     List<Map<String, dynamic>> around1KM = [];
     List<Map<String, dynamic>> around2KM = [];
-    int j=0;
+    int j = 0;
     num min_dis = 100000;
 
     var min_index = 0;
     _locateProvider.locateMe(); // 내 위치
     _shelterProvider.readShelterdata(); // 파일 읽기
-    Map<int, List<dynamic>> mp = context.read<ShelterProvider>().mp; // 대피소 저장 리스트
+    Map<int, List<dynamic>> mp =
+        context.read<ShelterProvider>().mp; // 대피소 저장 리스트
 
     int a = 0; // 1km list
     int b = 0; // 2km list
 
-    for(int i = 1; i< mp.length; i++){
+    for (int i = 1; i < mp.length; i++) {
       // lat : 위도, lng : 경도
       double lat2 = mp[i]![1]; // 위도
       double lng2 = mp[i]![0]; // 경도
       String spot = mp[i]![2]; // 장소이름
 
-      num distance = calculate(context.read<LocateProvider>().my_lat, lat2, context.read<LocateProvider>().my_lng, lng2); // 거리 계산
+      num distance = calculate(context.read<LocateProvider>().my_lat, lat2,
+          context.read<LocateProvider>().my_lng, lng2); // 거리 계산
 
-      if (min_dis > distance){
+      if (min_dis > distance) {
         min_dis = distance;
         min_index = i;
         min_lat = lat2;
@@ -80,7 +85,7 @@ class _AroundShelterState extends State<AroundShelter> {
         min_spot = spot;
       }
 
-      if (distance <= 1){
+      if (distance <= 1) {
         Map<String, dynamic> tmp = {
           'spot': spot as String,
           'lat': lat2 as double,
@@ -90,7 +95,7 @@ class _AroundShelterState extends State<AroundShelter> {
         a++;
       }
 
-      if(distance > 1 && distance <= 2){
+      if (distance > 1 && distance <= 2) {
         Map<String, dynamic> tmp = {
           'spot': spot as String,
           'lat': lat2,
@@ -108,11 +113,10 @@ class _AroundShelterState extends State<AroundShelter> {
       jsonAround1 = jsonEncode(around1);
       jsonAround2 = jsonEncode(around2);
     });
-
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _locateProvider.locateMe();
     readExcelFile();
@@ -130,36 +134,41 @@ class _AroundShelterState extends State<AroundShelter> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff6157DE),
-        elevation: 5,
-        title: Text(
-          "내 주변 대피소",
-          style: TextStyle(
-            fontFamily: 'Leferi',
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+      resizeToAvoidBottomInset: false,
+
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
+        child: AppBar(
+          backgroundColor: const Color(0xff6157DE),
+          elevation: 0,
+          title: Text(
+            "내 주변 대피소",
+            style: TextStyle(
+              fontFamily: 'Leferi',
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
           ),
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
+          
         ),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -169,35 +178,36 @@ class _AroundShelterState extends State<AroundShelter> {
                 return StreamBuilder(
                     stream: locate(),
                     builder: (context, snapshot) {
-                      if (_isLoading){
+                      if (_isLoading) {
                         // return const CircularProgressIndicator();
                         return Expanded(
                             child: Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 50.0),
-                                ),
-                                Container(
-                                  width: 500.0,
-                                  child: LinearProgressIndicator(
-                                    backgroundColor: Colors.pink,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 30.0),
-                                ),
-                                Text(
-                                  "Calculating.....",
-                                  style: TextStyle(color: Color(0xff6157DE), fontSize: 18.0, fontWeight: FontWeight.bold),
-                                )
-                              ],
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50.0),
+                            ),
+                            Container(
+                              width: 500.0,
+                              child: LinearProgressIndicator(
+                                backgroundColor: Colors.pink,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30.0),
+                            ),
+                            Text(
+                              "Calculating.....",
+                              style: TextStyle(
+                                  color: Color(0xff6157DE),
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold),
                             )
-                        );
-                      }
-                      else {
+                          ],
+                        ));
+                      } else {
                         return KakaoMapView(
-                            width: size.width,
-                            height: size.height / 2,
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.8,
                             kakaoMapKey: kakaoMapKey,
                             showMapTypeControl: true,
                             showZoomControl: true,
@@ -274,53 +284,22 @@ class _AroundShelterState extends State<AroundShelter> {
     map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
               ''',
                             onTapMarker: (message) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(content: Text(message.message)));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(message.message)));
                             });
                       }
-                    }
-                );
-              }
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {
-                  _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() + 1, {animate: true})');
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.red,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.remove,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() - 1, {animate: true})');
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.blue,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {
-                  _mapController.runJavascript('''
+                    });
+              }),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        _mapController.runJavascript('''
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
     var objAround1 = ${jsonAround2};
     
@@ -336,8 +315,8 @@ class _AroundShelterState extends State<AroundShelter> {
     
     var imageSize1 = new kakao.maps.Size(35, 45);
     var imageOptions1 = {  
-                spriteOrigin: new kakao.maps.Point(0, 325),
-                spriteSize: new kakao.maps.Size(50, 533)  
+                      spriteOrigin: new kakao.maps.Point(0, 325),
+                      spriteSize: new kakao.maps.Size(50, 533)  
     };
     var markerImage1 = createMarkerImage(imageURL, imageSize1, imageOptions1);
     
@@ -352,51 +331,76 @@ class _AroundShelterState extends State<AroundShelter> {
       addMarker(marker);
       clickMarker(marker, content, true);
     }
-              ''');
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.amber,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.pin_drop,
-                    color: Colors.white,
-                  ),
+                    ''');
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xff6157DE),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 1,
+                                color: Color(0xff6157DE).withOpacity(0.2),
+                                spreadRadius: 1
+                            )
+                          ]
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 18,
+                          child: const Icon(
+                            Icons.pin_drop,
+                            color: Color(0xff6157DE),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    InkWell(
+                      onTap: () async {
+                        _locateProvider.locateMe();
+                        setState(() {});
+                        await _mapController.clearCache();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xff6157DE),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 1,
+                                  color: Color(0xff6157DE).withOpacity(0.2),
+                                  spreadRadius: 1
+                              )
+                            ]
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 18,
+                          child: const Icon(
+                            Icons.refresh,
+                            color: Color(0xff6157DE),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              InkWell(
-                onTap: () async {
-                  _locateProvider.locateMe();
-                  setState(() {
-
-                  });
-                  await _mapController.clearCache();
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.green,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.refresh,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
+                ElevatedButton.icon(
+                    icon: const Icon(Icons.directions_run),
+                    label: Text('가장 가까운 대피소 길 안내'),
+                    style: ElevatedButton.styleFrom(
+                      //backgroundColor: const Color(0xff6157DE),
+                        primary: const Color(0xff6157DE),
+                        textStyle:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    onPressed: () async {
+                      await _openKakaoMapScreen(context);
+                    })
+              ],
+            ),
           ),
-          ElevatedButton.icon(
-              icon: const Icon(Icons.directions_run),
-              label: Text('가장 가까운 대피소 길 안내'),
-              style: ElevatedButton.styleFrom(
-                //backgroundColor: const Color(0xff6157DE),
-                primary: const Color(0xff6157DE),
-                textStyle: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                )
-              ),
-              onPressed: () async {
-                await _openKakaoMapScreen(context);
-              }
-              )
+
         ],
       ),
     );
@@ -406,16 +410,21 @@ class _AroundShelterState extends State<AroundShelter> {
     KakaoMapUtil util = KakaoMapUtil();
 
     /// This is short form of the above comment
-    String url =
-    await util.getMapScreenURL(min_lat, min_lng, name: min_spot);
-    String testURL1 = "https://map.kakao.com/link/to/" + min_spot + "," + min_lat.toString() + "," +
-        min_lng.toString() + "/from/내 위치," + context.read<LocateProvider>().my_lat.toString() + "," + context.read<LocateProvider>().my_lng.toString();
+    String url = await util.getMapScreenURL(min_lat, min_lng, name: min_spot);
+    String testURL1 = "https://map.kakao.com/link/to/" +
+        min_spot +
+        "," +
+        min_lat.toString() +
+        "," +
+        min_lng.toString() +
+        "/from/내 위치," +
+        context.read<LocateProvider>().my_lat.toString() +
+        "," +
+        context.read<LocateProvider>().my_lng.toString();
 
     print('url : $url');
 
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1))
-    );
+    Navigator.push(context,
+        MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1)));
   }
 }
-
