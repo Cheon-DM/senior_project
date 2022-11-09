@@ -115,7 +115,8 @@ class _AddFriendState extends State<AddFriend> {
                                       .collection('FriendAdmin')
                                       .doc('${snapshot.data!.docs[index]['uid']}')
                                       .set({
-                                    'me': 1
+                                    'me': 1,
+                                    'friend':0
                                   }); //사용자가 친구요청을 보냄 => me: 1이됨 (이것은 나중에 친구거절을 눌렀을시 0이됨) 근데 얘가 왜필요한지 의문...
                                   //쓸모없으면 나중에 지우기
 
@@ -125,6 +126,7 @@ class _AddFriendState extends State<AddFriend> {
                                       .doc(user!.uid)
                                       .set({
                                     'otheruser': 1,
+                                    'friend':0,
                                     'email': user!.email,
                                     'name': currentUserName,
                                     'uid': user!.uid,
