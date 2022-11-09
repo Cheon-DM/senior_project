@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:senior_project/login/login.dart';
+
+import '../mainpage.dart';
 
 class SignUpComplete extends StatefulWidget {
   final String received;
@@ -18,7 +19,6 @@ class _SignUpCompleteState extends State<SignUpComplete> {
   void _sendName() async {
     final userData = await ref.doc(user!.uid).get();
     name = userData.data()!['userName'];
-    print(name);
   }
 
   Scaffold showComplete(userName) {
@@ -101,13 +101,11 @@ class _SignUpCompleteState extends State<SignUpComplete> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return LogIn();
-                    }));
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                        builder: (context) => MainPage()), (route) => false,);
                   },
                   child: Text(
-                      "로그인하기",
+                      "메인페이지로 이동하기",
                     style: TextStyle(
                       fontFamily: 'Leferi',
                       fontWeight: FontWeight.bold,
