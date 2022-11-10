@@ -142,9 +142,9 @@ class _AroundShelterState extends State<AroundShelter> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.07),
         child: AppBar(
           backgroundColor: const Color(0xff6157DE),
           elevation: 0,
@@ -167,57 +167,59 @@ class _AroundShelterState extends State<AroundShelter> {
             ),
           ),
         ),
-          
-        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          FutureBuilder(
-              future: readExcelFile(),
-              builder: (context, snap) {
-                return StreamBuilder(
-                    stream: locate(),
-                    builder: (context, snapshot) {
-                      if (_isLoading) {
-                        // return const CircularProgressIndicator();
-                        return Expanded(
-                            child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 50.0),
-                            ),
-                            Container(
-                              width: 500.0,
-                              child: LinearProgressIndicator(
-                                backgroundColor: Colors.pink,
+          Stack(
+            children: [
+              FutureBuilder(
+                  future: readExcelFile(),
+                  builder: (context, snap) {
+                    return StreamBuilder(
+                        stream: locate(),
+                        builder: (context, snapshot) {
+                          if (_isLoading) {
+                            // return const CircularProgressIndicator();
+                            return Expanded(
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 50.0),
+                                  ),
+                                  Container(
+                                    width: 500.0,
+                                    child: LinearProgressIndicator(
+                                      backgroundColor: Colors.pink,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 30.0),
+                                  ),
+                                  Text(
+                                    "Calculating.....",
+                                    style: TextStyle(
+                                        color: Color(0xff6157DE),
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 30.0),
-                            ),
-                            Text(
-                              "Calculating.....",
-                              style: TextStyle(
-                                  color: Color(0xff6157DE),
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ));
-                      } else {
-                        return KakaoMapView(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            kakaoMapKey: kakaoMapKey,
-                            showMapTypeControl: true,
-                            showZoomControl: true,
-                            lat: context.read<LocateProvider>().my_lat,
-                            lng: context.read<LocateProvider>().my_lng,
-                            mapController: (controller) {
-                              _mapController = controller;
-                            },
-                            zoomLevel: 3,
-                            customScript: '''
+                            );
+                          } else {
+                            return KakaoMapView(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * 0.9,
+                                kakaoMapKey: kakaoMapKey,
+                                showMapTypeControl: true,
+                                showZoomControl: true,
+                                lat: context.read<LocateProvider>().my_lat,
+                                lng: context.read<LocateProvider>().my_lng,
+                                mapController: (controller) {
+                                  _mapController = controller;
+                                },
+                                zoomLevel: 3,
+                                customScript: '''
     var markers = [];
     var imageURL = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites.png';
     var objAround1 = ${jsonAround1};
@@ -256,16 +258,23 @@ class _AroundShelterState extends State<AroundShelter> {
     
     var imageSize = new kakao.maps.Size(35, 45);
     var imageOptions = {  
-                spriteOrigin: new kakao.maps.Point(0, 127),
-                spriteSize: new kakao.maps.Size(50, 533)  
+                    spriteOrigin: new kakao.maps.Point(0, 127),
+                    spriteSize: new kakao.maps.Size(50, 533)  
     };
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
     
     var customStyle = document.createElement("style");
     document.head.appendChild(customStyle);
+    customStyle.sheet.insertRule(".info {height: 80px; width: 140px; box-shadow: 3px 4px 0px 0px #1564ad;	background-color:transparent;	border-radius:0px;	border:1px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:sans-serif;	font-size:16px;	font-weight:bolder; padding:16px 30px;	text-decoration:none;	text-shadow:0px 1px 0px #528ecc; letter-spacing: -1px;}");
+    customStyle.sheet.insertRule(".info:hover {background-color:transparent;}");
+    customStyle.sheet.insertRule(".info:active {position:relative;	top:1px;}");
+    
+    /*
+    원본
     customStyle.sheet.insertRule(".info {height: 80px; width: 140px; box-shadow: 3px 4px 0px 0px #1564ad;	background-color:transparent;	border-radius:6px;	border:1px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:sans-serif;	font-size:16px;	padding:16px 30px;	text-decoration:none;	text-shadow:0px 1px 0px #528ecc;}");
     customStyle.sheet.insertRule(".info:hover {background-color:transparent;}");
     customStyle.sheet.insertRule(".info:active {position:relative;	top:1px;}");
+    */
     
     for(let i = 0 ; i < jsonObjSpot.length ; i++){
       var position = new kakao.maps.LatLng(jsonObjLat[i], jsonObjLng[i]);
@@ -282,24 +291,29 @@ class _AroundShelterState extends State<AroundShelter> {
 
     const mapTypeControl = new kakao.maps.MapTypeControl();
     map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-              ''',
-                            onTapMarker: (message) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(message.message)));
-                            });
-                      }
-                    });
-              }),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        _mapController.runJavascript('''
+                  ''',
+                                onTapMarker: (message) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(message.message)));
+                                });
+                          }
+                        });
+                  }),
+              Positioned(
+                bottom: 10,
+                right: 20,
+
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(width: 10,),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _mapController.runJavascript('''
     var markerImage = createMarkerImage(imageURL, imageSize, imageOptions);
     var objAround1 = ${jsonAround2};
     
@@ -315,8 +329,8 @@ class _AroundShelterState extends State<AroundShelter> {
     
     var imageSize1 = new kakao.maps.Size(35, 45);
     var imageOptions1 = {  
-                      spriteOrigin: new kakao.maps.Point(0, 325),
-                      spriteSize: new kakao.maps.Size(50, 533)  
+                            spriteOrigin: new kakao.maps.Point(0, 325),
+                            spriteSize: new kakao.maps.Size(50, 533)  
     };
     var markerImage1 = createMarkerImage(imageURL, imageSize1, imageOptions1);
     
@@ -331,72 +345,82 @@ class _AroundShelterState extends State<AroundShelter> {
       addMarker(marker);
       clickMarker(marker, content, true);
     }
-                    ''');
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xff6157DE),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 1,
-                                color: Color(0xff6157DE).withOpacity(0.2),
-                                spreadRadius: 1
-                            )
-                          ]
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 18,
-                          child: const Icon(
-                            Icons.pin_drop,
-                            color: Color(0xff6157DE),
+                          ''');
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color(0xff6157DE),
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 2,
+                                        color: Color(0xff6157DE),
+                                        spreadRadius: 1
+                                    ),
+                                  ],
+                              ),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 22,
+                                child: const Icon(
+                                  Icons.pin_drop,
+                                  color: Color(0xff6157DE),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10,),
-                    InkWell(
-                      onTap: () async {
-                        _locateProvider.locateMe();
-                        setState(() {});
-                        await _mapController.clearCache();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Color(0xff6157DE),
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 1,
-                                  color: Color(0xff6157DE).withOpacity(0.2),
-                                  spreadRadius: 1
-                              )
-                            ]
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 18,
-                          child: const Icon(
-                            Icons.refresh,
-                            color: Color(0xff6157DE),
+                          SizedBox(
+                            width: 10,
                           ),
-                        ),
+                          InkWell(
+                            onTap: () async {
+                              _locateProvider.locateMe();
+                              setState(() {});
+                              await _mapController.clearCache();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color(0xff6157DE),
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 2,
+                                        color: Color(0xff6157DE),
+                                        spreadRadius: 1
+                                    ),
+                                  ],
+                              ),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 22,
+                                child: const Icon(
+                                  Icons.refresh,
+                                  color: Color(0xff6157DE),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                      SizedBox(width: 25,),
+                      ElevatedButton.icon(
+                        icon: const Icon(Icons.directions_run),
+                        label: Text('가장 가까운 대피소 길 안내'),
+                        style: ElevatedButton.styleFrom(
+                            //backgroundColor: const Color(0xff6157DE),
+                            primary: const Color(0xff6157DE),
+                            textStyle:
+                                TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                        onPressed: () async {
+                          await _openKakaoMapScreen(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                ElevatedButton.icon(
-                    icon: const Icon(Icons.directions_run),
-                    label: Text('가장 가까운 대피소 길 안내'),
-                    style: ElevatedButton.styleFrom(
-                      //backgroundColor: const Color(0xff6157DE),
-                        primary: const Color(0xff6157DE),
-                        textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                    onPressed: () async {
-                      await _openKakaoMapScreen(context);
-                    })8
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -418,8 +442,7 @@ class _AroundShelterState extends State<AroundShelter> {
         "," +
         context.read<LocateProvider>().my_lng.toString();
 
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1))
-    );
+    Navigator.push(context,
+        MaterialPageRoute(builder: (_) => KakaoMapScreen(url: testURL1)));
   }
 }
