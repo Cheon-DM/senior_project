@@ -21,27 +21,29 @@ class KakaoMapScreen extends StatelessWidget {
       key: _scaffoldMessengerKey,
       child: Scaffold(
           body: SafeArea(
-            child: WebView(
-                initialUrl: url,
-                javascriptMode: JavascriptMode.unrestricted,
-                javascriptChannels: <JavascriptChannel>{
-                  _toasterJavascriptChannel()
-                },
-                navigationDelegate: (delegate) async {
-                  debugPrint('[Webview] delegate : ${delegate.url}');
+            child: Container(
+              child: WebView(
+                  initialUrl: url,
+                  javascriptMode: JavascriptMode.unrestricted,
+                  javascriptChannels: <JavascriptChannel>{
+                    _toasterJavascriptChannel()
+                  },
+                  navigationDelegate: (delegate) async {
+                    debugPrint('[Webview] delegate : ${delegate.url}');
 
-                  if (Platform.isAndroid && delegate.url.startsWith('intent://')) {
-                    await _channel.invokeMethod('intent', {'url': delegate.url});
+                    if (Platform.isAndroid && delegate.url.startsWith('intent://')) {
+                      await _channel.invokeMethod('intent', {'url': delegate.url});
 
-                    return NavigationDecision.prevent;
-                  } else if (Platform.isIOS && delegate.url.contains('itms-apps')) {
-                    await _iosNavigate(delegate.url);
+                      return NavigationDecision.prevent;
+                    } else if (Platform.isIOS && delegate.url.contains('itms-apps')) {
+                      await _iosNavigate(delegate.url);
 
-                    return NavigationDecision.prevent;
-                  }
+                      return NavigationDecision.prevent;
+                    }
 
-                  return NavigationDecision.navigate;
-                }),
+                    return NavigationDecision.navigate;
+                  }),
+            ),
           )),
     );
   }
