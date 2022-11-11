@@ -154,108 +154,101 @@ class _MyPageState extends State<MyPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+
                       //프로필 변경
                       Container(
-                        height: 35,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        margin: EdgeInsets.only(bottom: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          gradient: LinearGradient(
-                              colors: [
-                                Color(0xff6157DE),
-                                Color.fromRGBO(100, 109, 255, 1.0),
-                              ],
-                              begin: Alignment.bottomRight,
-                              end: Alignment.topLeft),
-                        ),
+                        width: 200,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(15)),
+                            ),
                             side: BorderSide(
-                              width: 0,
-                              color: Colors.white.withOpacity(0.0),
+                              width: 1,
+                              color: Color(0xff6157DE),
                             ),
                           ),
                           onPressed: () {
                             _locateProvider.locateMe();
                             showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: ElevatedButton.icon(
-                                          style: OutlinedButton.styleFrom(
-                                            side: BorderSide(
-                                              width: 0.0,
-                                              color:
-                                                  Colors.white.withOpacity(0.0),
-                                            ),
-                                            backgroundColor: Colors.deepPurple
-                                                .withOpacity(0.0),
-                                            shadowColor: Colors.deepPurple
-                                                .withOpacity(0.0),
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: ElevatedButton.icon(
+                                        style: OutlinedButton.styleFrom(
+                                          side: BorderSide(
+                                            width: 0.0,
+                                            color:
+                                            Colors.white.withOpacity(0.0),
                                           ),
-                                          onPressed: () async {
-                                            _getPhoto();
-                                          },
-                                          icon: Icon(
-                                            Icons.camera_alt_rounded,
+                                          backgroundColor: Colors.deepPurple
+                                              .withOpacity(0.0),
+                                          shadowColor: Colors.deepPurple
+                                              .withOpacity(0.0),
+                                        ),
+                                        onPressed: () async {
+                                          _getPhoto();
+                                        },
+                                        icon: Icon(
+                                          Icons.camera_alt_rounded,
+                                          color: Colors.black,
+                                          size: 50,
+                                        ),
+                                        label: Text(
+                                          "사진 불러오기",
+                                          style: TextStyle(
                                             color: Colors.black,
-                                            size: 50,
                                           ),
-                                          label: Text(
-                                            "사진 불러오기",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
-                                      Container(
-                                        child: ElevatedButton.icon(
-                                          style: OutlinedButton.styleFrom(
-                                            side: BorderSide(
-                                              width: 0.0,
-                                              color:
-                                                  Colors.black.withOpacity(0.0),
-                                            ),
-                                            backgroundColor: Colors.deepPurple
-                                                .withOpacity(0.0),
-                                            shadowColor: Colors.deepPurple
-                                                .withOpacity(0.0),
+                                    ),
+                                    Container(
+                                      child: OutlinedButton.icon(
+                                        style: OutlinedButton.styleFrom(
+                                          side: BorderSide(
+                                            width: 0.0,
+                                            color:
+                                            Colors.black.withOpacity(0.0),
                                           ),
-                                          onPressed: () async {
-                                            _getBasicImage();
-                                          },
-                                          icon: Icon(
-                                            Icons.co_present_outlined,
+                                          backgroundColor: Colors.deepPurple
+                                              .withOpacity(0.0),
+                                          shadowColor: Colors.deepPurple
+                                              .withOpacity(0.0),
+                                        ),
+                                        onPressed: () async {
+                                          _getBasicImage();
+                                        },
+                                        icon: Icon(
+                                          Icons.co_present_outlined,
+                                          color: Colors.black,
+                                          size: 50,
+                                        ),
+                                        label: Text(
+                                          "기본 이미지로 변경",
+                                          style: TextStyle(
                                             color: Colors.black,
-                                            size: 50,
                                           ),
-                                          label: Text(
-                                            "기본 이미지로 변경",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
-                                    ],
-                                  );
-                                });
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           child: Text(
                             "프로필 사진 변경하기",
                             style: TextStyle(
                               fontFamily: 'Leferi',
-                              color: Colors.white,
+                              color: Color(0xff6157DE),
                               fontSize: 13,
                             ),
                           ),
@@ -264,38 +257,29 @@ class _MyPageState extends State<MyPage> {
 
                       //나의 친구관리 버튼
                       Container(
-                        height: 35,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        margin: EdgeInsets.only(bottom: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          gradient: LinearGradient(
-                              colors: [
-                                Color(0xff6157DE),
-                                Color.fromRGBO(100, 109, 255, 1.0),
-                              ],
-                              begin: Alignment.bottomRight,
-                              end: Alignment.topLeft),
-                        ),
+                        width: 200,
                         child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                              ),
                               side: BorderSide(
-                                width: 0.0,
-                                color: Colors.white.withOpacity(0.0),
+                                width: 1,
+                                color: Color(0xff6157DE),
                               ),
                             ),
                             onPressed: () {
                               _locateProvider.locateMe();
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                return Menu();
-                              }));
+                                    return Menu();
+                                  }));
                             },
                             child: Text(
                               "나의 친구관리",
                               style: TextStyle(
                                 fontFamily: 'Leferi',
-                                color: Colors.white,
+                                color: Color(0xff6157DE),
                                 fontSize: 13,
                               ),
                             )),
@@ -303,24 +287,15 @@ class _MyPageState extends State<MyPage> {
 
                       //메인페이지 버튼
                       Container(
-                        height: 35,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        margin: EdgeInsets.only(bottom: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          gradient: LinearGradient(
-                              colors: [
-                                Color(0xff6157DE),
-                                Color.fromRGBO(100, 109, 255, 1.0),
-                              ],
-                              begin: Alignment.bottomRight,
-                              end: Alignment.topLeft),
-                        ),
+                        width: 200,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(15)),
+                            ),
                             side: BorderSide(
-                              width: 0.0,
-                              color: Colors.white.withOpacity(0.0),
+                              width: 1,
+                              color: Color(0xff6157DE),
                             ),
                           ),
                           onPressed: () {
@@ -330,17 +305,13 @@ class _MyPageState extends State<MyPage> {
                             "메인페이지",
                             style: TextStyle(
                               fontFamily: 'Leferi',
-                              color: Colors.white,
+                              color: Color(0xff6157DE),
                               fontSize: 13,
                             ),
                           ),
                         ),
                       ),
                     ],
-                  ),
-
-                  SizedBox(
-                    height: 50,
                   ),
                 ],
               ),
