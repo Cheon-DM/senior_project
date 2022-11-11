@@ -96,28 +96,33 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
             ),
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+            body: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //프로필 사진
                   userPhoto == ""
-                      ? Image.asset(
-                          //기본이미지
-                          'assets/images/neoguleman.jpeg',
-                          fit: BoxFit.contain,
-                          height: 200,
-                          width: 200,
-                        )
-                      : Image.network(
-                          //사용자 지정 이미지
-                          photourl,
-                          fit: BoxFit.cover,
-                          height: 200,
-                          width: 200,
-                        ),
+                      ? Card(
+                        child: Image.asset(
+                            //기본이미지
+                            'assets/images/neoguleman.jpeg',
+                            fit: BoxFit.contain,
+                            height: 200,
+                            width: 200,
+                          ),
+                    elevation: 3,
+                      )
+                      : Card(
+                        child: Image.network(
+                            //사용자 지정 이미지
+                            photourl,
+                            fit: BoxFit.cover,
+                            height: 200,
+                            width: 200,
+                          ),
+                    elevation: 3,
+                      ),
 
                   //사용자 정보 ui
                   //사용자 닉네임
@@ -143,7 +148,7 @@ class _MyPageState extends State<MyPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 50,
+                    height: 30,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -151,15 +156,15 @@ class _MyPageState extends State<MyPage> {
                     children: [
                       //프로필 변경
                       Container(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: 35,
+                        width: MediaQuery.of(context).size.width * 0.45,
                         margin: EdgeInsets.only(bottom: 5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           gradient: LinearGradient(
                               colors: [
                                 Color(0xff6157DE),
-                                Color.fromRGBO(150, 79, 255, 1.0)
+                                Color.fromRGBO(100, 109, 255, 1.0),
                               ],
                               begin: Alignment.bottomRight,
                               end: Alignment.topLeft),
@@ -167,7 +172,7 @@ class _MyPageState extends State<MyPage> {
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
-                              width: 0.0,
+                              width: 0,
                               color: Colors.white.withOpacity(0.0),
                             ),
                           ),
@@ -259,15 +264,15 @@ class _MyPageState extends State<MyPage> {
 
                       //나의 친구관리 버튼
                       Container(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: 35,
+                        width: MediaQuery.of(context).size.width * 0.45,
                         margin: EdgeInsets.only(bottom: 5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           gradient: LinearGradient(
                               colors: [
                                 Color(0xff6157DE),
-                                Color.fromRGBO(150, 79, 255, 1.0)
+                                Color.fromRGBO(100, 109, 255, 1.0),
                               ],
                               begin: Alignment.bottomRight,
                               end: Alignment.topLeft),
@@ -298,15 +303,15 @@ class _MyPageState extends State<MyPage> {
 
                       //메인페이지 버튼
                       Container(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: 35,
+                        width: MediaQuery.of(context).size.width * 0.45,
                         margin: EdgeInsets.only(bottom: 5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           gradient: LinearGradient(
                               colors: [
                                 Color(0xff6157DE),
-                                Color.fromRGBO(150, 79, 255, 1.0)
+                                Color.fromRGBO(100, 109, 255, 1.0),
                               ],
                               begin: Alignment.bottomRight,
                               end: Alignment.topLeft),
