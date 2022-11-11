@@ -24,9 +24,11 @@ class _MainPageState extends State<MainPage> {
       home: Container(
           child: Scaffold(
               resizeToAvoidBottomInset : false,
+
               appBar: AppBar(
                 backgroundColor: const Color(0xff6157DE),
                 elevation: 0,
+
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -63,26 +65,27 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         // 그림자처럼 깔린...그 부분
                         Positioned(
-                          left: -10,
-                          bottom: -20,
+                          left: -7.5,
+                          bottom: -10,
 
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.4,
-                            width: MediaQuery.of(context).size.width+10,
+                            width: MediaQuery.of(context).size.width+15,
                             margin: const EdgeInsets.only(left: 0, right: 0, bottom: 30),
 
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
-                                bottomRight: Radius.circular(0),
-                                bottomLeft: Radius.circular(100),
+                                bottomRight: Radius.circular(200),
+                                bottomLeft: Radius.circular(200),
                               ),
                               gradient: LinearGradient(
                                   colors: [
-                                    Color.fromRGBO(100, 94, 255, 0.35),
-                                    Color.fromRGBO(160, 32, 255, 0.35)
+                                    Color.fromRGBO(100, 129, 240, 0.55),
+                                    Color.fromRGBO(100, 129, 240, 0.2),
+                                    Color.fromRGBO(100, 129, 240, 0.55),
                                   ],
-                                  begin: Alignment.bottomRight,
-                                  end : Alignment.topLeft
+                                  begin: Alignment.bottomLeft,
+                                  end : Alignment.bottomRight
                               ),
                             ),
                           ),
@@ -104,7 +107,7 @@ class _MainPageState extends State<MainPage> {
                                       fontWeight: FontWeight.bold,
                                       shadows: [
                                         Shadow(
-                                          color: Colors.deepPurple.withOpacity(1.0),
+                                         color : Color.fromRGBO(170, 179, 255, 1.0),
                                           offset: Offset(0, 0),
                                           blurRadius: 20,
                                         )
@@ -145,13 +148,17 @@ class _MainPageState extends State<MainPage> {
                           margin: const EdgeInsets.only(left: 0, right: 0, bottom: 30),
                           decoration: BoxDecoration(
                             borderRadius: const BorderRadius.only(
-                              bottomRight: Radius.circular(0),
-                              bottomLeft: Radius.circular(100),
+                              bottomRight: Radius.circular(200),
+                              bottomLeft: Radius.circular(200),
                             ),
                             gradient: LinearGradient(
                                 colors: [
                                   Color(0xff6157DE),
+                                  Color.fromRGBO(100, 109, 255, 1.0).withOpacity(0.8),
+                                  /*
                                   Color.fromRGBO(170, 79, 255, 1.0)
+                                  */
+
                                 ],
                                 begin: Alignment.topCenter,
                                 end : Alignment.bottomCenter
@@ -372,4 +379,18 @@ class _MainPageState extends State<MainPage> {
               ))),
     );
   }
+}
+
+class MyPainter extends CustomPainter{
+
+  @override
+  void paint(Canvas canvas, Size size) {
+
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+
 }
