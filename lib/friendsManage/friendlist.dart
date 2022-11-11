@@ -17,7 +17,7 @@ class Menu extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
-        elevation: 5,
+        elevation: 0,
         title: Text(
           "친구목록",
           style: TextStyle(
@@ -39,51 +39,73 @@ class Menu extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
+          Stack(
+            children: [
               Container(
-                padding: EdgeInsets.only(top: 13),
-                color: Colors.white,
-                width: size.width * 0.5,
+                color: Color(0xff6157DE),
+                width: size.width,
                 height: 50,
-                child: SizedBox.expand(
-                  child: Text(
-                    "친구",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'Leferi',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
               ),
-              InkWell(
-                child: Container(
-                  padding: EdgeInsets.only(top: 13),
-                  color: const Color(0xff6157DE),
-                  width: size.width * 0.5,
-                  height: 50,
-                  child: SizedBox.expand(
-                    child: Text(
-                      "받은 요청",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'Leferi',
-                        fontWeight: FontWeight.bold,
+              //친구
+              Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(top: 13),
+                    width: size.width * 0.5,
+                    height: 50,
+                    decoration: BoxDecoration(
                         color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        )),
+                    child: SizedBox.expand(
+                      child: Text(
+                        "친구",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Leferi',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                onTap: () {
-                  //_sendName() 함수 삭제
-                  Navigator.of(context, rootNavigator: true).pop();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Requested()));
-                },
-              )
+
+                  //받은 요청
+                  InkWell(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 13),
+                      width: size.width * 0.5,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Color(0xff6157DE),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          )),
+                      child: SizedBox.expand(
+                        child: Text(
+                          "받은 요청",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Leferi',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      //_sendName() 함수 삭제
+                      Navigator.of(context, rootNavigator: true).pop();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Requested()));
+                    },
+                  )
+                ],
+              ),
             ],
           ),
           Expanded(
@@ -105,6 +127,7 @@ class Menu extends StatelessWidget {
                 context, MaterialPageRoute(builder: (context) => AddFriend()));
           },
           child: Container(
+            alignment: Alignment.center,
             height: 50,
             color: const Color(0xff6157DE),
             child: Text(
@@ -130,7 +153,7 @@ class FreindList extends StatefulWidget {
 }
 
 class _FreindListState extends State<FreindList> {
-  String memo="";
+  String memo = "";
   final user = FirebaseAuth.instance.currentUser;
   final ref = FirebaseFirestore.instance.collection('user');
 
@@ -194,12 +217,12 @@ class _FreindListState extends State<FreindList> {
 
   void showDelete(context, name, email, uid) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-              child: Container(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Container(
             width: 400,
-            height: 200,
+            height: 150,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
@@ -207,18 +230,37 @@ class _FreindListState extends State<FreindList> {
             child: Column(
               children: [
                 SizedBox(height: 30),
-                Text(
-                  name + '님을 정말로 삭제 하시겠습니까??',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      '님을 정말로 삭제 하시겠습니까??',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff6157DE),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        elevation: 0,
+                      ),
                       onPressed: () async {
                         await FirebaseFirestore.instance
                             .collection('user')
@@ -248,9 +290,15 @@ class _FreindListState extends State<FreindList> {
                       ),
                     ),
                     SizedBox(
-                      width: 10,
+                      width: 15,
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.grey[200],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        elevation: 0,
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -258,6 +306,7 @@ class _FreindListState extends State<FreindList> {
                         '취소',
                         style: TextStyle(
                           fontFamily: 'Leferi',
+                          color: Colors.black,
                         ),
                       ),
                     )
@@ -265,8 +314,10 @@ class _FreindListState extends State<FreindList> {
                 )
               ],
             ),
-          ));
-        });
+          ),
+        );
+      },
+    );
   }
 
   Future<List> getUserLocation(friendLat, friendLng) async {
@@ -296,24 +347,69 @@ class _FreindListState extends State<FreindList> {
             child: FutureBuilder(
                 builder: (context, snapshot) {
                   if (snapshot.hasData == false) {
-                    return CircularProgressIndicator();
+                    return Center(
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: const [
+                            CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 5,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   } else {
                     List ll = snapshot.data as List;
                     return Column(
                       children: [
                         SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              '님의 위치',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text(
-                          name + '님의 위치\n\n' + '지번주소: ' + ll[0] + '\n',
+                          '지번주소: ' + ll[0] + '\n',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
+
+                        //친구위치 확인하기 > 확인 버튼
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.grey[200],
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                elevation: 0,
+                              ),
                               onPressed: () {
                                 Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -323,11 +419,9 @@ class _FreindListState extends State<FreindList> {
                                 '확인',
                                 style: TextStyle(
                                   fontFamily: 'Leferi',
+                                  color: Colors.black,
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 10,
                             ),
                           ],
                         )
@@ -350,43 +444,69 @@ class _FreindListState extends State<FreindList> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: const [
+                    CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 5,
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
           return Scaffold(
               body: ListView.separated(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (BuildContext context, int index) {
+              // 친구목록 - 프로필사진 및 목록
               return ExpansionTile(
                 iconColor: Colors.grey,
                 collapsedIconColor: Colors.grey,
                 textColor: Colors.black,
                 collapsedTextColor: Colors.black,
                 collapsedBackgroundColor: Colors.white,
-                backgroundColor: Colors.grey[200],
-
+                backgroundColor: Colors.white,
                 leading: snapshot.data!.docs[index]['userPhotoUrl'] == ""
                     ? Image.asset(
                         'assets/images/neoguleman.jpeg',
-                        fit: BoxFit.contain,
-                        height: 200,
+                        fit: BoxFit.fitWidth,
+                        width: 50,
                       )
-                    : Image.network(snapshot.data!.docs[index]['userPhotoUrl'],
-                        fit: BoxFit.cover),
+                    : Image.network(
+                        snapshot.data!.docs[index]['userPhotoUrl'],
+                        fit: BoxFit.fitWidth,
+                        width: 50,
+                      ),
                 /*Icon(
                 Icons.account_circle,
                 size: 40,
               ),
               ),*/
+                // 친구목록 - 이름, 이메일
                 title: Text(
                   snapshot.data!.docs[index]['name'],
                 ),
                 subtitle: Text(snapshot.data!.docs[index]['email']),
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40),
+                  Container(
+                    alignment: Alignment.bottomRight,
                     child: ListTile(
                       tileColor: Colors.white,
+
+                      // 친구위치 확인하기 버튼
                       title: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xff6157DE),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          elevation: 0,
+                        ),
                         onPressed: () async {
                           showFriendLocation(
                               context,
@@ -399,34 +519,40 @@ class _FreindListState extends State<FreindList> {
                           style: TextStyle(
                             fontFamily: 'Leferi',
                             fontSize: 13,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(width: 5),
+                          // 친구 삭제 버튼
                           ElevatedButton(
-                              onPressed: () {
-                                showDelete(
-                                    context,
-                                    snapshot.data!.docs[index]['name'],
-                                    snapshot.data!.docs[index]['email'],
-                                    snapshot.data!.docs[index]['uid']);
-                              },
-                              child: Text(
-                                '친구 삭제',
-                                style: TextStyle(
-                                  fontFamily: 'Leferi',
-                                  fontSize: 13,
-                                  color: Colors.black,
-                                ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey[200],
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              elevation: 0,
+                            ),
+                            onPressed: () {
+                              showDelete(
+                                  context,
+                                  snapshot.data!.docs[index]['name'],
+                                  snapshot.data!.docs[index]['email'],
+                                  snapshot.data!.docs[index]['uid']);
+                            },
+                            child: Text(
+                              '친구 삭제',
+                              style: TextStyle(
+                                fontFamily: 'Leferi',
+                                fontSize: 13,
+                                color: Colors.black,
                               ),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                              )),
-                          SizedBox(width: 10)
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
                         ],
                       ),
                     ),
