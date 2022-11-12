@@ -84,6 +84,7 @@ class _AddFriendState extends State<AddFriend> {
               ),
             );
           }
+
           return Scaffold(
               body: Stack(
             children: <Widget>[
@@ -108,13 +109,32 @@ class _AddFriendState extends State<AddFriend> {
                           color: Colors.white.withOpacity(0),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            '${snapshot.data!.docs[index]['email']}',
+                            '${snapshot.data!.docs[index]['email']} ${snapshot.data!.docs[index]['name']}',
                             style: TextStyle(
                               color: Colors.black,
                               fontFamily: 'Leferi',
                               fontSize: 15,
                             ),
                           ),
+                        ),
+
+                        snapshot.data!.docs[index]['userPhotoUrl']== "" ?
+                            Card(
+                              child: Image.asset(
+                                //기본이미지
+                                  'assets/images/neoguleman.jpeg',
+                                  fit: BoxFit.contain,
+                                  height: 200,
+                                  width: 200,
+                              )
+                            )
+                        : Card(
+                          child: Image.network(snapshot.data!.docs[index]['userPhotoUrl']
+                          ,fit: BoxFit.contain,
+                            height: 200,
+                            width: 200,
+                          ),
+
                         ),
 
                         // 친구요청 버튼

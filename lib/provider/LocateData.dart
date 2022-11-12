@@ -57,7 +57,6 @@ class LocateProvider extends ChangeNotifier {
       if (haspermission) {
         notifyListeners();
         getLocation();
-        friendLocation();
       }
     } else {
       print("GPS Service is not enabled, turn on GPS location");
@@ -77,15 +76,15 @@ class LocateProvider extends ChangeNotifier {
       _my_lat = position.latitude;
       _my_lng = position.longitude;
 
-      await ref.doc(user!.uid).update({'my_lat': _my_lat, 'my_lng': _my_lng});
+      await ref.doc(user?.uid).update({'my_lat': _my_lat, 'my_lng': _my_lng});
       QuerySnapshot querySnapshot =
-          await ref.doc(user!.uid).collection('FriendAdmin').where('friend', isEqualTo: 1).get();
+          await ref.doc(user?.uid).collection('FriendAdmin').where('friend', isEqualTo: 1).get();
 
       final allData = querySnapshot.docs.map((doc) => doc.get('uid')).toList();
 
       for(var s in allData){
         await ref.doc(s)
-            .collection('FriendAdmin').doc(user!.uid).update({
+            .collection('FriendAdmin').doc(user?.uid).update({
           'friend_lat': tmp1,
           'friend_lng': tmp2,
         });
@@ -96,7 +95,7 @@ class LocateProvider extends ChangeNotifier {
 
 
   friendLocation() async{
-    QuerySnapshot querySnapshot = await ref.doc(user!.uid)
+    QuerySnapshot querySnapshot = await ref.doc(user?.uid)
         .collection('FriendAdmin').where('friend', isEqualTo: 1).get();
 
     _friend_lat = querySnapshot.docs.map((doc) => doc.get('friend_lat')).toList();
