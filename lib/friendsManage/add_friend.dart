@@ -225,12 +225,7 @@ class _AddFriendState extends State<AddFriend> {
                   cursorWidth: 1.5,
                   controller: searchTextEditingController,
                   decoration: InputDecoration(
-                    focusColor: Colors.pink,
                     fillColor: Colors.white.withOpacity(0),
-                    iconColor: Colors.black,
-                    hoverColor: Colors.purple,
-                    prefixIconColor: Colors.yellow,
-                    suffixIconColor: Colors.red,
                     hintText: ' Search Email',
                     hintStyle: TextStyle(
                       color: Colors.white.withOpacity(0.5),
