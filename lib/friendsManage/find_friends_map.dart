@@ -91,11 +91,14 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                                 height: 100,
                                 child: Stack(
                                   fit: StackFit.expand,
-                                  children: const [
+                                  children: <Widget>[
                                     CircularProgressIndicator(
                                       color: Color(0xff6157DE),
                                       strokeWidth: 5,
                                     ),
+                                    Container(
+                                      height: 500,
+                                    )
                                   ],
                                 ),
                               ),
@@ -152,7 +155,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
       for(let i = 0 ; i < flat.length ; i++){
         var imageSize = new kakao.maps.Size(35, 45);
         var imageOptions = {  
-                spriteOrigin: new kakao.maps.Point(0, 5 + i * 45),    
+                spriteOrigin: new kakao.maps.Point(90, 5 + i * 45),    
                 spriteSize: new kakao.maps.Size(644, 946)  
         };
       
