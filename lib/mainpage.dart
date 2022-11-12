@@ -66,7 +66,7 @@ class _MainPageState extends State<MainPage> {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.white,
-                                Color.fromRGBO(220, 229, 255, 0.1),
+                                Color.fromRGBO(238, 235, 255, 1),
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -92,9 +92,9 @@ class _MainPageState extends State<MainPage> {
                                   ),
                                   gradient: LinearGradient(
                                       colors: [
-                                        Color.fromRGBO(150, 169, 255, 0.55),
-                                        Color.fromRGBO(150, 169, 255, 0.2),
-                                        Color.fromRGBO(150, 169, 255, 0.55),
+                                        Color.fromRGBO(150, 109, 255, 0.55),
+                                        Color.fromRGBO(150, 109, 255, 0.2),
+                                        Color.fromRGBO(150, 109, 255, 0.55)
                                       ],
                                       begin: Alignment.bottomLeft,
                                       end: Alignment.bottomRight),
@@ -117,7 +117,7 @@ class _MainPageState extends State<MainPage> {
                                       style: TextStyle(
                                           fontFamily: 'Leferi',
                                           color: Colors.white,
-                                          fontSize: 30,
+                                          fontSize: MediaQuery.of(context).size.width*0.5/7,
                                           fontWeight: FontWeight.bold,
                                           shadows: [
                                             Shadow(
@@ -171,7 +171,7 @@ class _MainPageState extends State<MainPage> {
                                 gradient: LinearGradient(
                                     colors: [
                                       Color(0xff6157DE),
-                                      Color.fromRGBO(100, 109, 255, 1.0)
+                                      Color.fromRGBO(150, 109, 255, 1.0)
                                           .withOpacity(0.8),
                                       /*
                                   Color.fromRGBO(170, 79, 255, 1.0)

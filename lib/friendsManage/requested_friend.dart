@@ -137,7 +137,21 @@ class _FreindListState extends State<FreindList> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: const [
+                    CircularProgressIndicator(
+                      color: Color(0xff6157DE),
+                      strokeWidth: 5,
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
           return Scaffold(
               body: ListView.separated(
@@ -158,6 +172,13 @@ class _FreindListState extends State<FreindList> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xff6157DE),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          elevation: 0,
+                        ),
+
                         onPressed: () async {
                           var currentUserName = '';
                           double currentUserLat = 0;
@@ -207,6 +228,13 @@ class _FreindListState extends State<FreindList> {
                         width: 10,
                       ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey[200],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          elevation: 0,
+                        ),
+
                         onPressed: () async {
                           await ref
                               .doc('${snapshot.data!.docs[index]['uid']}')
@@ -225,6 +253,7 @@ class _FreindListState extends State<FreindList> {
                           '거절',
                           style: TextStyle(
                             fontFamily: 'Leferi',
+                            color: Colors.black,
                           ),
                         ),
                       )
