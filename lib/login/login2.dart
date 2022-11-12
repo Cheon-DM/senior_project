@@ -104,6 +104,8 @@ class _LogInState extends State<LogIn> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: TextFormField(
+                  autofocus: true,
+
                   key: ValueKey(5),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -128,8 +130,14 @@ class _LogInState extends State<LogIn> {
                   decoration: InputDecoration(
                     icon: Icon(
                         Icons.person,
+                      color: Color(0xff6157DE),
                     ),
                     hintText: ' Email',
+                      hintStyle: TextStyle(
+                        fontFamily: 'Leferi',
+                        fontSize: 15,
+                        color: Colors.grey,
+                      ),
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Color(0xff6157DE),
@@ -141,6 +149,13 @@ class _LogInState extends State<LogIn> {
                       borderSide: const BorderSide(
                           color: Color(0xff6157DE),
                           width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -166,8 +181,16 @@ class _LogInState extends State<LogIn> {
                   userPassword = value!;
                 },
                 decoration: InputDecoration(
-                    icon: Icon(Icons.vpn_key),
+                    icon: Icon(
+                        Icons.vpn_key,
+                      color: Color(0xff6157DE),
+                    ),
                     hintText: ' Password',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Leferi',
+                    fontSize: 15,
+                    color: Colors.grey,
+                  ),
 
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -180,6 +203,13 @@ class _LogInState extends State<LogIn> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Color(0xff6157DE),
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
                       width: 1.0,
                     ),
                     borderRadius: BorderRadius.circular(15),
