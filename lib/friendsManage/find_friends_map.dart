@@ -113,7 +113,7 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                                 mapController: (controller) {
                                   _mapController = controller;
                                 },
-                                zoomLevel: 2,
+                                zoomLevel: 3,
                                 customScript: '''
       var markers = [];
       var friendImageURL = 'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png';

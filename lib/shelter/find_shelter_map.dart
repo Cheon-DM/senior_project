@@ -190,7 +190,8 @@ class _AroundShelterState extends State<AroundShelter> {
                                   Container(
                                     width: 500.0,
                                     child: LinearProgressIndicator(
-                                      backgroundColor: Colors.pink,
+                                      backgroundColor: Color(0xff6157DE),
+                                      color: Colors.white,
                                     ),
                                   ),
                                   Padding(
@@ -202,6 +203,9 @@ class _AroundShelterState extends State<AroundShelter> {
                                         color: Color(0xff6157DE),
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    height: MediaQuery.of(context).size.height * 0.6,
                                   ),
                                 ],
                               ),
