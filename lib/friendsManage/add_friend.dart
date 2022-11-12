@@ -42,16 +42,11 @@ class _AddFriendState extends State<AddFriend> {
           children: <Widget>[
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(Icons.group, color: Colors.grey[300], size: 150),
                 Text(
-                  "검색 결과가 존재하지 않습니다",
-                  style: TextStyle(
-                    fontFamily: 'Leferi',
-                  ),
-                ),
-                Text(
-                  "이메일을 올바르게 작성했는지 확인해주세요",
+                  "Search your friends",
                   style: TextStyle(
                     fontFamily: 'Leferi',
                   ),
