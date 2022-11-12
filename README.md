@@ -75,6 +75,7 @@ HTTP POST 방식을 이용하여 실시간으로 응답받은 재난문자를 SQ
 ## 알고리즘
 
 <!--알고리즘 사진 첨부-->
+![플로우차트](https://user-images.githubusercontent.com/76736548/201462363-d2564821-ad8f-4a2b-809b-3ccad1e8cc9c.png)
 
 <br>
 
@@ -90,4 +91,4 @@ HTTP POST 방식을 이용하여 실시간으로 응답받은 재난문자를 SQ
 
 ## 라이센스
 
-<!-- Stack Icon Refernces -->
+<!-- Refernces -->
