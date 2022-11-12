@@ -491,8 +491,20 @@ class _FreindListState extends State<FreindList> {
                 // 친구목록 - 이름, 이메일
                 title: Text(
                   snapshot.data!.docs[index]['name'],
+                  style: TextStyle(
+                    fontFamily: 'Leferi',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                subtitle: Text(snapshot.data!.docs[index]['email']),
+                subtitle: Text(
+                    snapshot.data!.docs[index]['email'],
+                  style: TextStyle(
+                    fontFamily: 'Leferi',
+                    color: Colors.black.withOpacity(0.5),
+                    fontSize: 14,
+                  ),
+                ),
                 children: <Widget>[
                   Container(
                     alignment: Alignment.bottomRight,
