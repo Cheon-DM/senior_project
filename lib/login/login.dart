@@ -91,7 +91,7 @@ class _LogInState extends State<LogIn> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 100, left: 100, right: 100),
+        padding: const EdgeInsets.only(top: 100, left: 70, right: 70),
 
         child: Form(
           key: _formkey,
@@ -101,48 +101,51 @@ class _LogInState extends State<LogIn> {
             mainAxisAlignment: MainAxisAlignment.start,
 
             children: <Widget>[
-              TextFormField(
-                key: ValueKey(5),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return '이메일 주소를 입력해주세요';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  userEmail = value!;
-                },
-                onChanged: (value) {
-                  userEmail = value!;
-                },
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: TextFormField(
+                  key: ValueKey(5),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return '이메일 주소를 입력해주세요';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    userEmail = value!;
+                  },
+                  onChanged: (value) {
+                    userEmail = value!;
+                  },
 
-                cursorWidth: 1.5,
-                cursorRadius: Radius.circular(5),
-                cursorColor: Color(0xff6157DE),
-                style: TextStyle(
-                  fontFamily: 'Leferi',
-                  color: Colors.black,
-                ),
-                decoration: InputDecoration(
-                  icon: Icon(
-                      Icons.person,
+                  cursorWidth: 1.5,
+                  cursorRadius: Radius.circular(5),
+                  cursorColor: Color(0xff6157DE),
+                  style: TextStyle(
+                    fontFamily: 'Leferi',
+                    color: Colors.black,
                   ),
-                  hintText: ' Email',
-                    border: OutlineInputBorder(
+                  decoration: InputDecoration(
+                    icon: Icon(
+                        Icons.person,
+                    ),
+                    hintText: ' Email',
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xff6157DE),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
-                        color: Color(0xff6157DE),
-                        width: 1.0,
+                          color: Color(0xff6157DE),
+                          width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color(0xff6157DE),
-                        width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
                 ),
               ),
 
