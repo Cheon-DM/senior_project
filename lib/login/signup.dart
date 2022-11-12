@@ -13,6 +13,11 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  bool isPressed1 = false;
+  bool isPressed2 = false;
+  bool isPressed3 = false;
+  bool isPressed4 = false;
+
   final _formkey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
   final user = FirebaseAuth.instance.currentUser;
@@ -36,9 +41,11 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+
       appBar: AppBar(
         backgroundColor: const Color(0xff6157DE),
         elevation: 0,
+
         title: Text(
           "회원가입",
           style: TextStyle(
@@ -69,6 +76,10 @@ class _SignUpState extends State<SignUp> {
                 Container(height: 50),
                 //사용자 이름 박스
                 TextFormField(
+                  autofocus: true,
+
+                  cursorWidth: 1.5,
+                  cursorRadius: Radius.circular(5),
                   cursorColor: const Color(0xff6157DE),
                   key: ValueKey(1),
                   //닉네임 키: 1
@@ -87,35 +98,53 @@ class _SignUpState extends State<SignUp> {
                   },
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.accessibility),
+                    icon: Icon(
+                        Icons.accessibility,
+                    color: Color(0xff6157DE),
+                    ),
                     labelText: "사용자 이름",
                     labelStyle: TextStyle(
                       color: const Color(0xff6157DE),
                       fontSize: 15,
                       fontWeight: FontWeight.normal,
                     ),
-                    hintText: '닉네임',
-                    border: OutlineInputBorder(),
+                    hintText: ' 닉네임',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xff6157DE),
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
 
                     //입력 활성화 중 UI
                     focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
                         borderSide: BorderSide(
                             width: 1, color: const Color(0xff6157DE))),
 
                     //입력 비활성화 중 UI
-                    filled: true,
-                    fillColor: Colors.grey[100],
                     enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
-                        borderSide: BorderSide(
-                            width: 1, color: const Color(0xff6157DE))),
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
                 ),
                 Container(height: 10),
 
                 //아이디 박스
                 TextFormField(
+                  cursorWidth: 1.5,
+                  cursorRadius: Radius.circular(5),
                   cursorColor: const Color(0xff6157DE),
 
                   key: ValueKey(2),
@@ -134,36 +163,54 @@ class _SignUpState extends State<SignUp> {
                   },
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.person),
+                    icon: Icon(
+                        Icons.person,
+                      color: Color(0xff6157DE),
+                    ),
                     labelText: "아이디",
                     labelStyle: TextStyle(
-                      color: Colors.black87,
+                      color: Color(0xff6157DE),
                       fontSize: 15,
                       fontWeight: FontWeight.normal,
                     ),
 
-                    hintText: 'Email',
-                    border: OutlineInputBorder(),
+                    hintText: ' Email',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xff6157DE),
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
 
                     //입력 활성화 중 UI
                     focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
                         borderSide: BorderSide(
                             width: 1, color: const Color(0xff6157DE))),
 
                     //입력 비활성화 중 UI
-                    filled: true,
-                    fillColor: Colors.grey[200],
                     enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
-                        borderSide: BorderSide(
-                            width: 1, color: Color.fromRGBO(0, 0, 0, 0.0))),
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
                 ),
                 Container(height: 10),
 
                 //비밀번호 박스
                 TextFormField(
+                  cursorWidth: 1.5,
+                  cursorRadius: Radius.circular(5),
                   cursorColor: const Color(0xff6157DE),
 
                   obscureText: true,
@@ -183,36 +230,54 @@ class _SignUpState extends State<SignUp> {
                   },
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.vpn_key),
+                    icon: Icon(
+                        Icons.vpn_key,
+                      color: Color(0xff6157DE),
+                    ),
                     labelText: "비밀번호",
                     labelStyle: TextStyle(
-                      color: Colors.black87,
+                      color: Color(0xff6157DE),
                       fontSize: 15,
                       fontWeight: FontWeight.normal,
                     ),
 
-                    hintText: 'Password',
-                    border: OutlineInputBorder(),
+                    hintText: ' Password',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xff6157DE),
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
 
                     //입력 활성화 중 UI
                     focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
                         borderSide: BorderSide(
                             width: 1, color: const Color(0xff6157DE))),
 
                     //입력 비활성화 중 UI
-                    filled: true,
-                    fillColor: Colors.grey[200],
                     enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
-                        borderSide: BorderSide(
-                            width: 1, color: Color.fromRGBO(0, 0, 0, 0.0))),
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
                 ),
                 Container(height: 10),
 
                 //비밀번호 확인 박스
                 TextFormField(
+                  cursorWidth: 1.5,
+                  cursorRadius: Radius.circular(5),
                   cursorColor: const Color(0xff6157DE),
                   obscureText: true,
                   key: ValueKey(4),
@@ -232,30 +297,46 @@ class _SignUpState extends State<SignUp> {
 
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.vpn_key_outlined),
+                    icon: Icon(
+                        Icons.vpn_key_outlined,
+                      color: Color(0xff6157DE),
+                    ),
                     labelText: "비밀번호 확인",
                     labelStyle: TextStyle(
-                      color: Colors.black87,
+                      color: Color(0xff6157DE),
                       fontSize: 15,
                       fontWeight: FontWeight.normal,
                     ),
 
-                    hintText: 'Password',
-                    border: OutlineInputBorder(),
+                    hintText: ' Password',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xff6157DE),
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
 
                     //입력 활성화 중 UI
                     focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
                         borderSide: BorderSide(
                             width: 1, color: const Color(0xff6157DE))),
 
                     //입력 비활성화 중 UI
-                    filled: true,
-                    fillColor: Colors.grey[200],
                     enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
-                        borderSide: BorderSide(
-                            width: 1, color: Color.fromRGBO(0, 0, 0, 0.0))),
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
                 ),
               ],
