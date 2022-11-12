@@ -269,7 +269,7 @@ class _AroundShelterState extends State<AroundShelter> {
     
     var customStyle = document.createElement("style");
     document.head.appendChild(customStyle);
-    customStyle.sheet.insertRule(".info {height: 80px; width: 140px; box-shadow: 3px 4px 0px 0px #1564ad;	background-color:transparent;	border-radius:0px;	border:1px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:sans-serif;	font-size:16px;	font-weight:bolder; padding:16px 30px;	text-decoration:none;	text-shadow:0px 1px 0px #528ecc; letter-spacing: -1px;}");
+    customStyle.sheet.insertRule(".info {height: 80px; width: 140px; box-shadow: 0px 0px 0px 0px #1564ad;	background-color:transparent;	border-radius:0px;	border:0px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:'Leferi';	font-size:16px;	font-weight:bolder; padding:10px 10px 10px 10px;	text-decoration:none;	text-shadow:0px 0px 0px #528ecc; letter-spacing: -1px;}");
     customStyle.sheet.insertRule(".info:hover {background-color:transparent;}");
     customStyle.sheet.insertRule(".info:active {position:relative;	top:1px;}");
     
@@ -338,7 +338,7 @@ class _AroundShelterState extends State<AroundShelter> {
     };
     var markerImage1 = createMarkerImage(imageURL, imageSize1, imageOptions1);
     
-    customStyle.sheet.insertRule(".difinfo {height: 80px; width: 140px; box-shadow: 3px 4px 0px 0px #2b7816;	background-color:transparent;	border-radius:6px;	border:1px solid #1a8a25;	display:inline-block;	cursor:pointer;	color:#397848;	font-family:sans-serif;	font-size:16px;	padding:16px 30px;	text-decoration:none;	text-shadow:0px 1px 0px #2f6627;}");
+    customStyle.sheet.insertRule(".difinfo {height: 80px; width: 140px; box-shadow: 0px 0px 0px 0px #1564ad;	background-color:transparent;	border-radius:0px;	border:0px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:'Leferi';	font-size:16px;	font-weight:bolder; padding:10px 10px 10px 10px;	text-decoration:none;	text-shadow:0px 0px 0px #528ecc; letter-spacing: -1px;}");
     customStyle.sheet.insertRule(".difinfo:hover {background-color:transparent;}");
     customStyle.sheet.insertRule(".difinfo:active {position:relative;	top:1px;}");    
     
