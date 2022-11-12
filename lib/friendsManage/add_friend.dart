@@ -109,7 +109,7 @@ class _AddFriendState extends State<AddFriend> {
                           color: Colors.white.withOpacity(0),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            '${snapshot.data!.docs[index]['email']} ${snapshot.data!.docs[index]['name']}',
+                            '${snapshot.data!.docs[index]['email']} ${snapshot.data!.docs[index]['userName']}',
                             style: TextStyle(
                               color: Colors.black,
                               fontFamily: 'Leferi',
