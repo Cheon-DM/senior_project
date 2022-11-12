@@ -338,7 +338,7 @@ class _AroundShelterState extends State<AroundShelter> {
     };
     var markerImage1 = createMarkerImage(imageURL, imageSize1, imageOptions1);
     
-    customStyle.sheet.insertRule(".difinfo {height: 80px; width: 140px; box-shadow: 0px 0px 0px 0px #1564ad;	background-color:transparent;	border-radius:0px;	border:0px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:'Leferi';	font-size:16px;	font-weight:bolder; padding:10px 10px 10px 10px;	text-decoration:none;	text-shadow:0px 0px 0px #528ecc; letter-spacing: -1px;}");
+    customStyle.sheet.insertRule(".difinfo {height: 80px; width: 160px; box-shadow: 0px 0px 0px 0px #1564ad;	background-color:transparent;	border-radius:0px;	border:0px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:'Leferi';	font-size:14px;	font-weight:bolder; padding:10px 10px 10px 10px;	text-decoration:none;	text-shadow:0px 0px 0px #528ecc; letter-spacing: -1px;}");
     customStyle.sheet.insertRule(".difinfo:hover {background-color:transparent;}");
     customStyle.sheet.insertRule(".difinfo:active {position:relative;	top:1px;}");    
     

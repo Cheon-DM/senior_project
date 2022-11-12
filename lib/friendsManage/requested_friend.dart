@@ -80,11 +80,11 @@ class Requested extends StatelessWidget {
                       width: size.width * 0.5,
                       height: 50,
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15),
-                          ),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
                       ),
                       child: SizedBox.expand(
                         child: Text(
@@ -160,14 +160,32 @@ class _FreindListState extends State<FreindList> {
               return ListTile(
                   iconColor: Colors.grey,
                   textColor: Colors.black,
-                  leading: Icon(
-                    Icons.account_circle,
-                    size: 40,
+                  leading: snapshot.data!.docs[index]['userPhotoUrl'] == ""
+                      ? Image.asset(
+                    'assets/images/neoguleman.jpeg',
+                    fit: BoxFit.fitWidth,
+                    width: 50,
+                  )
+                      : Image.network(
+                    snapshot.data!.docs[index]['userPhotoUrl'],
+                    fit: BoxFit.fitWidth,
+                    width: 50,
                   ),
                   title: Text(
                     snapshot.data!.docs[index]['name'],
+                    style: TextStyle(
+                      fontFamily: 'Leferi',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  subtitle: Text(snapshot.data!.docs[index]['email']),
+                  subtitle: Text(
+                    snapshot.data!.docs[index]['email'],
+                    style: TextStyle(
+                        fontFamily: 'Leferi',
+                        fontSize: 14,
+                        color: Colors.black.withOpacity(0.5)),
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -178,7 +196,6 @@ class _FreindListState extends State<FreindList> {
                               borderRadius: BorderRadius.circular(15)),
                           elevation: 0,
                         ),
-
                         onPressed: () async {
                           var currentUserName = '';
                           double currentUserLat = 0;
@@ -234,7 +251,6 @@ class _FreindListState extends State<FreindList> {
                               borderRadius: BorderRadius.circular(15)),
                           elevation: 0,
                         ),
-
                         onPressed: () async {
                           await ref
                               .doc('${snapshot.data!.docs[index]['uid']}')
