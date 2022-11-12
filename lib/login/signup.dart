@@ -139,7 +139,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-                Container(height: 10),
+                Container(height: 15),
 
                 //아이디 박스
                 TextFormField(
@@ -205,7 +205,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-                Container(height: 10),
+                Container(height: 15),
 
                 //비밀번호 박스
                 TextFormField(
@@ -272,7 +272,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-                Container(height: 10),
+                Container(height: 15),
 
                 //비밀번호 확인 박스
                 TextFormField(

@@ -62,17 +62,7 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         Container(
                           height: MediaQuery.of(context).size.height - 80,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.white,
-                                Color.fromRGBO(238, 235, 255, 1),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
                           ),
-                        ),
                         Stack(
                           children: [
                             // 그림자처럼 깔린...그 부분
@@ -87,8 +77,8 @@ class _MainPageState extends State<MainPage> {
                                     left: 0, right: 0, bottom: 30),
                                 decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.only(
-                                    bottomRight: Radius.circular(200),
-                                    bottomLeft: Radius.circular(200),
+                                    bottomRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(150),
                                   ),
                                   gradient: LinearGradient(
                                       colors: [
@@ -119,10 +109,10 @@ class _MainPageState extends State<MainPage> {
                                           color: Colors.white,
                                           fontSize: MediaQuery.of(context).size.width*0.5/7,
                                           fontWeight: FontWeight.bold,
+                                          letterSpacing: -1,
                                           shadows: [
                                             Shadow(
-                                              color: Color.fromRGBO(
-                                                  170, 179, 255, 1.0),
+                                              color: Color(0xff6157DE),
                                               offset: Offset(0, 0),
                                               blurRadius: 20,
                                             )
@@ -140,13 +130,13 @@ class _MainPageState extends State<MainPage> {
                                     "나와 가장 가까운 대피소",
                                     style: TextStyle(
                                         fontFamily: 'Leferi',
-                                        color: Colors.white.withOpacity(0.75),
+                                        color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
+                                        letterSpacing: -1,
                                         shadows: [
                                           Shadow(
-                                            color:
-                                                Colors.white.withOpacity(0.7),
+                                            color: Color(0xff6157DE),
                                             offset: Offset(0, 0),
                                             blurRadius: 5,
                                           )
@@ -165,8 +155,8 @@ class _MainPageState extends State<MainPage> {
                                   left: 0, right: 0, bottom: 30),
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.only(
-                                  bottomRight: Radius.circular(200),
-                                  bottomLeft: Radius.circular(200),
+                                  bottomRight: Radius.circular(0),
+                                  bottomLeft: Radius.circular(150),
                                 ),
                                 gradient: LinearGradient(
                                     colors: [
@@ -230,11 +220,6 @@ class _MainPageState extends State<MainPage> {
                                           SizedBox(
                                             width: 120,
                                           ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: Colors.black,
-                                            size: 30,
-                                          )
                                         ],
                                       ),
                                     ),
@@ -254,7 +239,16 @@ class _MainPageState extends State<MainPage> {
                                       topLeft: Radius.circular(50),
                                       bottomLeft: Radius.circular(50),
                                     ),
-                                    color: Colors.white.withOpacity(1)),
+                                    color: Colors.white.withOpacity(1),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Color.fromRGBO(245, 245, 250, 1),
+                                        blurRadius: 5,
+                                        spreadRadius: 3,
+                                        offset: Offset(0, 2),
+                                      ),
+                                    ]
+                                ),
                               ),
 
                               //위치공유
@@ -295,11 +289,6 @@ class _MainPageState extends State<MainPage> {
                                           SizedBox(
                                             width: 120,
                                           ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: Colors.black,
-                                            size: 30,
-                                          )
                                         ],
                                       ),
                                     ),
@@ -311,14 +300,25 @@ class _MainPageState extends State<MainPage> {
                                 margin: const EdgeInsets.only(
                                   left: 100,
                                   right: 0,
-                                  top: 15,
+                                  top: 20,
                                 ),
                                 decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(50),
                                       bottomLeft: Radius.circular(50),
                                     ),
-                                    color: Colors.white.withOpacity(1)),
+                                    color: Colors.white.withOpacity(1),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Color.fromRGBO(245, 245, 250, 1),
+                                          blurRadius: 5,
+                                          spreadRadius: 3,
+                                        offset: Offset(0, 2),
+                                      ),
+                                    ]
+
+                                ),
+
                               ),
 
                               //재난문자
@@ -362,11 +362,6 @@ class _MainPageState extends State<MainPage> {
                                           SizedBox(
                                             width: 120,
                                           ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: Colors.black,
-                                            size: 30,
-                                          )
                                         ],
                                       ),
                                     ),
@@ -378,14 +373,24 @@ class _MainPageState extends State<MainPage> {
                                 margin: const EdgeInsets.only(
                                   left: 100,
                                   right: 0,
-                                  top: 15,
+                                  top: 20,
                                 ),
                                 decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(50),
                                       bottomLeft: Radius.circular(50),
                                     ),
-                                    color: Colors.white.withOpacity(0.8)),
+                                    color: Colors.white.withOpacity(1),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Color.fromRGBO(245, 245, 250, 1),
+                                        blurRadius: 5,
+                                        spreadRadius: 3,
+                                        offset: Offset(0, 2),
+                                      ),
+                                    ]
+
+                                ),
                               ),
                             ],
                           ),
