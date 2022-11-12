@@ -129,12 +129,16 @@ class _MyPageState extends State<MyPage> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     alignment: Alignment.center,
-                    margin: EdgeInsets.symmetric(vertical: 10),
+                    margin: EdgeInsets.only(top: 10, bottom: 0),
                     child: Column(
                       children: <Widget>[
                         Text(usernameee,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20))
+                              fontFamily: 'Leferi',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                            ),
+                        ),
                       ],
                     ),
                   ),
@@ -144,7 +148,16 @@ class _MyPageState extends State<MyPage> {
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                     alignment: Alignment.center,
                     child: Column(
-                      children: <Widget>[Text(user!.email.toString())],
+                      children: <Widget>[
+                        Text(
+                            user!.email.toString(),
+                          style: TextStyle(
+                            fontFamily: 'Leferi',
+                            fontSize: 15,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
