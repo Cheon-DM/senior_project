@@ -85,7 +85,21 @@ class _FindFriendLocation extends State<FindFriendLocation> {
                         stream: locate(),
                         builder: (context, snapshot) {
                           if (isLoading){
-                            return const CircularProgressIndicator();
+                            return Center(
+                              child: SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: const [
+                                    CircularProgressIndicator(
+                                      color: Color(0xff6157DE),
+                                      strokeWidth: 5,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
                           }
                           else {
                             return KakaoMapView(
