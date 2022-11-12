@@ -108,6 +108,7 @@ class _ActionGuideState extends State<ActionGuide> {
                                       ),
                                     ),
                                     textColor: Colors.black,
+
                                     onTap: () {
                                       guideDataProvider.getNationalGuide(index);
                                       setState(() {
@@ -267,7 +268,7 @@ class _ActionGuideState extends State<ActionGuide> {
                     ],
                   ),
                 ),
-                flex: 2,
+                flex: 4,
               ),
 
               //화면 우측 분할부(내용)
@@ -327,7 +328,7 @@ class _ActionGuideState extends State<ActionGuide> {
                               ],
                             )
                     ),
-                    flex: 3,
+                    flex: 5,
                   );
                 }
               ),

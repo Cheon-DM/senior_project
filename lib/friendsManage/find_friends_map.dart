@@ -50,51 +50,57 @@ class _FindFriendLocation extends State<FindFriendLocation> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff6157DE),
-        elevation: 5,
-        title: Text(
-          "친구 위치 찾기",
-          style: TextStyle(
-            fontFamily: 'Leferi',
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(size.height*0.07),
+        child: AppBar(
+          backgroundColor: const Color(0xff6157DE),
+          elevation: 0,
+          title: Text(
+            "친구 위치 찾기",
+            style: TextStyle(
+              fontFamily: 'Leferi',
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+          ),  
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
+        
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          StreamBuilder(
-                    stream: locate(),
-                    builder: (context, snapshot) {
-                      if (isLoading){
-                        return const CircularProgressIndicator();
-                      }
-                      else {
-                        return KakaoMapView(
-                            width: size.width,
-                            height: size.height / 2,
-                            kakaoMapKey: kakaoMapKey,
-                            showMapTypeControl: true,
-                            showZoomControl: true,
-                            lat: context.read<LocateProvider>().my_lat,
-                            lng: context.read<LocateProvider>().my_lng,
-                            mapController: (controller) {
-                              _mapController = controller;
-                            },
-                            zoomLevel: 2,
-                            customScript: '''
+          Stack(
+            children: [
+              StreamBuilder(
+                        stream: locate(),
+                        builder: (context, snapshot) {
+                          if (isLoading){
+                            return const CircularProgressIndicator();
+                          }
+                          else {
+                            return KakaoMapView(
+                                width: size.width,
+                                height: size.height *0.9,
+                                kakaoMapKey: kakaoMapKey,
+                                showMapTypeControl: true,
+                                showZoomControl: true,
+                                lat: context.read<LocateProvider>().my_lat,
+                                lng: context.read<LocateProvider>().my_lng,
+                                mapController: (controller) {
+                                  _mapController = controller;
+                                },
+                                zoomLevel: 2,
+                                customScript: '''
       var markers = [];
       var friendImageURL = 'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png';
       
@@ -114,26 +120,26 @@ class _FindFriendLocation extends State<FindFriendLocation> {
       
       function clickMarker(marker, iwContent, iwRemoveable) {
         var infowindow = new kakao.maps.InfoWindow({
-          content : iwContent,
-          removable : iwRemoveable
+              content : iwContent,
+              removable : iwRemoveable
         });
         
         kakao.maps.event.addListener(marker, 'click', function() {
-          infowindow.open(map, marker);
+              infowindow.open(map, marker);
         });
       }
     
       var customStyle = document.createElement("style");
       document.head.appendChild(customStyle);
-      customStyle.sheet.insertRule(".fname {text-align : center; width: 100px;box-shadow: 3px 4px 0px 0px #1564ad;	background-color:transparent;	border-radius:6px;	border:1px solid #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:sans-serif;	font-size:16px;	padding:16px 30px;	text-decoration:none;	text-shadow:0px 1px 0px #528ecc;}");
+      customStyle.sheet.insertRule(".fname {text-align : center; width: 100px; box-shadow: 0px 0px 0px 0px #1564ad;	background-color:transparent;	border-radius:0px;	border:0px groove #337bc4;	display:inline-block;	cursor:pointer;	color:#3e3670;	font-family:sans-serif;	font-size:16px;	font-weight: bolder; padding:10px 10px 10px 10px;	text-decoration:none;	text-shadow:0px 0px 0px #528ecc; letter-spacing: -1px;}");
       customStyle.sheet.insertRule(".fname:hover {background-color:transparent;}");
       customStyle.sheet.insertRule(".fname:active {position:relative;}");
     
       for(let i = 0 ; i < flat.length ; i++){
         var imageSize = new kakao.maps.Size(35, 45);
         var imageOptions = {  
-            spriteOrigin: new kakao.maps.Point(0, 0 + i * 50),    
-            spriteSize: new kakao.maps.Size(644, 946)  
+                spriteOrigin: new kakao.maps.Point(0, 5 + i * 45),    
+                spriteSize: new kakao.maps.Size(644, 946)  
         };
       
         var friendMarkerImage = createMarkerImage(friendImageURL, imageSize, imageOptions);
@@ -149,79 +155,81 @@ class _FindFriendLocation extends State<FindFriendLocation> {
 
       const mapTypeControl = new kakao.maps.MapTypeControl();
       map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-              ''',
-                            onTapMarker: (message) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(content: Text(message.message)));
-                            });
-                      }
-                    }
-                ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {
-                  _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() + 1, {animate: true})');
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.red,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.remove,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  _mapController.runJavascript(
-                      'map.setLevel(map.getLevel() - 1, {animate: true})');
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.blue,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {},
-                child: CircleAvatar(
-                  backgroundColor: Colors.amber,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.pin_drop,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  locateProvider.locateMe();
-                  setState(() {
+                  ''',
+                                onTapMarker: (message) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(content: Text(message.message)));
+                                });
+                          }
+                        }
+                    ),
+              Positioned(
+                bottom: 20,
+                right: 10,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xff6157DE).withOpacity(0.0),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 2,
+                                  color: Color(0xff6157DE),
+                                  spreadRadius: 1
+                              )
+                            ]
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 22,
+                          child: const Icon(
+                            Icons.pin_drop,
+                            color: Color(0xff6157DE),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    InkWell(
+                      onTap: () async {
+                        locateProvider.locateMe();
+                        setState(() {
 
-                  });
-                  await _mapController.clearCache();
-                  debugPrint('[refresh] done');
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.green,
-                  radius: 40,
-                  child: const Icon(
-                    Icons.refresh,
-                    color: Colors.white,
-                  ),
+                        });
+                        await _mapController.clearCache();
+                        debugPrint('[refresh] done');
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xff6157DE),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 2,
+                                  color: Color(0xff6157DE),
+                                  spreadRadius: 1
+                              )
+                            ]
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 22,
+                          child: const Icon(
+                            Icons.refresh,
+                            color: Color(0xff6157DE),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                  ],
                 ),
-              )
+              ),
             ],
           )
         ],

@@ -14,7 +14,7 @@ class Requested extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: const Color(0xff6157DE),
-          elevation: 5,
+          elevation: 0,
           title: Text(
             "친구목록",
             style: TextStyle(
@@ -36,50 +36,71 @@ class Requested extends StatelessWidget {
         ),
         body: Column(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                GestureDetector(
-                    child: Container(
+            Stack(
+              children: [
+                Container(
+                  color: Color(0xff6157DE),
+                  width: size.width,
+                  height: 50,
+                ),
+                Row(
+                  children: <Widget>[
+                    GestureDetector(
+                        child: Container(
+                          padding: EdgeInsets.only(top: 13),
+                          width: size.width * 0.5,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: const Color(0xff6157DE),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                            ),
+                          ),
+                          child: SizedBox.expand(
+                            child: Text(
+                              "친구",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'Leferi',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Menu()));
+                        }),
+                    Container(
                       padding: EdgeInsets.only(top: 13),
-                      color: const Color(0xff6157DE),
                       width: size.width * 0.5,
                       height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          ),
+                      ),
                       child: SizedBox.expand(
                         child: Text(
-                          "친구",
+                          "받은 요청",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
                             fontFamily: 'Leferi',
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ),
-                    ),
-                    onTap: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Menu()));
-                    }),
-                Container(
-                  padding: EdgeInsets.only(top: 13),
-                  color: Colors.white,
-                  width: size.width * 0.5,
-                  height: 50,
-                  child: SizedBox.expand(
-                    child: Text(
-                      "받은 요청",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'Leferi',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                )
+                    )
+                  ],
+                ),
               ],
             ),
             Expanded(
