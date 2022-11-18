@@ -267,17 +267,13 @@ class _FreindListState extends State<FreindList> {
                             .doc(uid)
                             .collection('FriendAdmin')
                             .doc(user!.uid)
-                            .update({
-                          'friend': 0,
-                        });
+                            .delete();
                         await FirebaseFirestore.instance
                             .collection('user')
                             .doc(user!.uid)
                             .collection('FriendAdmin')
                             .doc(uid)
-                            .update({
-                          'friend': 0,
-                        });
+                            .delete();
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text('삭제되었습니다.')));
