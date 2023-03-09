@@ -82,13 +82,14 @@ HTTP POST 방식을 이용하여 실시간으로 응답받은 재난문자를 SQ
 ## 영상
 
 <!-- 영상 제작 후 링크 추가-->
+[![여기로가 시연 영상](https://img.youtube.com/vi/z6AdZMuiQEg/0.jpg)](https://youtu.be/z6AdZMuiQEg)
 <br>
 
 ## 배운 점 & 아쉬운 점
-
+실생활에 필요한 것을 생각하고 이를 구현해 사용자에게 필요한 기능을 제공할 수 있었던 프로젝트였다.
 
 <br>
 
 ## 라이센스
-
+Copyright @ HW & HS & DM
 <!-- Refernces -->
